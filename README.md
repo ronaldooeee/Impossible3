@@ -1,8 +1,8 @@
 # SeniorProject
 
-CMSI 401, taught by Prof. Johnson.
+CMSI 401 at Loyola Marymount University. Taught by Prof. Johnson.
 
-Impossible 3
+## Impossible 3
 
 A classic dungeon crawler with graphics powered by Unity 3D.
 
