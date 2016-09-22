@@ -1,0 +1,751 @@
+fileFormatVersion: 2
+guid: a41a30e734cd54f4fbf2eea059a6a6bd
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: crystals_1.png
+    21300002: crystals_2.png
+    21300004: crystals_3.png
+    21300006: crystals_4.png
+    21300008: landscape_00.png
+    21300010: landscape_01.png
+    21300012: landscape_02.png
+    21300014: landscape_03.png
+    21300016: landscape_04.png
+    21300018: landscape_05.png
+    21300020: landscape_06.png
+    21300022: landscape_07.png
+    21300024: landscape_08.png
+    21300026: landscape_09.png
+    21300028: landscape_10.png
+    21300030: landscape_11.png
+    21300032: landscape_12.png
+    21300034: landscape_13.png
+    21300036: landscape_14.png
+    21300038: landscape_15.png
+    21300040: landscape_16.png
+    21300042: landscape_17.png
+    21300044: landscape_18.png
+    21300046: landscape_19.png
+    21300048: landscape_20.png
+    21300050: landscape_21.png
+    21300052: landscape_22.png
+    21300054: landscape_23.png
+    21300056: landscape_24.png
+    21300058: landscape_25.png
+    21300060: landscape_26.png
+    21300062: landscape_27.png
+    21300064: landscape_28.png
+    21300066: landscape_29.png
+    21300068: landscape_30.png
+    21300070: landscape_31.png
+    21300072: landscape_32.png
+    21300074: landscape_33.png
+    21300076: landscape_34.png
+    21300078: landscape_35.png
+    21300080: landscape_36.png
+    21300082: landscape_37.png
+    21300084: landscape_38.png
+    21300086: landscape_39.png
+    21300088: rocks_1.png
+    21300090: rocks_2.png
+    21300092: rocks_3.png
+    21300094: rocks_4.png
+    21300096: rocks_5.png
+    21300098: rocks_6.png
+    21300100: rocks_7.png
+    21300102: rocks_8.png
+    21300104: trees_1.png
+    21300106: trees_10.png
+    21300108: trees_11.png
+    21300110: trees_12.png
+    21300112: trees_2.png
+    21300114: trees_3.png
+    21300116: trees_4.png
+    21300118: trees_5.png
+    21300120: trees_6.png
+    21300122: trees_7.png
+    21300124: trees_8.png
+    21300126: trees_9.png
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: crystals_1.png
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 546
+        width: 132
+        height: 112
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crystals_2.png
+      rect:
+        serializedVersion: 2
+        x: 663
+        y: 578
+        width: 132
+        height: 121
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crystals_3.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 897
+        width: 133
+        height: 127
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crystals_4.png
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 576
+        width: 132
+        height: 114
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_00.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 485
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_01.png
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 485
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_02.png
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 477
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_03.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 386
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_04.png
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 386
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_05.png
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 447
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_06.png
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 378
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_07.png
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 447
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_08.png
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 546
+        width: 132
+        height: 115
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_09.png
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 364
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_10.png
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 360
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_11.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 287
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_12.png
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 287
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_13.png
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 348
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_14.png
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 279
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_15.png
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 348
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_16.png
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 265
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_17.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6
+        width: 132
+        height: 83
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_18.png
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 574
+        width: 132
+        height: 115
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_19.png
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 261
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_20.png
+      rect:
+        serializedVersion: 2
+        x: 663
+        y: 463
+        width: 132
+        height: 115
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_21.png
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 6
+        width: 132
+        height: 83
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_22.png
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 459
+        width: 132
+        height: 115
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_23.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 584
+        width: 132
+        height: 115
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_24.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 188
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_25.png
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 188
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_26.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 89
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_27.png
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 584
+        width: 132
+        height: 115
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_28.png
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 89
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_29.png
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 249
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_30.png
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 180
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_31.png
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 249
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_32.png
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 166
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_33.png
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 67
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_34.png
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 67
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_35.png
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 150
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_36.png
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 51
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_37.png
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 689
+        width: 133
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_38.png
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 67
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: landscape_39.png
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 162
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rocks_1.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 798
+        width: 133
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rocks_2.png
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 798
+        width: 133
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rocks_3.png
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 801
+        width: 133
+        height: 102
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rocks_4.png
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 699
+        width: 133
+        height: 102
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rocks_5.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 699
+        width: 133
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rocks_6.png
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 699
+        width: 133
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rocks_7.png
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 63
+        width: 132
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rocks_8.png
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 690
+        width: 133
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_1.png
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 789
+        width: 133
+        height: 111
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_10.png
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 658
+        width: 132
+        height: 130
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_11.png
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 906
+        width: 133
+        height: 118
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_12.png
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 901
+        width: 133
+        height: 123
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_2.png
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 903
+        width: 133
+        height: 121
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_3.png
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 788
+        width: 133
+        height: 113
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_4.png
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 897
+        width: 133
+        height: 127
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_5.png
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 661
+        width: 132
+        height: 126
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_6.png
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 900
+        width: 133
+        height: 124
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_7.png
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 903
+        width: 133
+        height: 121
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_8.png
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 788
+        width: 133
+        height: 118
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: trees_9.png
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 787
+        width: 133
+        height: 116
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
