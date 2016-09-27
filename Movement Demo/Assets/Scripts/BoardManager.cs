@@ -16,6 +16,8 @@ public class BoardManager : MonoBehaviour {
 	public List<GameObject> unitPrefabs;
 	private List<GameObject> activeUnit = new List<GameObject>();
 
+	public bool isCooldownOff = true;
+
 	private void Start ()
 	{
 		SpawnAllUnits ();
@@ -26,6 +28,48 @@ public class BoardManager : MonoBehaviour {
 	{
 		UpdateSelection ();
 		DrawBoard ();
+
+		if (Input.GetMouseButtonDown (0))
+		{
+			if (selectionX >= 0 && selectionY >= 0)
+			{
+				if (selectedUnit == null) 
+				{
+					//Select Unit
+					SelectUnit (selectionX, selectionY);
+				}
+				else
+				{
+					//Move Unit
+					MoveUnit (selectionX,selectionY);
+				}
+			}
+		}
+	}
+
+	private void SelectUnit(int x, int y)
+	{
+		// If no unit is selected when clicked, return
+		if (Units [x, y] == null)
+			return;
+
+		// If unit that is clicked still has cooldown, or unit clicked is an enemy, return
+		if (Units [x, y].isPlayer != isCooldownOff)
+			return;
+
+		selectedUnit = Units [x, y];
+	}
+
+	private void MoveUnit(int x, int y)
+	{
+		if (selectedUnit.PossibleMove (x, y))
+		{
+			Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			selectedUnit.transform.position = GetTileCenter (x, y);
+			Units [x, y] = selectedUnit;
+		}
+
+		selectedUnit = null;
 	}
 
 	private void UpdateSelection()
@@ -53,6 +97,7 @@ public class BoardManager : MonoBehaviour {
 		GameObject go = Instantiate (unitPrefabs [index], GetTileCenter(x,y), Quaternion.identity) as GameObject;
 		go.transform.SetParent (transform);
 		Units [x, y] = go.GetComponent<Unit> ();
+		Units [x, y].SetPosition (x, y);
 		activeUnit.Add (go);
 	}
 
