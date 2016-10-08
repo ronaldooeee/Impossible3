@@ -3,14 +3,14 @@
 using UnityEngine;
 using System;
 
-public class BaseMinion
+public class BaseMinion :GameObject
 {
     private string minionID;
 
     private string minionType;
     private string minionDescription;
 
-    private int health;
+    public int health;
     private int attackTime;
     private int attackStrength;
 
@@ -26,5 +26,20 @@ public class BaseMinion
         GuidString = GuidString.Replace("=", "");
         GuidString = GuidString.Replace("+", "");
         minionID = GuidString;
+    }
+
+    public static void removeMinion(GameObject minion)
+    {
+        Destroy(minion);
+    }
+
+    //Does this work?
+    private void attack(BaseMinion minion)
+    {
+        minion.health -= attackStrength;
+        if (minion.health <= 0)
+        {
+            removeMinion(minion);
+        }
     }
 }
