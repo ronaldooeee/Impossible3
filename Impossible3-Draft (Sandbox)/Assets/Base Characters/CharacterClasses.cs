@@ -46,12 +46,12 @@ public class CharacterClasses{
 			movementCooldownTimer = value; 
 		}
 	}
-	public int movementRange{ //Number of tiles a character can move in either direction.
+	public int MovementRange{ //Number of tiles a character can move in either direction.
 		get{ 
 			return movementRange; 
 		}
 		set{
-			characterClassName = value; 
+			movementRange = value; 
 		}
 	}
 	public int ActionCooldownTimer{ //Cooldown timer for taking an action
