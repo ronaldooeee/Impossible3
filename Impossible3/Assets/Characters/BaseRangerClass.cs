@@ -12,5 +12,8 @@ public class BaseRangerClass : CharacterClasses {
 		ActionCooldownTimer = 5;
 		AttackStrength = 10;
 		ArmorValue = 10;
+		Level = 1; 
+		ExperiencePoints = 0; 
+		SkillPoints = 1;
 	}
 }
