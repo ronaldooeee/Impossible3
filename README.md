@@ -1,4 +1,4 @@
-# Impossible 3
+# Impossible3
 
 A classic dungeon crawler with graphics powered by Unity 3D.
 
