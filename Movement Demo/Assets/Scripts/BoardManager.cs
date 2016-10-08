@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class BoardManager : MonoBehaviour {
 
+	public static BoardManager Instance { set; get; }
+	private bool[,] allowedMoves{ set; get; }
+
 	public Unit[,] Units{ set; get; }
 	private Unit selectedUnit;
 
@@ -16,10 +19,14 @@ public class BoardManager : MonoBehaviour {
 	public List<GameObject> unitPrefabs;
 	private List<GameObject> activeUnit = new List<GameObject>();
 
+	private Material previousMat;
+	public Material selectedMat;
+
 	public bool isCooldownOff = true;
 
 	private void Start ()
 	{
+		Instance = this;
 		SpawnAllUnits ();
 	}
 
@@ -29,15 +36,20 @@ public class BoardManager : MonoBehaviour {
 		UpdateSelection ();
 		DrawBoard ();
 
+		//Measure when mouse button is clicked
 		if (Input.GetMouseButtonDown (0))
 		{
+			//Make sure x and y value is on the board
 			if (selectionX >= 0 && selectionY >= 0)
 			{
+				//If your clicking on a character while selectedUnit has nothing in it
+				// select that unit
 				if (selectedUnit == null) 
 				{
 					//Select Unit
 					SelectUnit (selectionX, selectionY);
 				}
+				//Or if theres is a unit selected, move it to that space
 				else
 				{
 					//Move Unit
@@ -57,18 +69,37 @@ public class BoardManager : MonoBehaviour {
 		if (Units [x, y].isPlayer != isCooldownOff)
 			return;
 
+		//What are you, and where do you want to go?
+		allowedMoves = Units[x,y].PossibleMove ();
+		//Make Sure unit is selected
 		selectedUnit = Units [x, y];
+		//Take the old material on the character model, exchange it with a highlighting material when selected
+		previousMat = selectedUnit.GetComponent<MeshRenderer> ().material;
+		selectedMat.mainTexture = previousMat.mainTexture;
+		selectedUnit.GetComponent<MeshRenderer> ().material = selectedMat;
+
+		BoardHighlights.Instance.HighlightAllowedMoves (allowedMoves);
 	}
 
 	private void MoveUnit(int x, int y)
 	{
-		if (selectedUnit.PossibleMove (x, y))
+		//If you movement to selected space is allowed, do this
+		if (allowedMoves[x,y])
 		{
+			//Deselect any other unit that might be selected by accident
 			Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			//Find the coordinates for destination
 			selectedUnit.transform.position = GetTileCenter (x, y);
+			//Move it there
+			selectedUnit.SetPosition (x, y);
+			//Set that unit's coordinates to desinations coordinates
 			Units [x, y] = selectedUnit;
-		}
 
+			//WHERE WE WOULD CALL RESET COOLDOWN TIMER FUNCTION
+		}
+		//Deselect unit and get rid of highlight
+		selectedUnit.GetComponent<MeshRenderer>().material = previousMat;
+		BoardHighlights.Instance.Hidehighlights();
 		selectedUnit = null;
 	}
 
@@ -106,8 +137,9 @@ public class BoardManager : MonoBehaviour {
 		activeUnit = new List<GameObject> ();
 		Units = new Unit[8, 8];
 
-		//Spawn Player Units
-		SpawnUnit (0, 0, 0);
+		//Spawn Player Units (Model number, x value, y value)
+		SpawnUnit (0, 4, 4);
+		SpawnUnit (0, 1, 0);
 
 		//Spawn Enemy Units
 		SpawnUnit (1,0,7);
