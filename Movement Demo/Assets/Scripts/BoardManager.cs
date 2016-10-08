@@ -19,6 +19,9 @@ public class BoardManager : MonoBehaviour {
 	public List<GameObject> unitPrefabs;
 	private List<GameObject> activeUnit = new List<GameObject>();
 
+	private Material previousMat;
+	public Material selectedMat;
+
 	public bool isCooldownOff = true;
 
 	private void Start ()
@@ -68,7 +71,13 @@ public class BoardManager : MonoBehaviour {
 
 		//What are you, and where do you want to go?
 		allowedMoves = Units[x,y].PossibleMove ();
+		//Make Sure unit is selected
 		selectedUnit = Units [x, y];
+		//Take the old material on the character model, exchange it with a highlighting material when selected
+		previousMat = selectedUnit.GetComponent<MeshRenderer> ().material;
+		selectedMat.mainTexture = previousMat.mainTexture;
+		selectedUnit.GetComponent<MeshRenderer> ().material = selectedMat;
+
 		BoardHighlights.Instance.HighlightAllowedMoves (allowedMoves);
 	}
 
@@ -89,6 +98,7 @@ public class BoardManager : MonoBehaviour {
 			//WHERE WE WOULD CALL RESET COOLDOWN TIMER FUNCTION
 		}
 		//Deselect unit and get rid of highlight
+		selectedUnit.GetComponent<MeshRenderer>().material = previousMat;
 		BoardHighlights.Instance.Hidehighlights();
 		selectedUnit = null;
 	}
