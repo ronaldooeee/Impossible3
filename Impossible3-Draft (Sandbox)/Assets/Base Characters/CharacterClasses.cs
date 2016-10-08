@@ -13,6 +13,9 @@ public class CharacterClasses{
 	private int actionCoooldownTimer;
 	private int attackStrength;
 	private int armorValue;
+	private int level;
+	private int experiencePoints;
+	private int skillPoints;
 
 	public string CharacterClassName{ //Returns or sets class name
 		get{ 
@@ -76,6 +79,30 @@ public class CharacterClasses{
 		}
 		set{
 			armorValue = value; 
+		}
+	}
+	public int Level{ //Level Value
+		get{ 
+			return Level; 
+		}
+		set{
+			Level = value; 
+		}
+	}
+	public int ExperiencePoints{ // Experience Value
+		get{ 
+			return experiencePoints; 
+		}
+		set{
+			experiencePoints = value; 
+		}
+	}
+	public int SkillPoints{ //Skill PointsValue
+		get{ 
+			return skillPoints; 
+		}
+		set{
+			skillPoints = value; 
 		}
 	}
 }
