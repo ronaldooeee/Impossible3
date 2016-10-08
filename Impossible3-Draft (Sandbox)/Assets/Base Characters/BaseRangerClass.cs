@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseRamgerClass : CharacterClasses {
+public class BaseRangerClass : CharacterClasses {
 
-	public void RangerClass(){ //Ranger Class
+	public BaseRangerClass(){ //Ranger Class
 		CharacterClassName = "Ranger";
 		CharacterClassName = "A man of the North, ready to use his bow and daggers to defeat his enemies.";
 		Health = 40;

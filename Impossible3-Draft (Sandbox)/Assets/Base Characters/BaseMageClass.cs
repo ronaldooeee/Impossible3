@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BaseMageClass : CharacterClasses {
 
-	public void MageClass(){ //Mage Class
+	public BaseMageClass(){ //Mage Class
 		CharacterClassName = "Mage";
 		CharacterClassName = "A practicioner of the arcane arts.";
 		Health = 30;
