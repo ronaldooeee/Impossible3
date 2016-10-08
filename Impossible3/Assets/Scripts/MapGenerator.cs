@@ -4,49 +4,24 @@ using System.Collections.Generic;
 
 public class MapGenerator : MonoBehaviour {
 
-	private Transform tilePrefab;
-	private Transform obstaclePrefab;
-	private static Vector2 mapSize;
+	public Transform tilePrefab;
+	public Transform obstaclePrefab;
+	public Vector2 mapSize;
 
 	[Range(0,1)]
-	private float outlinePercent;
+	public float outlinePercent;
 
-	private static List<Coord> allTileCoords;
-	private static Queue<Coord> shuffledTileCoords;
+	public List<Coord> allTileCoords;
+	public Queue<Coord> shuffledTileCoords;
+    public List<Vector3> obstaclePositions;
 
-    private int seed;
-    private System.Random randomNumber;
-    private float timeLeft;
+    public int seed;
+    public System.Random randomNumber;
+    public float timeLeft;
 
-    public static Vector2 getMapSize()
-    {
-        return MapGenerator.mapSize;
-    }
-
-    public static List<Coord> getTileCoords()
-    {
-        return MapGenerator.allTileCoords;
-    }
-
-    public static Queue<Coord> getShuffledTiledCoords()
-    {
-        return MapGenerator.shuffledTileCoords;
-    }
-
-	void Start()
-    {
-        randomNumber = new System.Random();
-        timeLeft = 2;
-        seed = randomNumber.Next(1, 100);
-        //mapSize.x = randomNumber.Next(1, 20);
-        //mapSize.y = randomNumber.Next(1, 20);
-        DestroyImmediate(transform.FindChild("Generated Map").gameObject);
-        GenerateMap ();
-	}
-
-    /*void Update()
-    {
+	/*void Update(){
         timeLeft -= Time.deltaTime;
+
         if (timeLeft < 0)
         {
             seed = randomNumber.Next(1, 100);
@@ -56,9 +31,20 @@ public class MapGenerator : MonoBehaviour {
             GenerateMap();
             timeLeft = 2;
         }
-    }*/
 
-    public void GenerateMap() {
+	}*/
+
+	void Start() {
+        randomNumber = new System.Random();
+        timeLeft = 2;
+        seed = randomNumber.Next(1, 100);
+        //mapSize.x = randomNumber.Next(1, 20);
+        //mapSize.y = randomNumber.Next(1, 20);
+        DestroyImmediate(transform.FindChild("Generated Map").gameObject);
+        GenerateMap ();
+	}
+
+	public void GenerateMap() {
 
 		allTileCoords = new List<Coord>();
 		for (int x = 0; x < mapSize.x; x ++) {
@@ -92,6 +78,7 @@ public class MapGenerator : MonoBehaviour {
 		for (int i = 0; i < obstacleCount; i++){
 			Coord randomCoord = getRandCoord();
 			Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
+            obstaclePositions.Add(obstaclePosition);
 			Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * .5f, Quaternion.identity) as Transform;
 			newObstacle.parent = mapHolder;
 		}
