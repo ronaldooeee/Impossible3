@@ -11,8 +11,9 @@ public class MapGenerator : MonoBehaviour {
 	[Range(0,1)]
 	public float outlinePercent;
 
-	List<Coord> allTileCoords;
-	Queue<Coord> shuffledTileCoords;
+	public List<Coord> allTileCoords;
+	public Queue<Coord> shuffledTileCoords;
+    public List<Vector3> obstaclePositions;
 
     public int seed;
     public System.Random randomNumber;
@@ -77,6 +78,7 @@ public class MapGenerator : MonoBehaviour {
 		for (int i = 0; i < obstacleCount; i++){
 			Coord randomCoord = getRandCoord();
 			Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
+            obstaclePositions.Add(obstaclePosition);
 			Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * .5f, Quaternion.identity) as Transform;
 			newObstacle.parent = mapHolder;
 		}
