@@ -16,6 +16,9 @@ public class MapGenerator : MonoBehaviour {
 
 	public int seed = 10;
 
+	void Update(){
+		GenerateMap ();
+	}
 	void Start() {
 		GenerateMap ();
 	}
