@@ -9,6 +9,7 @@ public class CharacterClasses{
 	//Stats
 	private int health; 
 	private int movementCooldownTimer;
+	private int movementRange;
 	private int actionCoooldownTimer;
 	private int attackStrength;
 	private int armorValue;
@@ -21,7 +22,7 @@ public class CharacterClasses{
 			characterClassName = value; 
 		}
 	}
-	public string CharacterClassDescription{
+	public string CharacterClassDescription{ //Description of class (aka more fore lore)
 		get{ 
 			return characterClassDescription; 
 		}
@@ -29,7 +30,7 @@ public class CharacterClasses{
 			characterClassName = value; 
 		}
 	}
-	public int Health{
+	public int Health{ //Health value
 		get{ 
 			return health; 
 		}
@@ -37,7 +38,7 @@ public class CharacterClasses{
 			health = value; 
 		}
 	}
-	public int MovementCooldownTimer{
+	public int MovementCooldownTimer{ //Cooldown timer for taking a movement
 		get{ 
 			return movementCooldownTimer; 
 		}
@@ -45,7 +46,15 @@ public class CharacterClasses{
 			movementCooldownTimer = value; 
 		}
 	}
-	public int ActionCooldownTimer{
+	public int movementRange{ //Number of tiles a character can move in either direction.
+		get{ 
+			return movementRange; 
+		}
+		set{
+			characterClassName = value; 
+		}
+	}
+	public int ActionCooldownTimer{ //Cooldown timer for taking an action
 		get{ 
 			return actionCoooldownTimer; 
 		}
@@ -53,7 +62,7 @@ public class CharacterClasses{
 			actionCoooldownTimer = value; 
 		}
 	}
-	public int AttackStrength{
+	public int AttackStrength{ //Character's damage 
 		get{ 
 			return attackStrength; 
 		}
@@ -61,7 +70,7 @@ public class CharacterClasses{
 			attackStrength = value; 
 		}
 	}
-	public int ArmorValue{
+	public int ArmorValue{ //Armor Value
 		get{ 
 			return armorValue; 
 		}
