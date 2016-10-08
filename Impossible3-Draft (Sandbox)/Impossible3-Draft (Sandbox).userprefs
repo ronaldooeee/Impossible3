@@ -2,10 +2,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Base Characters\CharacterClasses.cs">
     <Files>
+      <File FileName="Assets\movement.cs" Line="6" Column="38" />
       <File FileName="Assets\Base Characters\CharacterClasses.cs" Line="11" Column="30" />
       <File FileName="Assets\Base Characters\BaseWarriorClass.cs" Line="7" Column="3" />
-      <File FileName="Assets\TestGUI.cs" Line="22" Column="39" />
-      <File FileName="Assets\movement.cs" Line="11" Column="23" />
+      <File FileName="Assets\TestGUI.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
