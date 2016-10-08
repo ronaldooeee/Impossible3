@@ -5,7 +5,7 @@ public class BaseMageClass : CharacterClasses {
 
 	public BaseMageClass(){ //Mage Class
 		CharacterClassName = "Mage";
-		CharacterClassDescription = "A practicioner of the arcane arts.";
+		CharacterClassName = "A practicioner of the arcane arts.";
 		Health = 30;
 		MovementCooldownTimer = 5;
 		MovementRange = 5;
