@@ -4,36 +4,37 @@ using System.Collections.Generic;
 
 public class MapGenerator : MonoBehaviour {
 
-	public Transform tilePrefab;
-	public Transform obstaclePrefab;
-	public Vector2 mapSize;
+	private Transform tilePrefab;
+	private Transform obstaclePrefab;
+	private static Vector2 mapSize;
 
 	[Range(0,1)]
-	public float outlinePercent;
+	private float outlinePercent;
 
-	List<Coord> allTileCoords;
-	Queue<Coord> shuffledTileCoords;
+	private static List<Coord> allTileCoords;
+	private static Queue<Coord> shuffledTileCoords;
 
-    public int seed;
-    public System.Random randomNumber;
-    public float timeLeft;
+    private int seed;
+    private System.Random randomNumber;
+    private float timeLeft;
 
-	/*void Update(){
-        timeLeft -= Time.deltaTime;
+    public static Vector2 getMapSize()
+    {
+        return MapGenerator.mapSize;
+    }
 
-        if (timeLeft < 0)
-        {
-            seed = randomNumber.Next(1, 100);
-            //mapSize.x = randomNumber.Next(1, 20);
-            //mapSize.y = randomNumber.Next(1, 20);
-            DestroyImmediate(transform.FindChild("Generated Map").gameObject);
-            GenerateMap();
-            timeLeft = 2;
-        }
+    public static List<Coord> getTileCoords()
+    {
+        return MapGenerator.allTileCoords;
+    }
 
-	}*/
+    public static Queue<Coord> getShuffledTiledCoords()
+    {
+        return MapGenerator.shuffledTileCoords;
+    }
 
-	void Start() {
+	void Start()
+    {
         randomNumber = new System.Random();
         timeLeft = 2;
         seed = randomNumber.Next(1, 100);
@@ -43,7 +44,21 @@ public class MapGenerator : MonoBehaviour {
         GenerateMap ();
 	}
 
-	public void GenerateMap() {
+    /*void Update()
+    {
+        timeLeft -= Time.deltaTime;
+        if (timeLeft < 0)
+        {
+            seed = randomNumber.Next(1, 100);
+            //mapSize.x = randomNumber.Next(1, 20);
+            //mapSize.y = randomNumber.Next(1, 20);
+            DestroyImmediate(transform.FindChild("Generated Map").gameObject);
+            GenerateMap();
+            timeLeft = 2;
+        }
+    }*/
+
+    public void GenerateMap() {
 
 		allTileCoords = new List<Coord>();
 		for (int x = 0; x < mapSize.x; x ++) {
