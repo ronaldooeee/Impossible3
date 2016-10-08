@@ -3,7 +3,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class movement : CharacterClasses {
+public class movement : MonoBehaviour {
 
 	public float speed = 6.0f;
 	private Vector3 moveDirection = Vector3.zero;
