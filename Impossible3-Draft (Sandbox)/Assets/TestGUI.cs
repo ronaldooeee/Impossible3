@@ -18,9 +18,12 @@ public class TestGUI : MonoBehaviour {
 	void OnGUI(){
 		GUILayout.Label (class1.CharacterClassName);
 		GUILayout.Label (class1.CharacterClassDescription);
+		GUILayout.Label (class1.Health.ToString () + " Health");
 		GUILayout.Label (class2.CharacterClassName);
 		GUILayout.Label (class2.CharacterClassDescription);
+		GUILayout.Label (class2.Health.ToString () + " Health");
 		GUILayout.Label (class3.CharacterClassName);
 		GUILayout.Label (class3.CharacterClassDescription);
+		GUILayout.Label (class3.Health.ToString () + " Health");
 	}
 }
