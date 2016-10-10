@@ -9,9 +9,13 @@ public class CharacterClasses{
 	//Stats
 	private int health; 
 	private int movementCooldownTimer;
+	private int movementRange;
 	private int actionCoooldownTimer;
 	private int attackStrength;
 	private int armorValue;
+	private int level;
+	private int experiencePoints;
+	private int skillPoints;
 
 	public string CharacterClassName{ //Returns or sets class name
 		get{ 
@@ -21,7 +25,7 @@ public class CharacterClasses{
 			characterClassName = value; 
 		}
 	}
-	public string CharacterClassDescription{
+	public string CharacterClassDescription{ //Description of class (aka more fore lore)
 		get{ 
 			return characterClassDescription; 
 		}
@@ -29,7 +33,7 @@ public class CharacterClasses{
 			characterClassName = value; 
 		}
 	}
-	public int Health{
+	public int Health{ //Health value
 		get{ 
 			return health; 
 		}
@@ -37,7 +41,7 @@ public class CharacterClasses{
 			health = value; 
 		}
 	}
-	public int MovementCooldownTimer{
+	public int MovementCooldownTimer{ //Cooldown timer for taking a movement
 		get{ 
 			return movementCooldownTimer; 
 		}
@@ -45,7 +49,15 @@ public class CharacterClasses{
 			movementCooldownTimer = value; 
 		}
 	}
-	public int ActionCooldownTimer{
+	public int MovementRange{ //Number of tiles a character can move in either direction.
+		get{ 
+			return movementRange; 
+		}
+		set{
+			movementRange = value; 
+		}
+	}
+	public int ActionCooldownTimer{ //Cooldown timer for taking an action
 		get{ 
 			return actionCoooldownTimer; 
 		}
@@ -53,7 +65,7 @@ public class CharacterClasses{
 			actionCoooldownTimer = value; 
 		}
 	}
-	public int AttackStrength{
+	public int AttackStrength{ //Character's damage 
 		get{ 
 			return attackStrength; 
 		}
@@ -61,12 +73,36 @@ public class CharacterClasses{
 			attackStrength = value; 
 		}
 	}
-	public int ArmorValue{
+	public int ArmorValue{ //Armor Value
 		get{ 
 			return armorValue; 
 		}
 		set{
 			armorValue = value; 
+		}
+	}
+	public int Level{ //Level Value
+		get{ 
+			return Level; 
+		}
+		set{
+			Level = value; 
+		}
+	}
+	public int ExperiencePoints{ // Experience Value
+		get{ 
+			return experiencePoints; 
+		}
+		set{
+			experiencePoints = value; 
+		}
+	}
+	public int SkillPoints{ //Skill PointsValue
+		get{ 
+			return skillPoints; 
+		}
+		set{
+			skillPoints = value; 
 		}
 	}
 }

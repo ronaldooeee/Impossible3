@@ -36,9 +36,15 @@ public class BoardHighlights : MonoBehaviour
 
 	public void HighlightAllowedMoves(bool[,] moves)
 	{
+<<<<<<< HEAD
 		for (int i = 0; i < BoardManager.mapSize; i++) 
 		{
 			for (int j = 0; j < BoardManager.mapSize; j++) 
+=======
+		for (int i = 0; i < 8; i++) 
+		{
+			for (int j = 0; j < 8; j++) 
+>>>>>>> origin/master
 			{
 				if (moves [i, j]) 
 				{
