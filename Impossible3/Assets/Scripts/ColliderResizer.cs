@@ -10,6 +10,6 @@ public class ColliderResizer : MonoBehaviour {
 	void Start () {
 		BoardPlane = GameObject.Find ("BoardPlane");
 		transform.localScale = new Vector3 (BoardManager.mapSize, 0, BoardManager.mapSize);
-		transform.localPosition = new Vector3 (newMapSize, 0, newMapSize);
+		transform.localPosition = new Vector3 (newMapSize + 0.5f, 0, newMapSize + 0.5f);
 	}
 }

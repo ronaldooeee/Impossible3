@@ -10,11 +10,8 @@ public class BoardManager : MonoBehaviour {
 	public Unit[,] Units{ set; get; }
 	private Unit selectedUnit;
 
-<<<<<<< HEAD
 	public OpenMapSpots[,] Spots{ set; get; }
 
-=======
->>>>>>> origin/master
 	private const float TILE_SIZE = 1.0f;
 	private const float TILE_OFFSET = 0.5f;
 
@@ -29,11 +26,8 @@ public class BoardManager : MonoBehaviour {
 
 	public bool isCooldownOff = true;
 
-<<<<<<< HEAD
 	public static int mapSize = 11;
 
-=======
->>>>>>> origin/master
 	private void Start ()
 	{
 		Instance = this;
@@ -68,8 +62,7 @@ public class BoardManager : MonoBehaviour {
 			}
 		}
 	}
-
-<<<<<<< HEAD
+		
 	private void UpdateSelection()
 	{
 		if (!Camera.main)
@@ -88,9 +81,7 @@ public class BoardManager : MonoBehaviour {
 			selectionY = -1;
 		}
 	}
-
-=======
->>>>>>> origin/master
+		
 	private void SelectUnit(int x, int y)
 	{
 		// If no unit is selected when clicked, return
@@ -135,28 +126,6 @@ public class BoardManager : MonoBehaviour {
 		selectedUnit = null;
 	}
 
-<<<<<<< HEAD
-=======
-	private void UpdateSelection()
-	{
-		if (!Camera.main)
-			return;
-		// Measures where mouse is hitting from Camera Perspective, puts it in the out parameter to use later, only extends 25 units,
-		// and will only hit things on the "BoardPlane" Layer
-		RaycastHit hit;
-		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 25.0f, LayerMask.GetMask ("BoardPlane"))) 
-		{
-			selectionX = (int)hit.point.x;
-			selectionY = (int)hit.point.z;
-		} 
-		else 
-		{
-			selectionX = -1;
-			selectionY = -1;
-		}
-	}
-
->>>>>>> origin/master
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
 	private void SpawnUnit(int index, int x, int y)
 	{
@@ -170,11 +139,8 @@ public class BoardManager : MonoBehaviour {
 	private void SpawnAllUnits()
 	{
 		activeUnit = new List<GameObject> ();
-<<<<<<< HEAD
+
 		Units = new Unit[mapSize, mapSize];
-=======
-		Units = new Unit[8, 8];
->>>>>>> origin/master
 
 		//Spawn Player Units (Model number, x value, y value)
 		SpawnUnit (0, 4, 4);
@@ -183,8 +149,7 @@ public class BoardManager : MonoBehaviour {
 		//Spawn Enemy Units
 		SpawnUnit (1,0,7);
 	}
-
-<<<<<<< HEAD
+		
 	private void SpawnEnvironment(int index, int x, int y)
 	{
 		GameObject go2 = Instantiate (unitPrefabs [index], GetTileCenter(x,y), Quaternion.identity) as GameObject;
@@ -216,19 +181,6 @@ public class BoardManager : MonoBehaviour {
 			Vector3 start = Vector3.forward * i;
 			Debug.DrawLine (start, start + widthLine);
 			for (int j = 0; j <= mapSize; j++) 
-=======
-	//Draws 8x8 grid to show selection
-	private void DrawBoard()
-	{
-		Vector3 widthLine = Vector3.right * 8;
-		Vector3 heightLine = Vector3.forward * 8;
-		
-		for (int i = 0; i <= 8; i++) 
-		{
-			Vector3 start = Vector3.forward * i;
-			Debug.DrawLine (start, start + widthLine);
-			for (int j = 0; j <= 8; j++) 
->>>>>>> origin/master
 			{
 				start = Vector3.right * j;
 				Debug.DrawLine (start, start + heightLine);
