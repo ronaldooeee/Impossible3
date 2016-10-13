@@ -20,6 +20,7 @@ public class BoardManager : MonoBehaviour {
 
 	public List<GameObject> unitPrefabs;
 	private List<GameObject> activeUnit = new List<GameObject>();
+    public List<GameObject> mapTiles = new List<GameObject>();
 
 	private Material previousMat;
 	public Material selectedMat;
@@ -32,7 +33,9 @@ public class BoardManager : MonoBehaviour {
 	{
 		Instance = this;
 		SpawnAllUnits ();
-	}
+        SpawnMapTiles();
+        ColorMapTiles();
+    }
 
 	// Update world to show changes
 	private void Update()
@@ -112,7 +115,7 @@ public class BoardManager : MonoBehaviour {
 			//Deselect any other unit that might be selected by accident
 			Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
 			//Find the coordinates for destination
-			selectedUnit.transform.position = GetTileCenter (x, y);
+			selectedUnit.transform.position = GetTileCenter (x, y,0.5f);
 			//Move it there
 			selectedUnit.SetPosition (x, y);
 			//Set that unit's coordinates to desinations coordinates
@@ -129,8 +132,8 @@ public class BoardManager : MonoBehaviour {
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
 	private void SpawnUnit(int index, int x, int y)
 	{
-		GameObject go = Instantiate (unitPrefabs [index], GetTileCenter(x,y), Quaternion.identity) as GameObject;
-		go.transform.SetParent (transform);
+		GameObject go = Instantiate (unitPrefabs [index], GetTileCenter(x,y,0.5f), Quaternion.identity) as GameObject;
+		//go.transform.SetParent (transform);
 		Units [x, y] = go.GetComponent<Unit> ();
 		Units [x, y].SetPosition (x, y);
 		activeUnit.Add (go);
@@ -152,11 +155,12 @@ public class BoardManager : MonoBehaviour {
 		
 	private void SpawnEnvironment(int index, int x, int y)
 	{
-		GameObject go2 = Instantiate (unitPrefabs [index], GetTileCenter(x,y), Quaternion.identity) as GameObject;
+		GameObject go2 = Instantiate (unitPrefabs [index], GetTileCenter(x,y,-0.1f), Quaternion.identity) as GameObject;
 		go2.transform.SetParent (transform);
-		Spots [x, y] = go2.GetComponent<OpenMapSpots> ();
-		Spots [x, y].SetPosition (x, y);
-		activeUnit.Add (go2);
+        go2.transform.Rotate(new Vector3(90f,0,0));
+		//Spots [x, y] = go2.GetComponent<OpenMapSpots> ();
+		//Spots [x, y].SetPosition (x, y);
+		mapTiles.Add (go2);
 	}
 
 	private void SpawnMapTiles()
@@ -166,10 +170,26 @@ public class BoardManager : MonoBehaviour {
 		for (int i = 0; i < mapSize; i++)
 		{
 			for (int j = 0; j < mapSize; j++)
-				SpawnEnvironment (2, i, j);
+            {
+                SpawnEnvironment(2, i, j);
+            }
+				
 		}
 	}
 
+    private void ColorMapTiles()
+    {
+        float a = 0.2f;
+        float b = 0;
+        float c = 0.1f;
+        foreach (GameObject tile in mapTiles)
+        {
+            tile.GetComponent<Renderer>().material.color = new Color(a,b,c);
+            a = a + 0.005f;
+            b = b + 0.005f;
+            c = c + 0.005f;
+        }
+    }
 	//Draws X.Y grid to show selection
 	private void DrawBoard()
 	{
@@ -203,11 +223,12 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	//Helper function to get center of tiles for unit placement
-	private Vector3 GetTileCenter(int x, int z)
+	private Vector3 GetTileCenter(int x, int z, float y = 0)
 	{
 		Vector3 origin = Vector3.zero;
 		origin.x += (TILE_SIZE * x) + TILE_OFFSET;
 		origin.z += (TILE_SIZE * z) + TILE_OFFSET;
+        origin.y = y;
 		return origin;
 	}
 }
