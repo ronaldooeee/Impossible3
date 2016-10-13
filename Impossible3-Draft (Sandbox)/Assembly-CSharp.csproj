@@ -51,6 +51,12 @@
      <Compile Include="Assets\Base Characters\BaseRangerClass.cs" />
      <Compile Include="Assets\Base Characters\BaseWarriorClass.cs" />
      <Compile Include="Assets\Base Characters\CharacterClasses.cs" />
+     <Compile Include="Assets\Enemies\BaseMinion.cs" />
+     <Compile Include="Assets\Enemies\Goblin.cs" />
+     <Compile Include="Assets\Enemies\Kobucha.cs" />
+     <Compile Include="Assets\Enemies\Skeleton.cs" />
+     <Compile Include="Assets\Enemies\SkeletonMelee.cs" />
+     <Compile Include="Assets\Enemies\SkeletonRange.cs" />
      <Compile Include="Assets\TestGUI.cs" />
      <Compile Include="Assets\movement.cs" />
  <Reference Include="UnityEngine.UI">
