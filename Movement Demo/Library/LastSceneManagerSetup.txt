@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< HEAD
-- path: C:/Users/Nick Soffa/Documents/GitHub/SeniorProject/Impossible3/Assets/Scenes/TestStage.unity
-=======
 - path: Assets/Scenes/MainScene.unity
->>>>>>> origin/master
   isLoaded: 1
   isActive: 1
