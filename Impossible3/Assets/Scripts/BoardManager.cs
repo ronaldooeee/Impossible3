@@ -156,7 +156,7 @@ public class BoardManager : MonoBehaviour {
 		
 	private void SpawnEnvironment(int index, int x, int y)
 	{
-		GameObject go2 = Instantiate (unitPrefabs [index], GetTileCenter(x,y,-0.1f), Quaternion.identity) as GameObject;
+		GameObject go2 = Instantiate (unitPrefabs [index], GetTileCenter(x,y,-0.01f), Quaternion.identity) as GameObject;
 		go2.transform.SetParent (transform);
         go2.transform.Rotate(new Vector3(90f,0,0));
 		//Spots [x, y] = go2.GetComponent<OpenMapSpots> ();
