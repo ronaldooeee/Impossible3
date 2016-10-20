@@ -6,9 +6,11 @@ public class BoardManager : MonoBehaviour {
 
 	public static BoardManager Instance { set; get; }
 	private bool[,] allowedMoves{ set; get; }
+	private bool[,] allowedAttacks{ set; get; }
 
 	public Unit[,] Units{ set; get; }
 	private Unit selectedUnit;
+	private Unit selectedTarget;
 
 	public OpenMapSpots[,] Spots{ set; get; }
 
@@ -51,16 +53,18 @@ public class BoardManager : MonoBehaviour {
 			{
 				//If your clicking on a character while selectedUnit has nothing in it
 				// select that unit
-				if (selectedUnit == null) 
-				{
-					//Select Unit
+				if (selectedUnit == null) {
 					SelectUnit (selectionX, selectionY);
-				}
-				//Or if theres is a unit selected, move it to that space
-				else
+				
+				//Or if theres is a unit selected, move it to that space, then pull up attack options
+				} else if (selectedUnit != null) 
 				{
-					//Move Unit
-					MoveUnit (selectionX,selectionY);
+					MoveUnit (selectionX, selectionY);
+					if (selectedTarget == null) {
+						SelectTarget (selectionX, selectionY);
+					} else if (selectedTarget != null) {
+						AttackTarget (selectionX, selectionY);
+					}
 				}
 			}
 		}
@@ -87,12 +91,13 @@ public class BoardManager : MonoBehaviour {
 		
 	private void SelectUnit(int x, int y)
 	{
+		Debug.Log("SelectUnit Start");
 		// If no unit is selected when clicked, return
 		if (Units [x, y] == null)
 			return;
 
 		// If unit that is clicked still has cooldown, or unit clicked is an enemy, return
-		if (Units [x, y].isPlayer != isCooldownOff)
+		if (!Units [x, y].isPlayer && isCooldownOff)
 			return;
 
 		//What are you, and where do you want to go?
@@ -105,12 +110,14 @@ public class BoardManager : MonoBehaviour {
 		selectedUnit.GetComponent<MeshRenderer> ().material = selectedMat;
 
 		BoardHighlights.Instance.HighlightAllowedMoves (allowedMoves);
+		Debug.Log ("SelectUnit End");
 	}
 
 	private void MoveUnit(int x, int y)
 	{
+		Debug.Log ("MoveUnit Start");
 		//If you movement to selected space is allowed, do this
-		if (allowedMoves[x,y])
+		if (allowedMoves[x,y] && selectedTarget == null)
 		{
 			//Deselect any other unit that might be selected by accident
 			Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
@@ -120,13 +127,43 @@ public class BoardManager : MonoBehaviour {
 			selectedUnit.SetPosition (x, y);
 			//Set that unit's coordinates to desinations coordinates
 			Units [x, y] = selectedUnit;
+			//Debug.Log (Units [x, y]);
 
 			//WHERE WE WOULD CALL RESET COOLDOWN TIMER FUNCTION
 		}
 		//Deselect unit and get rid of highlight
 		selectedUnit.GetComponent<MeshRenderer>().material = previousMat;
 		BoardHighlights.Instance.Hidehighlights();
+
+		//selectedUnit = null;
+		Debug.Log ("MoveUnit End");
+	}
+
+	private void SelectTarget(int x, int y)
+	{
+		Debug.Log ("SelectTarget Start");
+
+		allowedAttacks = Units [x, y].PossibleAttack ();
+		selectedTarget = Units [x, y];
+
+		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
+
+		Debug.Log ("SelectTarget End");
+	}
+
+	private void AttackTarget(int x, int y)
+	{
+		Debug.Log ("AttackTarget Start");
+		if (allowedAttacks [x, y]) 
+		{
+
+		}
+
+		BoardHighlights.Instance.Hidehighlights();
+
+		selectedTarget = null;
 		selectedUnit = null;
+		Debug.Log ("AttackTarget End");
 	}
 
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
