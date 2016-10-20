@@ -32,7 +32,7 @@ TextureImporter:
     filterMode: 0
     aniso: 0
     mipBias: -1
-    wrapMode: -1
+    wrapMode: 0
   nPOTScale: 1
   lightmap: 0
   rGBM: 0
@@ -51,7 +51,7 @@ TextureImporter:
   buildTargetSettings:
   - buildTarget: Standalone
     maxTextureSize: 2048
-    textureFormat: -3
+    textureFormat: -2
     compressionQuality: 50
     allowsAlphaSplitting: 0
   spriteSheet:

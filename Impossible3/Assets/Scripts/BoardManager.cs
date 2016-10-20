@@ -181,9 +181,21 @@ public class BoardManager : MonoBehaviour {
     private void ColorMapTiles()
     {
         Texture2D tile1 = Resources.Load("tile1") as Texture2D;
+        Texture2D tile2 = Resources.Load("tile2") as Texture2D;
+        Texture2D tile3 = Resources.Load("tile3") as Texture2D;
         foreach (GameObject tile in mapTiles)
         {
-            tile.GetComponent<Renderer>().material.mainTexture = tile1;
+            int rand = Random.Range(0, 10);
+            if (rand < 8 && rand >2)
+            {
+                tile.GetComponent<Renderer>().material.mainTexture = tile1;
+            }else if(rand <= 2)
+            {
+                tile.GetComponent<Renderer>().material.mainTexture = tile2;
+            }else
+            {
+                tile.GetComponent<Renderer>().material.mainTexture = tile3;
+            }
             tile.GetComponent<Renderer>().material.color= Color.white;
 
         }
