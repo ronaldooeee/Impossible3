@@ -24,8 +24,9 @@ public class BoardManager : MonoBehaviour {
 
 	private Material previousMat;
 	public Material selectedMat;
+    public Material[] materials;
 
-	public bool isCooldownOff = true;
+    public bool isCooldownOff = true;
 
 	public static int mapSize = 11;
 
@@ -179,15 +180,12 @@ public class BoardManager : MonoBehaviour {
 
     private void ColorMapTiles()
     {
-        float a = 0.2f;
-        float b = 0;
-        float c = 0.1f;
+        Texture2D tile1 = Resources.Load("tile1") as Texture2D;
         foreach (GameObject tile in mapTiles)
         {
-            tile.GetComponent<Renderer>().material.color = new Color(a,b,c);
-            a = a + 0.005f;
-            b = b + 0.005f;
-            c = c + 0.005f;
+            tile.GetComponent<Renderer>().material.mainTexture = tile1;
+            tile.GetComponent<Renderer>().material.color= Color.white;
+
         }
     }
 	//Draws X.Y grid to show selection
