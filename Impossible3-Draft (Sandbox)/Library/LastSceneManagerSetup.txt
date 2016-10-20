@@ -1,4 +1,0 @@
-sceneSetups:
-- path: C:/Users/Sanny/Documents/GitHub/SeniorProject/Impossible3/Assets/Scenes/TestStage.unity
-  isLoaded: 1
-  isActive: 1

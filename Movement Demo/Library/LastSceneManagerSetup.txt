@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/MainScene.unity
+- path: C:/Users/F/Documents/GitHub/Impossible3/Impossible3/Assets/Scenes/TestStage.unity
   isLoaded: 1
   isActive: 1

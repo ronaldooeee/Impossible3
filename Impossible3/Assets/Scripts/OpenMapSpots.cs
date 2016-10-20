@@ -17,4 +17,5 @@ public abstract class OpenMapSpots : MonoBehaviour {
 	{
 		return new bool[BoardManager.mapSize, BoardManager.mapSize];
 	}
+		
 }
