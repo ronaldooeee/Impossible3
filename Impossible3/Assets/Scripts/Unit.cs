@@ -18,4 +18,9 @@ public abstract class Unit : MonoBehaviour {
 	{
 		return new bool[BoardManager.mapSize, BoardManager.mapSize];
 	}
+
+	public virtual bool[,] PossibleAttack()
+	{
+		return new bool[BoardManager.mapSize, BoardManager.mapSize];
+	}
 }
