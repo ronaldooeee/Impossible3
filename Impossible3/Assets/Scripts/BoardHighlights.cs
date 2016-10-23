@@ -7,7 +7,8 @@ public class BoardHighlights : MonoBehaviour
 	//So this code can be accesssed in other programs
 	public static BoardHighlights Instance{ set; get; }
 
-	public GameObject highlightPrefab;
+	public GameObject mHighlightPrefab;
+	public GameObject aHighlightPrefab;
 	private List<GameObject> highlights;
 
 	//Instantiate highlights
@@ -18,19 +19,11 @@ public class BoardHighlights : MonoBehaviour
 	}
 
 	//Check if highlights are on or off
-	private GameObject GetHighlightObject() 
+	private GameObject GetMovementHighlightObject() 
 	{
-		//Find and return the first object that matches !g.activeSelf
-		GameObject go = highlights.Find (g => !g.activeSelf);
+		GameObject go = Instantiate (mHighlightPrefab);
+		highlights.Add (go);
 
-		//If none are found, instantiate one
-		if (go == null) 
-		{
-			go = Instantiate (highlightPrefab);
-			highlights.Add (go);
-		}
-
-		//Either way, return it
 		return go;
 	}
 
@@ -42,7 +35,31 @@ public class BoardHighlights : MonoBehaviour
 			{
 				if (moves [i, j]) 
 				{
-					GameObject go = GetHighlightObject ();
+					GameObject go = GetMovementHighlightObject ();
+					go.SetActive (true);
+					go.transform.position = new Vector3 (i+0.5f, 0, j+0.5f);
+				}
+			}
+		}
+	}
+
+	private GameObject GetAttackHighlightObject() 
+	{
+		GameObject go = Instantiate (aHighlightPrefab);
+		highlights.Add (go);
+
+		return go;
+	}
+
+	public void HighlightAllowedAttacks(bool[,] moves)
+	{
+		for (int i = 0; i < BoardManager.mapSize; i++) 
+		{
+			for (int j = 0; j < BoardManager.mapSize; j++) 
+			{
+				if (moves [i, j]) 
+				{
+					GameObject go = GetAttackHighlightObject ();
 					go.SetActive (true);
 					go.transform.position = new Vector3 (i+0.5f, 0, j+0.5f);
 				}
