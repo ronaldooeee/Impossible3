@@ -28,7 +28,7 @@ public class BasicObjectInformation { //constructor for basic objects
 	public string ObjectDescription{
 		get{ return description; }
 	}
-	public string ObjectIcon{
+	public Sprite ObjectIcon{
 		get{ return icon; }
 	}
 }
