@@ -17,6 +17,9 @@ public class Ability : AbilityBehaviors {
 	private bool aoe; //area of effect ability
 	private bool singleTarget; // single target ability 
 
+	public Ability(){
+		//empty constructor to fix bugs
+	}
 	public Ability(BasicObjectInformation abilityBasicInfo, List<AbilityBehaviors> abilityBehaviors, GameObject abilityParticle, bool abilityRequiresTarget, int abilityRange){ //basic ability / basic attack
 		objectInfo = abilityBasicInfo;
 		behaviors = new List<AbilityBehaviors> ();

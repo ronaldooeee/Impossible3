@@ -6,6 +6,9 @@ public class AbilityBehaviors{
 	private BasicObjectInformation objectInfo;
 	private BehaviorStartTimes startTime;
 
+	public AbilityBehaviors(){
+		//empty constructor to fix bugs
+	}
 	public AbilityBehaviors(BasicObjectInformation basicInfo, BehaviorStartTimes sTime){
 		objectInfo = basicInfo;
 		startTime = sTime;
