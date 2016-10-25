@@ -33,9 +33,17 @@ public class BoardManager : MonoBehaviour {
 	private void Start ()
 	{
 		Instance = this;
-		SpawnAllUnits ();
+        //Spawn Black Background
+        GameObject black = Instantiate(unitPrefabs[3], new Vector3(-32, -35, 30), Quaternion.identity) as GameObject;
+        black.transform.Rotate(new Vector3(-50, -45, -9));
+        black.transform.localScale = new Vector3(65, 0.1f, 30);
+        black.GetComponent<Renderer>().material.color = Color.black;
+        black.GetComponent<Renderer>().material.SetFloat("_Metallic", 1);
+
+        SpawnAllUnits ();
         SpawnMapTiles();
         ColorMapTiles();
+        SpawnWalls();
     }
 
 	// Update world to show changes
@@ -140,6 +148,20 @@ public class BoardManager : MonoBehaviour {
 		activeUnit.Add (go);
 	}
 
+    private void SpawnWalls()
+    {
+        GameObject wall1 = Instantiate(unitPrefabs[3], new Vector3 (0, (float)mapSize/4 , (float)mapSize/2), Quaternion.identity) as GameObject;
+        wall1.transform.Rotate(new Vector3(90f, 90f, 0));
+        wall1.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize/2);
+        GameObject wall2 = Instantiate(unitPrefabs[3], new Vector3((float)mapSize/2, (float)mapSize/4, mapSize), Quaternion.identity) as GameObject;
+        wall2.transform.Rotate(new Vector3(90f, 0, 180f));
+        wall2.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize/2);
+        Texture2D walltex = Resources.Load("wall") as Texture2D;
+        Texture2D walltex2 = Resources.Load("wall2") as Texture2D;
+        wall1.GetComponent<Renderer>().material.mainTexture = walltex;
+        wall2.GetComponent<Renderer>().material.mainTexture = walltex2;
+    }
+
 	private void SpawnAllUnits()
 	{
 		activeUnit = new List<GameObject> ();
@@ -156,12 +178,12 @@ public class BoardManager : MonoBehaviour {
 		
 	private void SpawnEnvironment(int index, int x, int y)
 	{
-		GameObject go2 = Instantiate (unitPrefabs [index], GetTileCenter(x,y,-0.01f), Quaternion.identity) as GameObject;
-		go2.transform.SetParent (transform);
-        go2.transform.Rotate(new Vector3(90f,0,0));
+		GameObject tile = Instantiate (unitPrefabs [index], GetTileCenter(x,y,-0.01f), Quaternion.identity) as GameObject;
+		tile.transform.SetParent (transform);
+        tile.transform.Rotate(new Vector3(90f,0,0));
 		//Spots [x, y] = go2.GetComponent<OpenMapSpots> ();
 		//Spots [x, y].SetPosition (x, y);
-		mapTiles.Add (go2);
+		mapTiles.Add (tile);
 	}
 
 	private void SpawnMapTiles()
