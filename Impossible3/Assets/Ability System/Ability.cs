@@ -16,7 +16,18 @@ public class Ability : AbilityBehaviors {
 	private int range; //range of ability
 	private bool aoe; //area of effect ability
 	private bool singleTarget; // single target ability 
+	private float castTime; //how long it takes to cast
+	private float cooldownCost; //how long the cooldown is for the cost
+	private AbilityType type; //type of ability.
 
+	public enum AbilityType
+	{
+		Spell,
+		Melee,
+		Range,
+		Buff,
+		Debuff
+	}
 	public Ability(){
 		//empty constructor to fix bugs
 	}

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AbilityBehaviors{
+public class AbilityBehaviors : MonoBehaviour{
 
 	private BasicObjectInformation objectInfo;
 	private BehaviorStartTimes startTime;
