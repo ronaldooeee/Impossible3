@@ -59,7 +59,7 @@ public class Ability : AbilityBehaviors {
 			return description; 
 		}
 	}
-	public string AbilityIcon{
+	public Sprite AbilityIcon{
 		get{
 			return icon; 
 		}
