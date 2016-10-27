@@ -140,13 +140,13 @@ public class PlayerUnit : Unit
 		{
 			u = BoardManager.Instance.Units [CurrentX, CurrentY + 1];
 			//if (u.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX, CurrentY + 1] = true;
+			aSpaces [CurrentX, CurrentY + 1] = true;
 
 			if (CurrentY != BoardManager.mapSize - 2 && isRanged) 
 			{
 				u2 = BoardManager.Instance.Units [CurrentX, CurrentY + 2];
 				//if (u2.GetComponent<EnemyUnit>() != null)
-					aSpaces [CurrentX, CurrentY + 2] = true;
+				aSpaces [CurrentX, CurrentY + 2] = true;
 			}
 		}
 
@@ -155,13 +155,13 @@ public class PlayerUnit : Unit
 		{
 			u = BoardManager.Instance.Units [CurrentX, CurrentY - 1];
 			//if (u.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX, CurrentY - 1] = true;
-			
+			aSpaces [CurrentX, CurrentY - 1] = true;
+
 			if (CurrentY != 1 && isRanged) 
 			{
 				u2 = BoardManager.Instance.Units [CurrentX, CurrentY - 2];
 				//if (u2.GetComponent<EnemyUnit>() != null)
-					aSpaces [CurrentX, CurrentY - 2] = true;
+				aSpaces [CurrentX, CurrentY - 2] = true;
 			}
 		}
 
@@ -170,13 +170,13 @@ public class PlayerUnit : Unit
 		{
 			u = BoardManager.Instance.Units [CurrentX - 1, CurrentY];
 			//if (u.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX - 1, CurrentY] = true;
-			
+			aSpaces [CurrentX - 1, CurrentY] = true;
+
 			if (CurrentX != 1 && isRanged) 
 			{
 				u2 = BoardManager.Instance.Units [CurrentX - 2, CurrentY];
 				//if (u2.GetComponent<EnemyUnit>() != null)
-					aSpaces [CurrentX - 2, CurrentY] = true;
+				aSpaces [CurrentX - 2, CurrentY] = true;
 			}
 		}
 
@@ -186,13 +186,13 @@ public class PlayerUnit : Unit
 		{
 			u = BoardManager.Instance.Units [CurrentX + 1, CurrentY];
 			//if (u.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX + 1, CurrentY] = true;
-			
+			aSpaces [CurrentX + 1, CurrentY] = true;
+
 			if (CurrentX != BoardManager.mapSize - 2 && isRanged) 
 			{
 				u2 = BoardManager.Instance.Units [CurrentX + 2, CurrentY];
 				//if (u2.GetComponent<EnemyUnit>() != null)
-					aSpaces [CurrentX + 2, CurrentY] = true;
+				aSpaces [CurrentX + 2, CurrentY] = true;
 			}
 		}
 
@@ -205,7 +205,7 @@ public class PlayerUnit : Unit
 				u = BoardManager.Instance.Units [CurrentX - 1, CurrentY + 1];
 				//If its open, be able to move there
 				//if (u.GetComponent<EnemyUnit>() != null)
-					aSpaces [CurrentX - 1, CurrentY + 1] = true;
+				aSpaces [CurrentX - 1, CurrentY + 1] = true;
 			}
 		}
 
@@ -216,7 +216,7 @@ public class PlayerUnit : Unit
 			if (CurrentY != BoardManager.mapSize - 1) {
 				u = BoardManager.Instance.Units [CurrentX + 1, CurrentY + 1];
 				//if (u.GetComponent<EnemyUnit>() != null)
-					aSpaces [CurrentX + 1, CurrentY + 1] = true;
+				aSpaces [CurrentX + 1, CurrentY + 1] = true;
 			}
 		}
 
@@ -228,7 +228,7 @@ public class PlayerUnit : Unit
 				u = BoardManager.Instance.Units [CurrentX - 1, CurrentY - 1];
 				//If its open, be able to move there
 				//if (u.GetComponent<EnemyUnit>() != null)
-					aSpaces [CurrentX - 1, CurrentY - 1] = true;
+				aSpaces [CurrentX - 1, CurrentY - 1] = true;
 			}
 		}
 
@@ -240,7 +240,7 @@ public class PlayerUnit : Unit
 				u = BoardManager.Instance.Units [CurrentX + 1, CurrentY - 1];
 				//If its open, be able to move there
 				//if (u.GetComponent<EnemyUnit>() != null)
-					aSpaces [CurrentX + 1, CurrentY - 1] = true;
+				aSpaces [CurrentX + 1, CurrentY - 1] = true;
 			}
 		}
 
