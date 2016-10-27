@@ -22,7 +22,7 @@ public class BoardManager : MonoBehaviour {
 
 	public List<GameObject> unitPrefabs;
 	private List<GameObject> activeUnit = new List<GameObject>();
-    public List<GameObject> mapTiles = new List<GameObject>();
+	public List<GameObject> mapTiles = new List<GameObject>();
 
 	private Material previousMat;
 	public Material selectedMat;
@@ -34,10 +34,18 @@ public class BoardManager : MonoBehaviour {
 	private void Start ()
 	{
 		Instance = this;
+		//Spawn Black Background
+		GameObject black = Instantiate(unitPrefabs[3], new Vector3(-32, -35, 30), Quaternion.identity) as GameObject;
+		black.transform.Rotate(new Vector3(-50, -45, -9));
+		black.transform.localScale = new Vector3(65, 0.1f, 30);
+		black.GetComponent<Renderer>().material.color = Color.black;
+		black.GetComponent<Renderer>().material.SetFloat("_Metallic", 1);
+
 		SpawnAllUnits ();
-        SpawnMapTiles();
-        ColorMapTiles();
-    }
+		SpawnMapTiles();
+		ColorMapTiles();
+		SpawnWalls();
+	}
 
 	// Update world to show changes
 	private void Update()
@@ -55,8 +63,8 @@ public class BoardManager : MonoBehaviour {
 				// select that unit
 				if (selectedUnit == null) {
 					SelectUnit (selectionX, selectionY);
-				
-				//Or if theres is a unit selected, move it to that space, then pull up attack options
+
+					//Or if theres is a unit selected, move it to that space, then pull up attack options
 				} else if (selectedUnit != null) 
 				{
 					MoveUnit (selectionX, selectionY);
@@ -69,7 +77,7 @@ public class BoardManager : MonoBehaviour {
 			}
 		}
 	}
-		
+
 	private void UpdateSelection()
 	{
 		if (!Camera.main)
@@ -88,10 +96,10 @@ public class BoardManager : MonoBehaviour {
 			selectionY = -1;
 		}
 	}
-		
+
 	private void SelectUnit(int x, int y)
 	{
-		Debug.Log("SelectUnit Start");
+		//Debug.Log("SelectUnit Start");
 		// If no unit is selected when clicked, return
 		if (Units [x, y] == null)
 			return;
@@ -110,12 +118,12 @@ public class BoardManager : MonoBehaviour {
 		selectedUnit.GetComponent<MeshRenderer> ().material = selectedMat;
 
 		BoardHighlights.Instance.HighlightAllowedMoves (allowedMoves);
-		Debug.Log ("SelectUnit End");
+		//Debug.Log ("SelectUnit End");
 	}
 
 	private void MoveUnit(int x, int y)
 	{
-		Debug.Log ("MoveUnit Start");
+		//Debug.Log ("MoveUnit Start");
 		//If you movement to selected space is allowed, do this
 		if (allowedMoves[x,y] && selectedTarget == null)
 		{
@@ -136,24 +144,24 @@ public class BoardManager : MonoBehaviour {
 		BoardHighlights.Instance.Hidehighlights();
 
 		//selectedUnit = null;
-		Debug.Log ("MoveUnit End");
+		//Debug.Log ("MoveUnit End");
 	}
 
 	private void SelectTarget(int x, int y)
 	{
-		Debug.Log ("SelectTarget Start");
+		//Debug.Log ("SelectTarget Start");
 
 		allowedAttacks = Units [x, y].PossibleAttack ();
 		selectedTarget = Units [x, y];
 
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
 
-		Debug.Log ("SelectTarget End");
+		//Debug.Log ("SelectTarget End");
 	}
 
 	private void AttackTarget(int x, int y)
 	{
-		Debug.Log ("AttackTarget Start");
+		//Debug.Log ("AttackTarget Start");
 		if (allowedAttacks [x, y]) 
 		{
 
@@ -161,9 +169,13 @@ public class BoardManager : MonoBehaviour {
 
 		BoardHighlights.Instance.Hidehighlights();
 
+		Debug.Log (selectedUnit);
+		Debug.Log (x);
+		Debug.Log (y);
+		Debug.Log (Units [x, y]);
 		selectedTarget = null;
 		selectedUnit = null;
-		Debug.Log ("AttackTarget End");
+		//Debug.Log ("AttackTarget End");
 	}
 
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
@@ -174,6 +186,20 @@ public class BoardManager : MonoBehaviour {
 		Units [x, y] = go.GetComponent<Unit> ();
 		Units [x, y].SetPosition (x, y);
 		activeUnit.Add (go);
+	}
+
+	private void SpawnWalls()
+	{
+		GameObject wall1 = Instantiate(unitPrefabs[3], new Vector3 (0, (float)mapSize/4 , (float)mapSize/2), Quaternion.identity) as GameObject;
+		wall1.transform.Rotate(new Vector3(90f, 90f, 0));
+		wall1.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize/2);
+		GameObject wall2 = Instantiate(unitPrefabs[3], new Vector3((float)mapSize/2, (float)mapSize/4, mapSize), Quaternion.identity) as GameObject;
+		wall2.transform.Rotate(new Vector3(90f, 0, 180f));
+		wall2.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize/2);
+		Texture2D walltex = Resources.Load("wall") as Texture2D;
+		Texture2D walltex2 = Resources.Load("wall2") as Texture2D;
+		wall1.GetComponent<Renderer>().material.mainTexture = walltex;
+		wall2.GetComponent<Renderer>().material.mainTexture = walltex2;
 	}
 
 	private void SpawnAllUnits()
@@ -189,15 +215,15 @@ public class BoardManager : MonoBehaviour {
 		//Spawn Enemy Units
 		SpawnUnit (1,0,7);
 	}
-		
+
 	private void SpawnEnvironment(int index, int x, int y)
 	{
-		GameObject go2 = Instantiate (unitPrefabs [index], GetTileCenter(x,y,-0.1f), Quaternion.identity) as GameObject;
-		go2.transform.SetParent (transform);
-        go2.transform.Rotate(new Vector3(90f,0,0));
+		GameObject tile = Instantiate (unitPrefabs [index], GetTileCenter(x,y,-0.01f), Quaternion.identity) as GameObject;
+		tile.transform.SetParent (transform);
+		tile.transform.Rotate(new Vector3(90f,0,0));
 		//Spots [x, y] = go2.GetComponent<OpenMapSpots> ();
 		//Spots [x, y].SetPosition (x, y);
-		mapTiles.Add (go2);
+		mapTiles.Add (tile);
 	}
 
 	private void SpawnMapTiles()
@@ -207,32 +233,41 @@ public class BoardManager : MonoBehaviour {
 		for (int i = 0; i < mapSize; i++)
 		{
 			for (int j = 0; j < mapSize; j++)
-            {
-                SpawnEnvironment(2, i, j);
-            }
-				
+			{
+				SpawnEnvironment(2, i, j);
+			}
+
 		}
 	}
 
-    private void ColorMapTiles()
-    {
-        float a = 0.2f;
-        float b = 0;
-        float c = 0.1f;
-        foreach (GameObject tile in mapTiles)
-        {
-            tile.GetComponent<Renderer>().material.color = new Color(a,b,c);
-            a = a + 0.005f;
-            b = b + 0.005f;
-            c = c + 0.005f;
-        }
-    }
+	private void ColorMapTiles()
+	{
+		Texture2D tile1 = Resources.Load("tile1") as Texture2D;
+		Texture2D tile2 = Resources.Load("tile2") as Texture2D;
+		Texture2D tile3 = Resources.Load("tile3") as Texture2D;
+		foreach (GameObject tile in mapTiles)
+		{
+			int rand = Random.Range(0, 10);
+			if (rand < 8 && rand >2)
+			{
+				tile.GetComponent<Renderer>().material.mainTexture = tile1;
+			}else if(rand <= 2)
+			{
+				tile.GetComponent<Renderer>().material.mainTexture = tile2;
+			}else
+			{
+				tile.GetComponent<Renderer>().material.mainTexture = tile3;
+			}
+			tile.GetComponent<Renderer>().material.color= Color.white;
+
+		}
+	}
 	//Draws X.Y grid to show selection
 	private void DrawBoard()
 	{
 		Vector3 widthLine = Vector3.right * mapSize;
 		Vector3 heightLine = Vector3.forward * mapSize;
-		
+
 		for (int i = 0; i <= mapSize; i++) 
 		{
 			Vector3 start = Vector3.forward * i;
@@ -265,7 +300,7 @@ public class BoardManager : MonoBehaviour {
 		Vector3 origin = Vector3.zero;
 		origin.x += (TILE_SIZE * x) + TILE_OFFSET;
 		origin.z += (TILE_SIZE * z) + TILE_OFFSET;
-        origin.y = y;
+		origin.y = y;
 		return origin;
 	}
 }

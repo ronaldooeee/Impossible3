@@ -5,7 +5,7 @@ using System.Collections;
 public class HealthSystem : MonoBehaviour {
 
 	public int startingHealth = 100;
-	private int currentHealth;
+	public int currentHealth;
 
 	public Slider healthSlider;
 	public Image fillImage;
