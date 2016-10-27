@@ -3,7 +3,7 @@
 using UnityEngine;
 using System;
 
-public class BaseMinion :GameObject
+public class BaseMinion : object
 {
     private string minionID;
 
@@ -28,9 +28,9 @@ public class BaseMinion :GameObject
         minionID = GuidString;
     }
 
-    public static void removeMinion(GameObject minion)
+    public static void removeMinion(object minion)
     {
-        Destroy(minion);
+        UnityEngine.GameObject.Destroy((GameObject) minion);
     }
 
     //Does this work?
@@ -39,7 +39,7 @@ public class BaseMinion :GameObject
         minion.health -= attackStrength;
         if (minion.health <= 0)
         {
-            removeMinion(minion);
+            BaseMinion.removeMinion(minion);
         }
     }
 }
