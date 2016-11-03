@@ -11,6 +11,7 @@ public class BoardManager : MonoBehaviour {
 	public Unit[,] Units{ set; get; }
 	private Unit selectedUnit;
 	private Unit selectedTarget;
+	private Component selectedTargetsHealth;
 
 	public OpenMapSpots[,] Spots{ set; get; }
 
@@ -113,9 +114,9 @@ public class BoardManager : MonoBehaviour {
 		//Make Sure unit is selected
 		selectedUnit = Units [x, y];
 		//Take the old material on the character model, exchange it with a highlighting material when selected
-		previousMat = selectedUnit.GetComponent<MeshRenderer> ().material;
-		selectedMat.mainTexture = previousMat.mainTexture;
-		selectedUnit.GetComponent<MeshRenderer> ().material = selectedMat;
+		//previousMat = selectedUnit.GetComponent<MeshRenderer> ().material;
+		//selectedMat.mainTexture = previousMat.mainTexture;
+		//selectedUnit.GetComponent<MeshRenderer> ().material = selectedMat;
 
 		BoardHighlights.Instance.HighlightAllowedMoves (allowedMoves);
 		//Debug.Log ("SelectUnit End");
@@ -140,7 +141,7 @@ public class BoardManager : MonoBehaviour {
 			//WHERE WE WOULD CALL RESET COOLDOWN TIMER FUNCTION
 		}
 		//Deselect unit and get rid of highlight
-		selectedUnit.GetComponent<MeshRenderer>().material = previousMat;
+		//selectedUnit.GetComponent<MeshRenderer>().material = previousMat;
 		BoardHighlights.Instance.Hidehighlights();
 
 		//selectedUnit = null;
@@ -162,16 +163,17 @@ public class BoardManager : MonoBehaviour {
 	private void AttackTarget(int x, int y)
 	{
 		//Debug.Log ("AttackTarget Start");
-		if (allowedAttacks [x, y]) 
+		selectedTarget = Units[x,y];
+		if (selectedTarget != null) 
 		{
-
+			GameObject enemy = selectedTarget.gameObject;
+			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
+			health.TakeDamage (50);
 		}
 
 		BoardHighlights.Instance.Hidehighlights();
 
-		Debug.Log (selectedUnit);
-		Debug.Log (x);
-		Debug.Log (y);
+		Debug.Log (selectedTarget);
 		Debug.Log (Units [x, y]);
 		selectedTarget = null;
 		selectedUnit = null;
@@ -179,27 +181,32 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
-	private void SpawnUnit(int index, int x, int y)
+	private void SpawnUnit(int unit, int index, int x, int y)
 	{
-		GameObject go = Instantiate (unitPrefabs [index], GetTileCenter(x,y,0.5f), Quaternion.identity) as GameObject;
-		//go.transform.SetParent (transform);
-		Units [x, y] = go.GetComponent<Unit> ();
+		GameObject go = Instantiate (unitPrefabs [unit+4], GetTileCenter(x,y,0.5f), Quaternion.identity) as GameObject;
+        //go.transform.SetParent (transform);
+        Sprite[] spriteArray = new Sprite[] { Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("knight2"), Resources.Load<Sprite>("golem") };
+        go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
+        go.transform.rotation = new Quaternion(-0.1f,0.9f,0.3f,0.4f);
+        //Debug.Log(go.transform.rotation);
+        go.transform.localScale = new Vector3(2, 2, 1);
+        Units [x, y] = go.GetComponent<Unit> ();
 		Units [x, y].SetPosition (x, y);
 		activeUnit.Add (go);
 	}
 
 	private void SpawnWalls()
 	{
-		GameObject wall1 = Instantiate(unitPrefabs[3], new Vector3 (0, (float)mapSize/4 , (float)mapSize/2), Quaternion.identity) as GameObject;
+		GameObject wall1 = Instantiate(unitPrefabs[3], new Vector3 (0, (float)mapSize/2 , (float)mapSize/2), Quaternion.identity) as GameObject;
 		wall1.transform.Rotate(new Vector3(90f, 90f, 0));
-		wall1.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize/2);
-		GameObject wall2 = Instantiate(unitPrefabs[3], new Vector3((float)mapSize/2, (float)mapSize/4, mapSize), Quaternion.identity) as GameObject;
+		wall1.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize);
+		GameObject wall2 = Instantiate(unitPrefabs[3], new Vector3((float)mapSize/2, (float)mapSize/2, mapSize), Quaternion.identity) as GameObject;
 		wall2.transform.Rotate(new Vector3(90f, 0, 180f));
-		wall2.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize/2);
+		wall2.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize);
 		Texture2D walltex = Resources.Load("wall") as Texture2D;
-		Texture2D walltex2 = Resources.Load("wall2") as Texture2D;
+		//Texture2D walltex2 = Resources.Load("wall2") as Texture2D;
 		wall1.GetComponent<Renderer>().material.mainTexture = walltex;
-		wall2.GetComponent<Renderer>().material.mainTexture = walltex2;
+		wall2.GetComponent<Renderer>().material.mainTexture = walltex;
 	}
 
 	private void SpawnAllUnits()
@@ -209,11 +216,11 @@ public class BoardManager : MonoBehaviour {
 		Units = new Unit[mapSize, mapSize];
 
 		//Spawn Player Units (Model number, x value, y value)
-		SpawnUnit (0, 4, 4);
-		SpawnUnit (0, 1, 0);
+		SpawnUnit (0,0, 4, 4);
+		SpawnUnit (0,1, 1, 0);
 
 		//Spawn Enemy Units
-		SpawnUnit (1,0,7);
+		SpawnUnit (1,2,1,7);
 	}
 
 	private void SpawnEnvironment(int index, int x, int y)
@@ -247,6 +254,7 @@ public class BoardManager : MonoBehaviour {
 		Texture2D tile3 = Resources.Load("tile3") as Texture2D;
 		foreach (GameObject tile in mapTiles)
 		{
+            tile.transform.Rotate(new Vector3(0,0, (Random.Range(0, 3) * 90)));
 			int rand = Random.Range(0, 10);
 			if (rand < 8 && rand >2)
 			{

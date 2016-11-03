@@ -27,7 +27,7 @@ public class HealthSystem : MonoBehaviour {
 
 		if (currentHealth <= 0) 
 		{
-			Destroy (this);
+			Destroy (gameObject);
 		}
 	}
 
