@@ -164,7 +164,7 @@ public class BoardManager : MonoBehaviour {
 	{
 		//Debug.Log ("AttackTarget Start");
 		selectedTarget = Units[x,y];
-		if (selectedTarget != null) 
+		if (selectedTarget != null && selectedTarget != selectedUnit) 
 		{
 			GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
