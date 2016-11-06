@@ -8,7 +8,7 @@ public class Skeleton : BaseMinion
     private string minionType = "Skeleton";
     private string minionDescription = "Buried underground, coming up for air, MUST, EAT, FLESH.";
 
-    private int health = 35;
+    public new int health = 35;
     private int attackTime;
     private int attackStrength;
 

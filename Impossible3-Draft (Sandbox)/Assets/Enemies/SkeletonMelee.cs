@@ -8,7 +8,7 @@ public class SkeletonMelee : BaseMinion
     private string minionType = "Skeleton Warrior";
     private string minionDescription = "BRAWL BRAWL BRAWL!";
 
-    private int health = 35;
+    public new int health = 35;
     private int attackTime;
     private int attackStrength = 20;
 

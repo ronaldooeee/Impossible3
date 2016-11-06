@@ -8,7 +8,7 @@ public class SkeletonRange : BaseMinion
     private string minionType = "Skeleton Archer";
     private string minionDescription = "A veritable rain of arrows.";
 
-    private int health = 35;
+    public new int health = 35;
     private int attackTime;
     private int attackStrength = 10;
 

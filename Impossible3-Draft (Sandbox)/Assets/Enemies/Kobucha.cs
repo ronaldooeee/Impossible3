@@ -8,12 +8,12 @@ public class Kobucha : BaseMinion
     private string minionType = "Kobucha!";
     private string minionDescription = "From the dark underbelly of your parents' garage.";
 
-    private int health = 10;
+    public new  health = 10;
     private int attackTime;
     private int attackStrength = 10;
 
     private int movementTime;
-    private int movementDistance;
+    private int movementDistance = 2;
 
     private int armorValue = 10;
 
