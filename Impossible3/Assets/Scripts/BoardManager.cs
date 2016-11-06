@@ -48,38 +48,60 @@ public class BoardManager : MonoBehaviour {
 		SpawnWalls();
 	}
 
-	// Update world to show changes
-	private void Update()
-	{
-		UpdateSelection ();
-		DrawBoard ();
+    // Update world to show changes
+    private void Update()
+    {
+        UpdateSelection();
+        DrawBoard();
 
-		//Measure when mouse button is clicked
-		if (Input.GetMouseButtonDown (0))
-		{
-			//Make sure x and y value is on the board
-			if (selectionX >= 0 && selectionY >= 0)
-			{
-				//If your clicking on a character while selectedUnit has nothing in it
-				// select that unit
-				if (selectedUnit == null) {
-					SelectUnit (selectionX, selectionY);
+        //Measure when mouse button is clicked
+        if (Input.GetMouseButtonDown(0))
+        {
+            //Make sure x and y value is on the board
+            if (selectionX >= 0 && selectionY >= 0)
+            {
+                //If the attack overlay is up, attack the target                
+                if (selectedTarget != null)
+                {
+                    AttackTarget(selectionX, selectionY);
+                }
+                // If you click on a unit, select that unit
+                if (selectedUnit == null)
+                {
+                    SelectUnit(selectionX, selectionY);
 
-					//Or if theres is a unit selected, move it to that space, then pull up attack options
-				} else if (selectedUnit != null) 
-				{
-					MoveUnit (selectionX, selectionY);
-					if (selectedTarget == null) {
-						SelectTarget (selectionX, selectionY);
-					} else if (selectedTarget != null) {
-						AttackTarget (selectionX, selectionY);
-					}
-				}
-			}
-		}
-	}
+                    //Or if theres is a unit selected, move it to that space
+                }
+                else if (selectedUnit != null)
+                {
+                    MoveUnit(selectionX, selectionY);
+                }
+            }
+        }
 
-	private void UpdateSelection()
+        //Measure when right mouse button is clicked
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (selectionX >= 0 && selectionY >= 0)
+            {
+                //Clear existing movement higlights
+                BoardHighlights.Instance.Hidehighlights();
+                selectedUnit = null;
+                //If you click on a player bring up the attack UI
+                if (selectedTarget == null)
+                {
+                    SelectTarget(selectionX, selectionY);
+                }
+                else
+                {
+                    BoardHighlights.Instance.Hidehighlights();
+                    selectedTarget = null;
+                }
+            }
+        }
+    }
+
+    private void UpdateSelection()
 	{
 		if (!Camera.main)
 			return;
@@ -144,7 +166,7 @@ public class BoardManager : MonoBehaviour {
 		//selectedUnit.GetComponent<MeshRenderer>().material = previousMat;
 		BoardHighlights.Instance.Hidehighlights();
 
-		//selectedUnit = null;
+		selectedUnit = null;
 		//Debug.Log ("MoveUnit End");
 	}
 
