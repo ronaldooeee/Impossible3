@@ -22,10 +22,10 @@ public class BoardManager : MonoBehaviour {
 	private int selectionY = -1;
 
 	public List<GameObject> unitPrefabs;
-	private List<GameObject> activeUnit = new List<GameObject>();
 	public List<GameObject> mapTiles = new List<GameObject>();
+    public static List<GameObject> playerUnits = new List<GameObject>();
 
-	private Material previousMat;
+    private Material previousMat;
 	public Material selectedMat;
 
 	public bool isCooldownOff = true;
@@ -85,8 +85,9 @@ public class BoardManager : MonoBehaviour {
             if (selectionX >= 0 && selectionY >= 0)
             {
                 //Clear existing movement higlights
+                
+                SelectUnit(selectionX, selectionY);
                 BoardHighlights.Instance.Hidehighlights();
-                selectedUnit = null;
                 //If you click on a player bring up the attack UI
                 if (selectedTarget == null)
                 {
@@ -184,8 +185,9 @@ public class BoardManager : MonoBehaviour {
 
 	private void AttackTarget(int x, int y)
 	{
-		//Debug.Log ("AttackTarget Start");
 		selectedTarget = Units[x,y];
+        Debug.Log(selectedTarget);
+        Debug.Log(selectedUnit);
         if (selectedTarget != null && selectedTarget.isPlayer != selectedUnit.isPlayer)
             {
 			GameObject enemy = selectedTarget.gameObject;
@@ -209,12 +211,15 @@ public class BoardManager : MonoBehaviour {
         //go.transform.SetParent (transform);
         Sprite[] spriteArray = new Sprite[] { Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("knight2"), Resources.Load<Sprite>("golem") };
         go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
-        go.transform.rotation = new Quaternion(-0.1f,0.9f,0.3f,0.4f);
+        go.transform.rotation = Camera.main.transform.rotation;
         //Debug.Log(go.transform.rotation);
         go.transform.localScale = new Vector3(2, 2, 1);
         Units [x, y] = go.GetComponent<Unit> ();
 		Units [x, y].SetPosition (x, y);
-		activeUnit.Add (go);
+        if (unit == 0)
+        {
+            playerUnits.Add(go);
+        }
 	}
 
 	private void SpawnWalls()
@@ -233,7 +238,6 @@ public class BoardManager : MonoBehaviour {
 
 	private void SpawnAllUnits()
 	{
-		activeUnit = new List<GameObject> ();
 
 		Units = new Unit[mapSize, mapSize];
 
