@@ -22,8 +22,8 @@ public class BoardManager : MonoBehaviour {
 	private int selectionY = -1;
 
 	public List<GameObject> unitPrefabs;
-	public List<GameObject> mapTiles = new List<GameObject>();
-    public static List<GameObject> playerUnits = new List<GameObject>();
+    public List<GameObject> mapTiles;
+
 
     private Material previousMat;
 	public Material selectedMat;
@@ -241,11 +241,11 @@ public class BoardManager : MonoBehaviour {
 
 		Units = new Unit[mapSize, mapSize];
 
-		//Spawn Player Units (Model number, x value, y value)
+		//Spawn Player Units (0 = Player,Sprite number, x value, y value)
 		SpawnUnit (0,0, 4, 4);
 		SpawnUnit (0,1, 1, 0);
 
-		//Spawn Enemy Units
+		//Spawn Enemy Units (1 = Enemy,Sprite number, x value, y value)
 		SpawnUnit (1,2,1,7);
 	}
 
