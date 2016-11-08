@@ -23,6 +23,8 @@ public class BoardManager : MonoBehaviour {
 
 	public List<GameObject> unitPrefabs;
     public List<GameObject> mapTiles;
+    public static List<GameObject> playerUnits;
+
 
 
     private Material previousMat;
@@ -34,7 +36,9 @@ public class BoardManager : MonoBehaviour {
 
 	private void Start ()
 	{
-		Instance = this;
+        playerUnits = new List<GameObject>();
+        mapTiles = new List<GameObject>();
+        Instance = this;
 		//Spawn Black Background
 		GameObject black = Instantiate(unitPrefabs[3], new Vector3(-32, -35, 30), Quaternion.identity) as GameObject;
 		black.transform.Rotate(new Vector3(-50, -45, -9));
@@ -186,9 +190,8 @@ public class BoardManager : MonoBehaviour {
 	private void AttackTarget(int x, int y)
 	{
 		selectedTarget = Units[x,y];
-        Debug.Log(selectedTarget);
-        Debug.Log(selectedUnit);
-        if (selectedTarget != null && selectedTarget.isPlayer != selectedUnit.isPlayer)
+        if (selectedTarget != null )
+        //if (selectedTarget != null && selectedTarget.isPlayer != selectedUnit.isPlayer)
             {
 			GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
@@ -197,8 +200,8 @@ public class BoardManager : MonoBehaviour {
 
 		BoardHighlights.Instance.Hidehighlights();
 
-		Debug.Log (selectedTarget);
-		Debug.Log (Units [x, y]);
+		//Debug.Log (selectedTarget);
+		//Debug.Log (Units [x, y]);
 		selectedTarget = null;
 		selectedUnit = null;
 		//Debug.Log ("AttackTarget End");
@@ -216,10 +219,7 @@ public class BoardManager : MonoBehaviour {
         go.transform.localScale = new Vector3(2, 2, 1);
         Units [x, y] = go.GetComponent<Unit> ();
 		Units [x, y].SetPosition (x, y);
-        if (unit == 0)
-        {
-            playerUnits.Add(go);
-        }
+        if (unit == 0){playerUnits.Add(go);}
 	}
 
 	private void SpawnWalls()
