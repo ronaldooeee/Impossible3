@@ -282,12 +282,12 @@ public class BoardManager : MonoBehaviour {
 		{
             tile.transform.Rotate(new Vector3(0,0, (Random.Range(0, 3) * 90)));
 			int rand = Random.Range(0, 10);
-			if (rand < 8 && rand >2)
-			{
-				tile.GetComponent<Renderer>().material.mainTexture = tile1;
-			}else if(rand <= 2)
+			if (rand < 9 && rand >2)
 			{
 				tile.GetComponent<Renderer>().material.mainTexture = tile2;
+			}else if(rand <= 2)
+			{
+				tile.GetComponent<Renderer>().material.mainTexture = tile1;
 			}else
 			{
 				tile.GetComponent<Renderer>().material.mainTexture = tile3;

@@ -27,7 +27,7 @@ public class PlayerUI : MonoBehaviour {
                 HealthSystem playerHP = Units[i].GetComponents<HealthSystem>()[i];
                 float healthratio = (float)playerHP.currentHealth / (float)playerHP.startingHealth;
                 bars0[0].color = Color.Lerp(playerHP.noHealth, playerHP.fullHealth, playerHP.currentHealth / playerHP.startingHealth);
-                bars0[0].transform.localScale = new Vector3((float)7.5 * healthratio, bars0[0].transform.localScale.y, bars0[0].transform.localScale.z);
+                bars0[0].transform.localScale = new Vector3((float)7 * healthratio, bars0[0].transform.localScale.y, bars0[0].transform.localScale.z);
                 //bars0[0].transform.position = new Vector3(0, bars0[0].transform.position.y, bars0[0].transform.position.z);
             }catch
             {
