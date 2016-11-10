@@ -11,13 +11,37 @@ public class MapGenerator : MonoBehaviour {
 	[Range(0,1)]
 	public float outlinePercent;
 
-	List<Coord> allTileCoords;
-	Queue<Coord> shuffledTileCoords;
+	public List<Coord> allTileCoords;
+	public Queue<Coord> shuffledTileCoords;
+    public List<Vector3> obstaclePositions;
 
-	public int seed = 10;
+    public int seed;
+    public System.Random randomNumber;
+    public float timeLeft;
+
+	/*void Update(){
+        timeLeft -= Time.deltaTime;
+
+        if (timeLeft < 0)
+        {
+            seed = randomNumber.Next(1, 100);
+            //mapSize.x = randomNumber.Next(1, 20);
+            //mapSize.y = randomNumber.Next(1, 20);
+            DestroyImmediate(transform.FindChild("Generated Map").gameObject);
+            GenerateMap();
+            timeLeft = 2;
+        }
+
+	}*/
 
 	void Start() {
-		GenerateMap ();
+        randomNumber = new System.Random();
+        timeLeft = 2;
+        seed = randomNumber.Next(1, 100);
+        //mapSize.x = randomNumber.Next(1, 20);
+        //mapSize.y = randomNumber.Next(1, 20);
+        DestroyImmediate(transform.FindChild("Generated Map").gameObject);
+        GenerateMap ();
 	}
 
 	public void GenerateMap() {
@@ -47,10 +71,14 @@ public class MapGenerator : MonoBehaviour {
 			}
 		}
 
-		int obstacleCount = 10;
+        //int obstacleCount = 10;
+        int mapArea = (int)(mapSize.x * mapSize.y);
+        int obstacleCount = (int) System.Math.Floor(mapArea * 0.06);
+
 		for (int i = 0; i < obstacleCount; i++){
 			Coord randomCoord = getRandCoord();
 			Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
+            obstaclePositions.Add(obstaclePosition);
 			Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * .5f, Quaternion.identity) as Transform;
 			newObstacle.parent = mapHolder;
 		}
