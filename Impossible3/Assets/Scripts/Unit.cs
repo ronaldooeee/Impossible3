@@ -8,7 +8,7 @@ public abstract class Unit : MonoBehaviour {
 
 	public bool isPlayer;
 
-	public float cooldownMoveSeconds = 1.0f;
+	public float cooldownMoveSeconds = 3.0f;
 	public float cooldownAttackSeconds = 5.0f;
 	public float timeStampMove = 0.0f;
 	public float timeStampAttack = 0.0f;

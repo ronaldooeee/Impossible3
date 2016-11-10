@@ -56,17 +56,13 @@ public class BoardManager : MonoBehaviour {
         UpdateSelection();
         DrawBoard();
 
-        //Measure when mouse button is clicked
+        //Measure when left mouse button is clicked
         if (Input.GetMouseButtonDown(0))
         {
             //Make sure x and y value is on the board
             if (selectionX >= 0 && selectionY >= 0)
             {
-                //If the attack overlay is up, attack the target                
-                if (selectedTarget != null)
-                {
-                    AttackTarget(selectionX, selectionY);
-                }
+
                 // If you click on a unit, select that unit
                 if (selectedUnit == null)
                 {
@@ -95,12 +91,20 @@ public class BoardManager : MonoBehaviour {
                 {
                     SelectTarget(selectionX, selectionY);
                 }
-                else
+                else if (selectedTarget != null)
                 {
-                    BoardHighlights.Instance.Hidehighlights();
-                    selectedTarget = null;
+                    if (allowedAttacks[selectionX, selectionY])
+                    {
+                        AttackTarget(selectionX, selectionY);
+                    }
+                    else
+                    {
+                        BoardHighlights.Instance.Hidehighlights();
+                        selectedTarget = null;
+                        selectedUnit = null;
+                    }
                 }
-            }
+             }
         }
     }
 
@@ -125,7 +129,6 @@ public class BoardManager : MonoBehaviour {
 
 	private void SelectUnit(int x, int y)
 	{
-		//Debug.Log("SelectUnit Start");
 		// If no unit is selected when clicked, return
 		if (Units [x, y] == null)
 			return;
@@ -138,18 +141,11 @@ public class BoardManager : MonoBehaviour {
 		allowedMoves = Units[x,y].PossibleMove ();
 		//Make Sure unit is selected
 		selectedUnit = Units [x, y];
-		//Take the old material on the character model, exchange it with a highlighting material when selected
-		//previousMat = selectedUnit.GetComponent<MeshRenderer> ().material;
-		//selectedMat.mainTexture = previousMat.mainTexture;
-		//selectedUnit.GetComponent<MeshRenderer> ().material = selectedMat;
-
 		BoardHighlights.Instance.HighlightAllowedMoves (allowedMoves);
-		//Debug.Log ("SelectUnit End");
 	}
 
 	private void MoveUnit(int x, int y)
 	{
-		//Debug.Log ("MoveUnit Start");
 		//If you movement to selected space is allowed, do this
 		if (allowedMoves [x, y] && selectedTarget == null && selectedUnit.timeStampMove <= Time.time) {
 			//Deselect any other unit that might be selected by accident
@@ -159,42 +155,28 @@ public class BoardManager : MonoBehaviour {
 			//Move it there
 			selectedUnit.SetPosition (x, y);
 			//Set that unit's coordinates to desinations coordinates
-			Units [x, y] = selectedUnit;
-            //Debug.Log (Units [x, y]);
-            
+			Units [x, y] = selectedUnit;           
             selectedUnit.timeStampMove = Time.time + selectedUnit.cooldownMoveSeconds;
         } else if (selectedUnit.timeStampMove > Time.time) {
 			return;
 		}
 		//Deselect unit and get rid of highlight
-		//selectedUnit.GetComponent<MeshRenderer>().material = previousMat;
 		BoardHighlights.Instance.Hidehighlights();
-
-		
-
 		selectedUnit = null;
-		//Debug.Log ("MoveUnit End");
 	}
 
 	private void SelectTarget(int x, int y)
 	{
-		//Debug.Log ("SelectTarget Start");
-
 		allowedAttacks = Units [x, y].PossibleAttack ();
 		selectedTarget = Units [x, y];
-
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
-		//Debug.Log ("SelectTarget End");
 	}
 
 	private void AttackTarget(int x, int y)
 	{
 		selectedTarget = Units[x,y];
-        //switch between next 2 lines to allow/deny attacking friendly units / self
 		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time)
-        //if (selectedTarget != null && selectedTarget.isPlayer != selectedUnit.isPlayer && selectedUnit.timeStampAttack <= Time.time)
         {
-            Debug.Log("Attack!!!");
             GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
 			health.TakeDamage (50);
@@ -202,27 +184,18 @@ public class BoardManager : MonoBehaviour {
         } else if (selectedUnit.timeStampMove > Time.time) {
 			return;
 		}
-
 		BoardHighlights.Instance.Hidehighlights();
-
-		
-
-		//Debug.Log (selectedTarget);
-		//Debug.Log (Units [x, y]);
 		selectedTarget = null;
 		selectedUnit = null;
-		//Debug.Log ("AttackTarget End");
 	}
 
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
 	private void SpawnUnit(int unit, int index, int x, int y)
 	{
 		GameObject go = Instantiate (unitPrefabs [unit+4], GetTileCenter(x,y,0.5f), Quaternion.identity) as GameObject;
-        //go.transform.SetParent (transform);
         Sprite[] spriteArray = new Sprite[] { Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("knight2"), Resources.Load<Sprite>("golem") };
         go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
         go.transform.rotation = Camera.main.transform.rotation;
-        //Debug.Log(go.transform.rotation);
         go.transform.localScale = new Vector3(2, 2, 1);
         Units [x, y] = go.GetComponent<Unit> ();
 		Units [x, y].SetPosition (x, y);
@@ -238,7 +211,6 @@ public class BoardManager : MonoBehaviour {
 		wall2.transform.Rotate(new Vector3(90f, 0, 180f));
 		wall2.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize);
 		Texture2D walltex = Resources.Load("wall") as Texture2D;
-		//Texture2D walltex2 = Resources.Load("wall2") as Texture2D;
 		wall1.GetComponent<Renderer>().material.mainTexture = walltex;
 		wall2.GetComponent<Renderer>().material.mainTexture = walltex;
 	}
@@ -261,8 +233,6 @@ public class BoardManager : MonoBehaviour {
 		GameObject tile = Instantiate (unitPrefabs [index], GetTileCenter(x,y,-0.01f), Quaternion.identity) as GameObject;
 		tile.transform.SetParent (transform);
 		tile.transform.Rotate(new Vector3(90f,0,0));
-		//Spots [x, y] = go2.GetComponent<OpenMapSpots> ();
-		//Spots [x, y].SetPosition (x, y);
 		mapTiles.Add (tile);
 	}
 
