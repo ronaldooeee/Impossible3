@@ -160,17 +160,17 @@ public class BoardManager : MonoBehaviour {
 			selectedUnit.SetPosition (x, y);
 			//Set that unit's coordinates to desinations coordinates
 			Units [x, y] = selectedUnit;
-			//Debug.Log (Units [x, y]);
-
-			//WHERE WE WOULD CALL RESET COOLDOWN TIMER FUNCTION
-		} else if (selectedUnit.timeStampMove > Time.time) {
+            //Debug.Log (Units [x, y]);
+            
+            selectedUnit.timeStampMove = Time.time + selectedUnit.cooldownMoveSeconds;
+        } else if (selectedUnit.timeStampMove > Time.time) {
 			return;
 		}
 		//Deselect unit and get rid of highlight
 		//selectedUnit.GetComponent<MeshRenderer>().material = previousMat;
 		BoardHighlights.Instance.Hidehighlights();
 
-		selectedUnit.timeStampMove = Time.time + selectedUnit.cooldownMoveSeconds;
+		
 
 		selectedUnit = null;
 		//Debug.Log ("MoveUnit End");
@@ -190,19 +190,22 @@ public class BoardManager : MonoBehaviour {
 	private void AttackTarget(int x, int y)
 	{
 		selectedTarget = Units[x,y];
+        //switch between next 2 lines to allow/deny attacking friendly units / self
 		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time)
-        //if (selectedTarget != null && selectedTarget.isPlayer != selectedUnit.isPlayer)
+        //if (selectedTarget != null && selectedTarget.isPlayer != selectedUnit.isPlayer && selectedUnit.timeStampAttack <= Time.time)
         {
-			GameObject enemy = selectedTarget.gameObject;
+            Debug.Log("Attack!!!");
+            GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
 			health.TakeDamage (50);
-		} else if (selectedUnit.timeStampMove > Time.time) {
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+        } else if (selectedUnit.timeStampMove > Time.time) {
 			return;
 		}
 
 		BoardHighlights.Instance.Hidehighlights();
 
-		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		
 
 		//Debug.Log (selectedTarget);
 		//Debug.Log (Units [x, y]);

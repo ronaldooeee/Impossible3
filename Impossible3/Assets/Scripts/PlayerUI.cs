@@ -23,13 +23,36 @@ public class PlayerUI : MonoBehaviour {
         {
             Image[] bars = UIs[i].GetComponentsInChildren<Image>();
             Image[] bars0 = bars[1].GetComponents<Image>();
-            try{
-                HealthSystem playerHP = Units[i].GetComponents<HealthSystem>()[i];
+            Image[] bars1 = bars[2].GetComponents<Image>();
+            Image[] bars2 = bars[3].GetComponents<Image>();
+            try
+            {
+                //HP Bar UI
+                HealthSystem playerHP = Units[i].GetComponents<HealthSystem>()[0];
                 float healthratio = (float)playerHP.currentHealth / (float)playerHP.startingHealth;
                 bars0[0].color = Color.Lerp(playerHP.noHealth, playerHP.fullHealth, playerHP.currentHealth / playerHP.startingHealth);
                 bars0[0].transform.localScale = new Vector3((float)7 * healthratio, bars0[0].transform.localScale.y, bars0[0].transform.localScale.z);
                 //bars0[0].transform.position = new Vector3(0, bars0[0].transform.position.y, bars0[0].transform.position.z);
-            }catch
+
+                //Movement Cooldown UI
+                float playerMoveCooldown = Units[i].GetComponents<PlayerUnit>()[0].timeStampMove - Time.time;
+                float maxMoveCooldown = Units[i].GetComponents<PlayerUnit>()[0].cooldownMoveSeconds;
+                if (playerMoveCooldown >= 0)
+                {
+                    bars1[0].transform.localScale = new Vector3((float)7 * (1-(playerMoveCooldown/maxMoveCooldown)), bars1[0].transform.localScale.y, bars1[0].transform.localScale.z);
+                }
+                //Debug.Log(playerCooldown);
+
+                //Attack Cooldown UI
+                float playerAttackCooldown = Units[i].GetComponents<PlayerUnit>()[0].timeStampAttack - Time.time;
+                float maxAttackCooldown = Units[i].GetComponents<PlayerUnit>()[0].cooldownAttackSeconds;
+                if (playerAttackCooldown >= 0)
+                {
+                    bars2[0].transform.localScale = new Vector3((float)7 * (1 - (playerAttackCooldown / maxAttackCooldown)), bars2[0].transform.localScale.y, bars2[0].transform.localScale.z);
+                }
+
+            }
+            catch
             {
                 //Temp workaround for when players are deleted so unity doesnt throw 1 million errors
             }
