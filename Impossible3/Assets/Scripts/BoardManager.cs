@@ -25,8 +25,6 @@ public class BoardManager : MonoBehaviour {
     public List<GameObject> mapTiles;
     public static List<GameObject> playerUnits;
 
-
-
     private Material previousMat;
 	public Material selectedMat;
 
@@ -153,12 +151,11 @@ public class BoardManager : MonoBehaviour {
 	{
 		//Debug.Log ("MoveUnit Start");
 		//If you movement to selected space is allowed, do this
-		if (allowedMoves[x,y] && selectedTarget == null)
-		{
+		if (allowedMoves [x, y] && selectedTarget == null && selectedUnit.timeStampMove <= Time.time) {
 			//Deselect any other unit that might be selected by accident
 			Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
 			//Find the coordinates for destination
-			selectedUnit.transform.position = GetTileCenter (x, y,0.5f);
+			selectedUnit.transform.position = GetTileCenter (x, y, 0.5f);
 			//Move it there
 			selectedUnit.SetPosition (x, y);
 			//Set that unit's coordinates to desinations coordinates
@@ -166,10 +163,14 @@ public class BoardManager : MonoBehaviour {
 			//Debug.Log (Units [x, y]);
 
 			//WHERE WE WOULD CALL RESET COOLDOWN TIMER FUNCTION
+		} else if (selectedUnit.timeStampMove > Time.time) {
+			return;
 		}
 		//Deselect unit and get rid of highlight
 		//selectedUnit.GetComponent<MeshRenderer>().material = previousMat;
 		BoardHighlights.Instance.Hidehighlights();
+
+		selectedUnit.timeStampMove = Time.time + selectedUnit.cooldownMoveSeconds;
 
 		selectedUnit = null;
 		//Debug.Log ("MoveUnit End");
@@ -183,22 +184,25 @@ public class BoardManager : MonoBehaviour {
 		selectedTarget = Units [x, y];
 
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
-
 		//Debug.Log ("SelectTarget End");
 	}
 
 	private void AttackTarget(int x, int y)
 	{
 		selectedTarget = Units[x,y];
-        if (selectedTarget != null )
+		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time)
         //if (selectedTarget != null && selectedTarget.isPlayer != selectedUnit.isPlayer)
-            {
+        {
 			GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
 			health.TakeDamage (50);
+		} else if (selectedUnit.timeStampMove > Time.time) {
+			return;
 		}
 
 		BoardHighlights.Instance.Hidehighlights();
+
+		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 
 		//Debug.Log (selectedTarget);
 		//Debug.Log (Units [x, y]);
