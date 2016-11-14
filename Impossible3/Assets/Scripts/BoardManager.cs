@@ -56,8 +56,8 @@ public class BoardManager : MonoBehaviour {
         UpdateSelection();
         DrawBoard();
 
-        //Measure when left mouse button is clicked
-        if (Input.GetMouseButtonDown(0))
+        //Measure when right mouse button is clicked
+        if (Input.GetMouseButtonDown(1))
         {
             //Make sure x and y value is on the board
             if (selectionX >= 0 && selectionY >= 0)
@@ -72,13 +72,22 @@ public class BoardManager : MonoBehaviour {
                 }
                 else if (selectedUnit != null)
                 {
-                    MoveUnit(selectionX, selectionY);
+                    if(allowedMoves[selectionX, selectionY])
+                    {
+                        MoveUnit(selectionX, selectionY);
+                    }
+                    else
+                    {
+                        BoardHighlights.Instance.Hidehighlights();
+                        selectedTarget = null;
+                        selectedUnit = null;
+                    }
                 }
             }
         }
 
-        //Measure when right mouse button is clicked
-        if (Input.GetMouseButtonDown(1))
+        //Measure when left mouse button is clicked
+        if (Input.GetMouseButtonDown(0))
         {
             if (selectionX >= 0 && selectionY >= 0)
             {
@@ -163,6 +172,7 @@ public class BoardManager : MonoBehaviour {
 		//Deselect unit and get rid of highlight
 		BoardHighlights.Instance.Hidehighlights();
 		selectedUnit = null;
+        selectedTarget = null;
 	}
 
 	private void SelectTarget(int x, int y)
