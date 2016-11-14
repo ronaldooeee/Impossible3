@@ -7,17 +7,45 @@ public class PlayerUI : MonoBehaviour {
     public List<GameObject> unitPrefabs;
     private List<GameObject> UIs;
     private List<GameObject> Units;
+    public Canvas mainCanvas;
+    public GameObject mainUI;
 
-    // Use this for initialization
+
     void Start () {
+        float width = mainCanvas.transform.localScale.x;
+        float height = mainCanvas.transform.localScale.y;
+        
         UIs = new List<GameObject>();
-        GameObject player1UI = Instantiate(unitPrefabs[0], new Vector3(5.65f,11.9f,-5.85f), Camera.main.transform.rotation) as GameObject;
-        //player1UI.transform.localScale = new Vector3(.005f,.005f,.005f);
+        GameObject player1UI = Instantiate(mainUI, new Vector3(0,0,0), Camera.main.transform.rotation) as GameObject;
+        player1UI.transform.parent = mainCanvas.transform;
+        player1UI.transform.localScale = new Vector3(.2f,.2f,.2f);
+        player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0,1);
+        player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0,1);
+        player1UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(-350,190,0);
+
+        GameObject player2UI = Instantiate(mainUI, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
+        player2UI.transform.parent = mainCanvas.transform;
+        player2UI.transform.localScale = new Vector3(.2f, .2f, .2f);
+        player2UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
+        player2UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
+        player2UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(-350, 90, 0);
+
+        GameObject player3UI = Instantiate(mainUI, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
+        player3UI.transform.parent = mainCanvas.transform;
+        player3UI.transform.localScale = new Vector3(.2f, .2f, .2f);
+        player3UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
+        player3UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
+        player3UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(-350, -10, 0);
+
         UIs.Add(player1UI);
+        UIs.Add(player2UI);
+        UIs.Add(player3UI);
     }
+
 	
 	// Update is called once per frame
 	void Update () {
+
         Units = BoardManager.playerUnits;
         for (int i = 0; i<UIs.Count; i++)
         {
@@ -25,7 +53,7 @@ public class PlayerUI : MonoBehaviour {
             Image[] bars0 = bars[1].GetComponents<Image>();
             Image[] bars1 = bars[2].GetComponents<Image>();
             Image[] bars2 = bars[3].GetComponents<Image>();
-            try
+            //try
             {
                 //HP Bar UI
                 HealthSystem playerHP = Units[i].GetComponents<HealthSystem>()[0];
@@ -41,7 +69,6 @@ public class PlayerUI : MonoBehaviour {
                 {
                     bars1[0].transform.localScale = new Vector3((float)7 * (1-(playerMoveCooldown/maxMoveCooldown)), bars1[0].transform.localScale.y, bars1[0].transform.localScale.z);
                 }
-                //Debug.Log(playerCooldown);
 
                 //Attack Cooldown UI
                 float playerAttackCooldown = Units[i].GetComponents<PlayerUnit>()[0].timeStampAttack - Time.time;
@@ -52,10 +79,10 @@ public class PlayerUI : MonoBehaviour {
                 }
 
             }
-            catch
-            {
+            //catch
+            //{
                 //Temp workaround for when players are deleted so unity doesnt throw 1 million errors
-            }
+            //}
         }
 	}
 }
