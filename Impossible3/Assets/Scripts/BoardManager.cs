@@ -160,7 +160,7 @@ public class BoardManager : MonoBehaviour {
 			//Deselect any other unit that might be selected by accident
 			Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
 			//Find the coordinates for destination
-			selectedUnit.transform.position = GetTileCenter (x, y, 0.5f);
+			selectedUnit.transform.position = GetTileCenter (x, y, 0);
 			//Move it there
 			selectedUnit.SetPosition (x, y);
 			//Set that unit's coordinates to desinations coordinates
@@ -202,9 +202,13 @@ public class BoardManager : MonoBehaviour {
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
 	private void SpawnUnit(int unit, int index, int x, int y)
 	{
-		GameObject go = Instantiate (unitPrefabs [unit+4], GetTileCenter(x,y,0.5f), Quaternion.identity) as GameObject;
-        Sprite[] spriteArray = new Sprite[] { Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("knight2"), Resources.Load<Sprite>("knight3"), Resources.Load<Sprite>("golem") };
+		GameObject go = Instantiate (unitPrefabs [unit+4], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
+        Sprite[] spriteArray = new Sprite[] {
+            Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("knight2"), Resources.Load<Sprite>("knight3"),
+            Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("skeleton_knight") };
+        RuntimeAnimatorController[] animationArray = {null, null, null, null, Resources.Load<RuntimeAnimatorController>("skeleton_knight") };
         go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
+        if (animationArray[index] != null) { go.GetComponent<Animator>().runtimeAnimatorController = animationArray[index]; }
         go.transform.rotation = Camera.main.transform.rotation;
         go.transform.localScale = new Vector3(2, 2, 1);
         Units [x, y] = go.GetComponent<Unit> ();
@@ -236,8 +240,9 @@ public class BoardManager : MonoBehaviour {
         SpawnUnit (0, 2, 6, 0);
 
         //Spawn Enemy Units (1 = Enemy,Sprite number, x value, y value)
-        SpawnUnit (1,3,1,7);
-	}
+        SpawnUnit (1, 3, 1, 7);
+        SpawnUnit (1, 4, 2, 9);
+    }
 
 	private void SpawnEnvironment(int index, int x, int y)
 	{

@@ -21,21 +21,21 @@ public class PlayerUI : MonoBehaviour {
         player1UI.transform.localScale = new Vector3(.2f,.2f,.2f);
         player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0,1);
         player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0,1);
-        player1UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(-400,190,0);
+        player1UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(-350,190,0);
 
         GameObject player2UI = Instantiate(mainUI, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
         player2UI.transform.parent = mainCanvas.transform;
         player2UI.transform.localScale = new Vector3(.2f, .2f, .2f);
         player2UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
         player2UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
-        player2UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(-400, 90, 0);
+        player2UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(-350, 90, 0);
 
         GameObject player3UI = Instantiate(mainUI, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
         player3UI.transform.parent = mainCanvas.transform;
         player3UI.transform.localScale = new Vector3(.2f, .2f, .2f);
         player3UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
         player3UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
-        player3UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(-400, -10, 0);
+        player3UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(-350, -10, 0);
 
         UIs.Add(player1UI);
         UIs.Add(player2UI);
