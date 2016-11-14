@@ -203,7 +203,7 @@ public class BoardManager : MonoBehaviour {
 	private void SpawnUnit(int unit, int index, int x, int y)
 	{
 		GameObject go = Instantiate (unitPrefabs [unit+4], GetTileCenter(x,y,0.5f), Quaternion.identity) as GameObject;
-        Sprite[] spriteArray = new Sprite[] { Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("knight2"), Resources.Load<Sprite>("golem") };
+        Sprite[] spriteArray = new Sprite[] { Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("knight2"), Resources.Load<Sprite>("knight3"), Resources.Load<Sprite>("golem") };
         go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
         go.transform.rotation = Camera.main.transform.rotation;
         go.transform.localScale = new Vector3(2, 2, 1);
@@ -231,11 +231,12 @@ public class BoardManager : MonoBehaviour {
 		Units = new Unit[mapSize, mapSize];
 
 		//Spawn Player Units (0 = Player,Sprite number, x value, y value)
-		SpawnUnit (0,0, 4, 4);
-		SpawnUnit (0,1, 1, 0);
+		SpawnUnit (0, 0, 2, 0);
+		SpawnUnit (0, 1, 4, 0);
+        SpawnUnit (0, 2, 6, 0);
 
-		//Spawn Enemy Units (1 = Enemy,Sprite number, x value, y value)
-		SpawnUnit (1,2,1,7);
+        //Spawn Enemy Units (1 = Enemy,Sprite number, x value, y value)
+        SpawnUnit (1,3,1,7);
 	}
 
 	private void SpawnEnvironment(int index, int x, int y)
