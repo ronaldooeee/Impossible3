@@ -7,6 +7,7 @@ public class BoardManager : MonoBehaviour {
 	public static BoardManager Instance { set; get; }
 	private bool[,] allowedMoves{ set; get; }
 	private bool[,] allowedAttacks{ set; get; }
+	private bool[,] allowedAbilities{ set; get; }
 
 	public Unit[,] Units{ set; get; }
 	private Unit selectedUnit;
@@ -115,6 +116,34 @@ public class BoardManager : MonoBehaviour {
                 }
              }
         }
+		if (Input.GetKeyDown("space"))
+		{
+			if (selectionX >= 0 && selectionY >= 0)
+			{
+				//Clear existing movement higlights
+
+				SelectUnit(selectionX, selectionY);
+				BoardHighlights.Instance.Hidehighlights();
+				//If you click on a player bring up the attack UI
+				if (selectedTarget == null)
+				{
+					SelectTarget(selectionX, selectionY);
+				}
+				else if (selectedTarget != null)
+				{
+					if (allowedAttacks[selectionX, selectionY])
+					{
+						AttackTarget(selectionX, selectionY);
+					}
+					else
+					{
+						BoardHighlights.Instance.Hidehighlights();
+						selectedTarget = null;
+						selectedUnit = null;
+					}
+				}
+			}
+		}
     }
 
     private void UpdateSelection()
@@ -178,6 +207,7 @@ public class BoardManager : MonoBehaviour {
 	private void SelectTarget(int x, int y)
 	{
 		allowedAttacks = Units [x, y].PossibleAttack ();
+		allowedAbilities = Units [x, y].PossibleAbilities();
 		selectedTarget = Units [x, y];
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
 	}
