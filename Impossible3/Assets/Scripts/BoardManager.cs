@@ -185,7 +185,7 @@ public class BoardManager : MonoBehaviour {
 	private void MoveUnit(int x, int y)
 	{
 		//If you movement to selected space is allowed, do this
-		if (allowedMoves [x, y] && selectedTarget == null && selectedUnit.timeStampMove <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer) {
+		if (allowedMoves [x, y] && selectedTarget == null && selectedUnit.timeStampMove <= Time.time) {
 			//Deselect any other unit that might be selected by accident
 			Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
 			//Find the coordinates for destination
@@ -219,7 +219,7 @@ public class BoardManager : MonoBehaviour {
         {
             GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
-			health.TakeDamage (30);
+			health.TakeDamage (50);
             selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         } else if (selectedUnit.timeStampMove > Time.time) {
 			return;
