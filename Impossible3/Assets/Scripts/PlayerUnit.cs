@@ -1,365 +1,117 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerUnit : Unit 
 {
-	public bool isRanged;
+    //Make another pubilic override bool called PossibleAttack, with 2 sets of if statements
+    //One to check if ranged attack, another to see if melee with checking surrounding spots
+    //Have it check if !self.Team is in range, then subtract that things health when clicked on
+    //BoardHighlights do a red prefab plane to show attack range
+    //In BoardManager do a deal damage function, which gets attack power of 1st GameObject and subtracts that from health of 2nd/target GameObject
+    //If health <= 0 then destroy GameObject
 
-	//Make another pubilic override bool called PossibleAttack, with 2 sets of if statements
-	//One to check if ranged attack, another to see if melee with checking surrounding spots
-	//Have it check if !self.Team is in range, then subtract that things health when clicked on
-	//BoardHighlights do a red prefab plane to show attack range
-	//In BoardManager do a deal damage function, which gets attack power of 1st GameObject and subtracts that from health of 2nd/target GameObject
-	//If health <= 0 then destroy GameObject
+    public int straightMoveRange = 4;
+    public int diagMoveRange = 2;
+    public int straightAttackRange = 3;
+    public int diagAttackRange = 3;
 
-	public override bool[,] PossibleMove ()
+    //this variable isnt used but it's references elsewhere so i cant remove it
+    public bool isRanged;
+
+    public override bool[,] PossibleMove ()
 	{
-		//Get a multidimensional grid of booleans representing spaces it can move to
-		bool[,] r = new bool[BoardManager.mapSize, BoardManager.mapSize];
-		Unit c, c2;
+        //I am become Flanders Destroyer of Code
 
-		//Straight
-		//If not against very top of board, do this for one square ahead
-		if (CurrentY != BoardManager.mapSize - 1) 
-		{
-			c = BoardManager.Instance.Units [CurrentX, CurrentY + 1];
-			if (c == null)
-				r [CurrentX, CurrentY + 1] = true;
+        //Tile boundries are (0,0),(0,mapsize),(mapsize,0)&(mapsize,mapsize)
+        //BoardManager.mapSize
 
-			if (CurrentY != BoardManager.mapSize - 2) 
-			{
-				c2 = BoardManager.Instance.Units [CurrentX, CurrentY + 2];
-				if (c2 == null)
-					r [CurrentX, CurrentY + 2] = true;
-			}
-		}
+        // List of units by space
+        //BoardManager.Instance.Units[x, y];
 
-		//Back
-		if (CurrentY != 0) 
-		{
-			c = BoardManager.Instance.Units [CurrentX, CurrentY - 1];
-			if (c == null)
-				r [CurrentX, CurrentY - 1] = true;
-			if (CurrentY != 1) 
-			{
-				c2 = BoardManager.Instance.Units [CurrentX, CurrentY - 2];
-				if (c2 == null)
-					r [CurrentX, CurrentY - 2] = true;
-			}
-		}
+        //Current Unit
+        //BoardManager.Instance.Units[CurrentX,CurrentY]
 
-		//Left
-		if (CurrentX != 0) 
-		{
-			c = BoardManager.Instance.Units [CurrentX - 1, CurrentY];
-			if (c == null)
-				r [CurrentX - 1, CurrentY] = true;
-			if (CurrentX != 1) 
-			{
-				c2 = BoardManager.Instance.Units [CurrentX - 2, CurrentY];
-				if (c2 == null)
-					r [CurrentX - 2, CurrentY] = true;
-			}
-		}
+        //Current selection
+        //CurrentX
+        //CurrentY
 
-		//Right
+        bool[,] isAcceptedMove = new bool[BoardManager.mapSize, BoardManager.mapSize];
 
-		if (CurrentX != BoardManager.mapSize - 1) 
-		{
-			c = BoardManager.Instance.Units [CurrentX + 1, CurrentY];
-			if (c == null)
-				r [CurrentX + 1, CurrentY] = true;
-			if (CurrentX != BoardManager.mapSize - 2) 
-			{
-				c2 = BoardManager.Instance.Units [CurrentX + 2, CurrentY];
-				if (c2 == null)
-					r [CurrentX + 2, CurrentY] = true;
-			}
-		}
+        for(int i =1; i <= straightMoveRange; i++)
+        {
+            foreach (List<int> pair in new List<List<int>>{ new List<int>{CurrentX,CurrentY+i },new List<int> { CurrentX+i,CurrentY },new List<int> {CurrentX,CurrentY-i },new List<int> {CurrentX-i,CurrentY } })
+            {
+                int x = pair[0];
+                int y = pair[1];
+                if(x< BoardManager.mapSize && y< BoardManager.mapSize && x>=0 && y>=0)
+                {
+                    if (BoardManager.Instance.Units[x, y] == null)
+                    {
+                        isAcceptedMove[x, y] = true;
+                    }
+                }
+            }
+        }
 
-		//Diag Front Left
-		//If not against left side of board or at very top of board, Do this
-		if (CurrentX != 0) 
-		{
-			if (CurrentY != BoardManager.mapSize - 1) {
-				//Check BoardObject at that x,y value
-				c = BoardManager.Instance.Units [CurrentX - 1, CurrentY + 1];
-				//If its open, be able to move there
-				if (c == null)
-					r [CurrentX - 1, CurrentY + 1] = true;
-			}
-		}
+        for (int i = 1; i <= diagMoveRange; i++)
+        {
+            foreach (List<int> pair in new List<List<int>> { new List<int> { CurrentX+i, CurrentY + i }, new List<int> { CurrentX + i, CurrentY-i }, new List<int> { CurrentX-i, CurrentY - i }, new List<int> { CurrentX - i, CurrentY+i } })
+            {
+                int x = pair[0];
+                int y = pair[1];
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
+                {
+                    if (BoardManager.Instance.Units[x, y] == null)
+                    {
+                        isAcceptedMove[x, y] = true;
+                    }
+                }
+            }
+        }
 
-		//Diag Front Right
-		//If not against right side of board or at very top of board, Do this
-		if (CurrentX != BoardManager.mapSize - 1) 
-		{
-			if (CurrentY != BoardManager.mapSize - 1) {
-				c = BoardManager.Instance.Units [CurrentX + 1, CurrentY + 1];
-				if (c == null)
-					r [CurrentX + 1, CurrentY + 1] = true;
-			}
-		}
-
-		//Diag Back Left
-		if (CurrentX != 0) 
-		{
-			if (CurrentY != 0) {
-				//Check BoardObject at that x,y value
-				c = BoardManager.Instance.Units [CurrentX - 1, CurrentY - 1];
-				//If its open, be able to move there
-				if (c == null)
-					r [CurrentX - 1, CurrentY - 1] = true;
-			}
-		}
-
-		//Diag Back Right
-		if (CurrentX != BoardManager.mapSize - 1) 
-		{
-			if (CurrentY != 0) {
-				//Check BoardObject at that x,y value
-				c = BoardManager.Instance.Units [CurrentX + 1, CurrentY - 1];
-				//If its open, be able to move there
-				if (c == null)
-					r [CurrentX + 1, CurrentY - 1] = true;
-			}
-		}
-
-		return r;
+        return isAcceptedMove;
+        
 	}
 
 	public override bool[,] PossibleAttack ()
 	{
-		//Get a multidimensional grid of booleans representing spaces it can attack
-		bool[,] aSpaces = new bool[BoardManager.mapSize, BoardManager.mapSize];
-		Unit u, u2;
+        bool[,] isAcceptedAttack = new bool[BoardManager.mapSize, BoardManager.mapSize];
 
-		//Straight
-		//If not against very top of board, do this for one square ahead
-		if (CurrentY != BoardManager.mapSize - 1) 
-		{
-			u = BoardManager.Instance.Units [CurrentX, CurrentY + 1];
-			//if (u.GetComponent<EnemyUnit>() != null)
-			aSpaces [CurrentX, CurrentY + 1] = true;
+        for (int i = 1; i <= straightAttackRange; i++)
+        {
+            foreach (List<int> pair in new List<List<int>> { new List<int> { CurrentX, CurrentY + i }, new List<int> { CurrentX + i, CurrentY }, new List<int> { CurrentX, CurrentY - i }, new List<int> { CurrentX - i, CurrentY } })
+            {
+                int x = pair[0];
+                int y = pair[1];
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
+                {
+                    if (BoardManager.Instance.Units[x, y] == null || BoardManager.Instance.Units[CurrentX, CurrentY].isPlayer!= BoardManager.Instance.Units[x, y].isPlayer)
+                    {
+                        isAcceptedAttack[x, y] = true;
+                    }
+                }
+            }
+        }
 
-			if (CurrentY != BoardManager.mapSize - 2 && isRanged) 
-			{
-				u2 = BoardManager.Instance.Units [CurrentX, CurrentY + 2];
-				//if (u2.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX, CurrentY + 2] = true;
-			}
-		}
+        for (int i = 1; i <= diagAttackRange; i++)
+        {
+            foreach (List<int> pair in new List<List<int>> { new List<int> { CurrentX + i, CurrentY + i }, new List<int> { CurrentX + i, CurrentY - i }, new List<int> { CurrentX - i, CurrentY - i }, new List<int> { CurrentX - i, CurrentY + i } })
+            {
+                int x = pair[0];
+                int y = pair[1];
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
+                {
+                    if (BoardManager.Instance.Units[x, y] == null || BoardManager.Instance.Units[CurrentX, CurrentY].isPlayer != BoardManager.Instance.Units[x, y].isPlayer)
+                    {
+                        isAcceptedAttack[x, y] = true;
+                    }
+                }
+            }
+        }
 
-		//Back
-		if (CurrentY != 0) 
-		{
-			u = BoardManager.Instance.Units [CurrentX, CurrentY - 1];
-			//if (u.GetComponent<EnemyUnit>() != null)
-			aSpaces [CurrentX, CurrentY - 1] = true;
+        return isAcceptedAttack;
+    }
 
-			if (CurrentY != 1 && isRanged) 
-			{
-				u2 = BoardManager.Instance.Units [CurrentX, CurrentY - 2];
-				//if (u2.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX, CurrentY - 2] = true;
-			}
-		}
-
-		//Left
-		if (CurrentX != 0) 
-		{
-			u = BoardManager.Instance.Units [CurrentX - 1, CurrentY];
-			//if (u.GetComponent<EnemyUnit>() != null)
-			aSpaces [CurrentX - 1, CurrentY] = true;
-
-			if (CurrentX != 1 && isRanged) 
-			{
-				u2 = BoardManager.Instance.Units [CurrentX - 2, CurrentY];
-				//if (u2.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX - 2, CurrentY] = true;
-			}
-		}
-
-		//Right
-
-		if (CurrentX != BoardManager.mapSize - 1) 
-		{
-			u = BoardManager.Instance.Units [CurrentX + 1, CurrentY];
-			//if (u.GetComponent<EnemyUnit>() != null)
-			aSpaces [CurrentX + 1, CurrentY] = true;
-
-			if (CurrentX != BoardManager.mapSize - 2 && isRanged) 
-			{
-				u2 = BoardManager.Instance.Units [CurrentX + 2, CurrentY];
-				//if (u2.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX + 2, CurrentY] = true;
-			}
-		}
-
-		//Diag Front Left
-		//If not against left side of board or at very top of board, Do this
-		if (CurrentX != 0 && isRanged) 
-		{
-			if (CurrentY != BoardManager.mapSize - 1) {
-				//Check BoardObject at that x,y value
-				u = BoardManager.Instance.Units [CurrentX - 1, CurrentY + 1];
-				//If its open, be able to move there
-				//if (u.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX - 1, CurrentY + 1] = true;
-			}
-		}
-
-		//Diag Front Right
-		//If not against right side of board or at very top of board, Do this
-		if (CurrentX != BoardManager.mapSize - 1 && isRanged) 
-		{
-			if (CurrentY != BoardManager.mapSize - 1) {
-				u = BoardManager.Instance.Units [CurrentX + 1, CurrentY + 1];
-				//if (u.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX + 1, CurrentY + 1] = true;
-			}
-		}
-
-		//Diag Back Left
-		if (CurrentX != 0 && isRanged) 
-		{
-			if (CurrentY != 0) {
-				//Check BoardObject at that x,y value
-				u = BoardManager.Instance.Units [CurrentX - 1, CurrentY - 1];
-				//If its open, be able to move there
-				//if (u.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX - 1, CurrentY - 1] = true;
-			}
-		}
-
-		//Diag Back Right
-		if (CurrentX != BoardManager.mapSize - 1 && isRanged) 
-		{
-			if (CurrentY != 0) {
-				//Check BoardObject at that x,y value
-				u = BoardManager.Instance.Units [CurrentX + 1, CurrentY - 1];
-				//If its open, be able to move there
-				//if (u.GetComponent<EnemyUnit>() != null)
-				aSpaces [CurrentX + 1, CurrentY - 1] = true;
-			}
-		}
-
-		return aSpaces;
-	}
-	public bool[,] PossibleAbilities ()
-	{
-		//Get a multidimensional grid of booleans representing spaces it can move to
-		bool[,] abilSpaces = new bool[BoardManager.mapSize, BoardManager.mapSize];
-		Unit a, a2;
-
-		//Straight
-		//If not against very top of board, do this for one square ahead
-		if (CurrentY != BoardManager.mapSize - 1) 
-		{
-			a = BoardManager.Instance.Units [CurrentX, CurrentY + 1];
-			//if (a == null)
-			abilSpaces [CurrentX, CurrentY + 1] = true;
-
-			if (CurrentY != BoardManager.mapSize - 2) 
-			{
-				a2 = BoardManager.Instance.Units [CurrentX, CurrentY + 2];
-				//if (a2 == null)
-				abilSpaces [CurrentX, CurrentY + 2] = true;
-			}
-		}
-
-		//Back
-		if (CurrentY != 0) 
-		{
-			a = BoardManager.Instance.Units [CurrentX, CurrentY - 1];
-			//if (a == null)
-			abilSpaces [CurrentX, CurrentY - 1] = true;
-			if (CurrentY != 1) 
-			{
-				a2 = BoardManager.Instance.Units [CurrentX, CurrentY - 2];
-				//if (a2 == null)
-				abilSpaces [CurrentX, CurrentY - 2] = true;
-			}
-		}
-
-		//Left
-		if (CurrentX != 0) 
-		{
-			a = BoardManager.Instance.Units [CurrentX - 1, CurrentY];
-			//if (a == null)
-			abilSpaces [CurrentX - 1, CurrentY] = true;
-			if (CurrentX != 1) 
-			{
-				a2 = BoardManager.Instance.Units [CurrentX - 2, CurrentY];
-				//if (a2 == null)
-				abilSpaces [CurrentX - 2, CurrentY] = true;
-			}
-		}
-
-		//Right
-
-		if (CurrentX != BoardManager.mapSize - 1) 
-		{
-			a = BoardManager.Instance.Units [CurrentX + 1, CurrentY];
-			if (a == null)
-				abilSpaces [CurrentX + 1, CurrentY] = true;
-			if (CurrentX != BoardManager.mapSize - 2) 
-			{
-				a2 = BoardManager.Instance.Units [CurrentX + 2, CurrentY];
-				//if (a2 == null)
-				abilSpaces [CurrentX + 2, CurrentY] = true;
-			}
-		}
-
-		//Diag Front Left
-		//If not against left side of board or at very top of board, Do this
-		if (CurrentX != 0) 
-		{
-			if (CurrentY != BoardManager.mapSize - 1) {
-				//Check BoardObject at that x,y value
-				a = BoardManager.Instance.Units [CurrentX - 1, CurrentY + 1];
-				//If its open, be able to move there
-				//if (a == null)
-				abilSpaces [CurrentX - 1, CurrentY + 1] = true;
-			}
-		}
-
-		//Diag Front Right
-		//If not against right side of board or at very top of board, Do this
-		if (CurrentX != BoardManager.mapSize - 1) 
-		{
-			if (CurrentY != BoardManager.mapSize - 1) {
-				a = BoardManager.Instance.Units [CurrentX + 1, CurrentY + 1];
-				//if (a == null)
-				abilSpaces [CurrentX + 1, CurrentY + 1] = true;
-			}
-		}
-
-		//Diag Back Left
-		if (CurrentX != 0) 
-		{
-			if (CurrentY != 0) {
-				//Check BoardObject at that x,y value
-				a = BoardManager.Instance.Units [CurrentX - 1, CurrentY - 1];
-				//If its open, be able to move there
-				//if (a == null)
-				abilSpaces [CurrentX - 1, CurrentY - 1] = true;
-			}
-		}
-
-		//Diag Back Right
-		if (CurrentX != BoardManager.mapSize - 1) 
-		{
-			if (CurrentY != 0) {
-				//Check BoardObject at that x,y value
-				a = BoardManager.Instance.Units [CurrentX + 1, CurrentY - 1];
-				//If its open, be able to move there
-				//if (a == null)
-				abilSpaces [CurrentX + 1, CurrentY - 1] = true;
-			}
-		}
-
-		return abilSpaces;
-	}
 
 }

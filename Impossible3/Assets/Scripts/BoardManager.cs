@@ -31,7 +31,7 @@ public class BoardManager : MonoBehaviour {
 
 	public bool isCooldownOff = true;
 
-	public static int mapSize = 11;
+	public static int mapSize = 30;
 
 	private void Start ()
 	{
