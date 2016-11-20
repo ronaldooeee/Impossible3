@@ -12,9 +12,12 @@ public class PlayerUnit : Unit
     //If health <= 0 then destroy GameObject
 
     public int straightMoveRange = 4;
-    public int diagMoveRange = 2;
+    public int diagMoveRange = 3;
+    public int circMoveRange = 2;
+
     public int straightAttackRange = 3;
-    public int diagAttackRange = 3;
+    public int diagAttackRange = 0;
+    public int circAttackRange = 2;
 
     //this variable isnt used but it's references elsewhere so i cant remove it
     public bool isRanged;
@@ -70,6 +73,21 @@ public class PlayerUnit : Unit
             }
         }
 
+        for (int i = 0 - circMoveRange; i <= circMoveRange; i++)
+        {
+            int x = CurrentX + i;
+            for (int j = 0 - circMoveRange; j <= circMoveRange; j++)
+            {
+                int y = CurrentY + j;
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedMove[x, y] != true)
+                {
+                    if (BoardManager.Instance.Units[x, y] == null)
+                    {
+                        isAcceptedMove[x, y] = true;
+                    }
+                }
+            }
+        }
         return isAcceptedMove;
         
 	}
@@ -101,6 +119,22 @@ public class PlayerUnit : Unit
                 int x = pair[0];
                 int y = pair[1];
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
+                {
+                    if (BoardManager.Instance.Units[x, y] == null || BoardManager.Instance.Units[CurrentX, CurrentY].isPlayer != BoardManager.Instance.Units[x, y].isPlayer)
+                    {
+                        isAcceptedAttack[x, y] = true;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0 - circAttackRange; i <= circAttackRange; i++)
+        {
+            int x = CurrentX + i;
+            for (int j = 0 - circAttackRange; j <= circAttackRange; j++)
+            {
+                int y = CurrentY + j;
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedAttack[x, y] != true)
                 {
                     if (BoardManager.Instance.Units[x, y] == null || BoardManager.Instance.Units[CurrentX, CurrentY].isPlayer != BoardManager.Instance.Units[x, y].isPlayer)
                     {
