@@ -58,7 +58,10 @@ public class PlayerUI : MonoBehaviour {
                 //HP Bar UI
                 HealthSystem playerHP = Units[i].GetComponents<HealthSystem>()[0];
                 float healthratio = (float)playerHP.currentHealth / (float)playerHP.startingHealth;
-                bars0[0].color = Color.Lerp(playerHP.noHealth, playerHP.fullHealth, playerHP.currentHealth / playerHP.startingHealth);
+                if (healthratio >= .66) { bars0[0].color = new Color(0, 1, 0, 1); }
+                else if (healthratio >= .33) { bars0[0].color = new Color(1, 0.92f, 0.016f, 1); }
+                else { bars0[0].color = new Color(1, 0, 0, 1); }
+                //bars0[0].color = Color.Lerp(playerHP.noHealth, playerHP.fullHealth, playerHP.currentHealth / playerHP.startingHealth);
                 bars0[0].transform.localScale = new Vector3((float)7 * healthratio, bars0[0].transform.localScale.y, bars0[0].transform.localScale.z);
                 //bars0[0].transform.position = new Vector3(0, bars0[0].transform.position.y, bars0[0].transform.position.z);
 

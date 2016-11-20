@@ -215,7 +215,7 @@ public class BoardManager : MonoBehaviour {
 	private void AttackTarget(int x, int y)
 	{
 		selectedTarget = Units[x,y];
-		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time)
+		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer)
         {
             GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
