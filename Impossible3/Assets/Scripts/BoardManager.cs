@@ -25,6 +25,7 @@ public class BoardManager : MonoBehaviour {
 	public List<GameObject> unitPrefabs;
     public List<GameObject> mapTiles;
     public static List<GameObject> playerUnits;
+    public static List<GameObject> enemyUnits;
 
     private Material previousMat;
 	public Material selectedMat;
@@ -36,6 +37,7 @@ public class BoardManager : MonoBehaviour {
 	private void Start ()
 	{
         playerUnits = new List<GameObject>();
+        enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
         Instance = this;
 		//Spawn Black Background
@@ -207,7 +209,6 @@ public class BoardManager : MonoBehaviour {
 	private void SelectTarget(int x, int y)
 	{
 		allowedAttacks = Units [x, y].PossibleAttack ();
-		allowedAbilities = Units [x, y].PossibleAbilities();
 		selectedTarget = Units [x, y];
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
 	}
@@ -243,8 +244,11 @@ public class BoardManager : MonoBehaviour {
         go.transform.localScale = new Vector3(2, 2, 1);
         Units [x, y] = go.GetComponent<Unit> ();
 		Units [x, y].SetPosition (x, y);
-        if (unit == 0){playerUnits.Add(go);}
-	}
+        if (unit == 0){
+            playerUnits.Add(go);
+        }
+        else{enemyUnits.Add(go); }
+    }
 
 	private void SpawnWalls()
 	{
@@ -352,7 +356,7 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	//Helper function to get center of tiles for unit placement
-	private Vector3 GetTileCenter(int x, int z, float y = 0)
+	public Vector3 GetTileCenter(int x, int z, float y = 0)
 	{
 		Vector3 origin = Vector3.zero;
 		origin.x += (TILE_SIZE * x) + TILE_OFFSET;

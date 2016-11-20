@@ -69,7 +69,7 @@ public class BoardHighlights : MonoBehaviour
 
 	public void Hidehighlights()
 	{
-		foreach (GameObject go in highlights)
-			go.SetActive (false);
+        foreach (GameObject go in highlights)
+            Destroy(go);
 	}
 }
