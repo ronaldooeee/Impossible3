@@ -45,51 +45,47 @@ public class PlayerUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-        Units = BoardManager.playerUnits;
         for (int i = 0; i<UIs.Count; i++)
         {
-            if (Units[i] == null)
-            {
-                return;
-            }
+
             Image[] bars = UIs[i].GetComponentsInChildren<Image>();
             Image[] bars0 = bars[1].GetComponents<Image>();
             Image[] bars1 = bars[2].GetComponents<Image>();
             Image[] bars2 = bars[3].GetComponents<Image>();
-            //try
+            if (Units[i] == null)
             {
-                //HP Bar UI
-                HealthSystem playerHP = Units[i].GetComponents<HealthSystem>()[0];
-                float healthratio = (float)playerHP.currentHealth / (float)playerHP.startingHealth;
-                if (healthratio >= .66) { bars0[0].color = new Color(0, 1, 0, 1); }
-                else if (healthratio >= .33) { bars0[0].color = new Color(1, 0.92f, 0.016f, 1); }
-                else { bars0[0].color = new Color(1, 0, 0, 1); }
-                //bars0[0].color = Color.Lerp(playerHP.noHealth, playerHP.fullHealth, playerHP.currentHealth / playerHP.startingHealth);
-                bars0[0].transform.localScale = new Vector3((float)7 * healthratio, bars0[0].transform.localScale.y, bars0[0].transform.localScale.z);
-                //bars0[0].transform.position = new Vector3(0, bars0[0].transform.position.y, bars0[0].transform.position.z);
-
-                //Movement Cooldown UI
-                float playerMoveCooldown = Units[i].GetComponent<PlayerUnit>().timeStampMove - Time.time;
-                float maxMoveCooldown = Units[i].GetComponent<PlayerUnit>().cooldownMoveSeconds;
-                if (playerMoveCooldown >= 0)
-                {
-                    bars1[0].transform.localScale = new Vector3((float)7 * (1-(playerMoveCooldown/maxMoveCooldown)), bars1[0].transform.localScale.y, bars1[0].transform.localScale.z);
-                }
-
-                //Attack Cooldown UI
-                float playerAttackCooldown = Units[i].GetComponent<PlayerUnit>().timeStampAttack - Time.time;
-                float maxAttackCooldown = Units[i].GetComponent<PlayerUnit>().cooldownAttackSeconds;
-                if (playerAttackCooldown >= 0)
-                {
-                    bars2[0].transform.localScale = new Vector3((float)7 * (1 - (playerAttackCooldown / maxAttackCooldown)), bars2[0].transform.localScale.y, bars2[0].transform.localScale.z);
-                }
-
+                bars0[0].transform.localScale = Vector3.zero;
+                bars1[0].transform.localScale = Vector3.zero;
+                bars2[0].transform.localScale = Vector3.zero;
+                return;
             }
-            //catch
-            //{
-                //Temp workaround for when players are deleted so unity doesnt throw 1 million errors
-            //}
+            //HP Bar UI
+            HealthSystem playerHP = Units[i].GetComponents<HealthSystem>()[0];
+            float healthratio = (float)playerHP.currentHealth / (float)playerHP.startingHealth;
+            if (healthratio >= .66) { bars0[0].color = new Color(0, 1, 0, 1); }
+            else if (healthratio >= .33) { bars0[0].color = new Color(1, 0.92f, 0.016f, 1); }
+            else { bars0[0].color = new Color(1, 0, 0, 1); }
+            //bars0[0].color = Color.Lerp(playerHP.noHealth, playerHP.fullHealth, playerHP.currentHealth / playerHP.startingHealth);
+            bars0[0].transform.localScale = new Vector3((float)7 * healthratio, bars0[0].transform.localScale.y, bars0[0].transform.localScale.z);
+            //bars0[0].transform.position = new Vector3(0, bars0[0].transform.position.y, bars0[0].transform.position.z);
+
+            //Movement Cooldown UI
+            float playerMoveCooldown = Units[i].GetComponent<PlayerUnit>().timeStampMove - Time.time;
+            float maxMoveCooldown = Units[i].GetComponent<PlayerUnit>().cooldownMoveSeconds;
+            if (playerMoveCooldown >= 0)
+            {
+                bars1[0].transform.localScale = new Vector3((float)7 * (1-(playerMoveCooldown/maxMoveCooldown)), bars1[0].transform.localScale.y, bars1[0].transform.localScale.z);
+            }
+
+            //Attack Cooldown UI
+            float playerAttackCooldown = Units[i].GetComponent<PlayerUnit>().timeStampAttack - Time.time;
+            float maxAttackCooldown = Units[i].GetComponent<PlayerUnit>().cooldownAttackSeconds;
+            if (playerAttackCooldown >= 0)
+            {
+                bars2[0].transform.localScale = new Vector3((float)7 * (1 - (playerAttackCooldown / maxAttackCooldown)), bars2[0].transform.localScale.y, bars2[0].transform.localScale.z);
+            }
+
+            
         }
 	}
 }

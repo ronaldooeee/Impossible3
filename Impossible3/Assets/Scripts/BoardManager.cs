@@ -40,12 +40,6 @@ public class BoardManager : MonoBehaviour {
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
         Instance = this;
-		//Spawn Black Background
-		GameObject black = Instantiate(unitPrefabs[3], new Vector3(-32, -35, 30), Quaternion.identity) as GameObject;
-		black.transform.Rotate(new Vector3(-50, -45, -9));
-		black.transform.localScale = new Vector3(65, 0.1f, 30);
-		black.GetComponent<Renderer>().material.color = Color.black;
-		black.GetComponent<Renderer>().material.SetFloat("_Metallic", 1);
 
 		SpawnAllUnits ();
 		SpawnMapTiles();
@@ -99,7 +93,7 @@ public class BoardManager : MonoBehaviour {
                 SelectUnit(selectionX, selectionY);
                 BoardHighlights.Instance.Hidehighlights();
                 //If you click on a player bring up the attack UI
-                if (selectedTarget == null)
+                if (selectedTarget == null && Units[selectionX,selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
                     SelectTarget(selectionX, selectionY);
                 }
@@ -127,7 +121,7 @@ public class BoardManager : MonoBehaviour {
 				SelectUnit(selectionX, selectionY);
 				BoardHighlights.Instance.Hidehighlights();
 				//If you click on a player bring up the attack UI
-				if (selectedTarget == null)
+				if (selectedTarget == null && Units[selectionX,selectionY]!=null && Units[selectionX, selectionY].isPlayer)
 				{
 					SelectTarget(selectionX, selectionY);
 				}
@@ -174,7 +168,7 @@ public class BoardManager : MonoBehaviour {
 			return;
 
 		// If unit that is clicked still has cooldown, or unit clicked is an enemy, return
-		if (!Units [x, y].isPlayer && isCooldownOff)
+		if (!Units [x, y].isPlayer)
 			return;
 
 		//What are you, and where do you want to go?
@@ -248,14 +242,27 @@ public class BoardManager : MonoBehaviour {
             playerUnits.Add(go);
         }
         else{enemyUnits.Add(go); }
+        setUnitAttributes(go);
     }
 
-	private void SpawnWalls()
+    public void setUnitAttributes(GameObject go)
+    {
+        PlayerUnit unit = go.GetComponent<PlayerUnit>();
+        unit.straightMoveRange = 2 ;
+        unit.diagMoveRange= 2;
+        unit.circMoveRange=1 ;
+
+        unit.straightAttackRange = 2;
+        unit.diagAttackRange = 2;
+        unit.circAttackRange = 1;
+}
+
+    private void SpawnWalls()
 	{
-		GameObject wall1 = Instantiate(unitPrefabs[3], new Vector3 (0, (float)mapSize/2 , (float)mapSize/2), Quaternion.identity) as GameObject;
+		GameObject wall1 = Instantiate(unitPrefabs[3], new Vector3 (0-5, (float)mapSize/2-5 , (float)mapSize/2+5), Quaternion.identity) as GameObject;
 		wall1.transform.Rotate(new Vector3(90f, 90f, 0));
 		wall1.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize);
-		GameObject wall2 = Instantiate(unitPrefabs[3], new Vector3((float)mapSize/2, (float)mapSize/2, mapSize), Quaternion.identity) as GameObject;
+		GameObject wall2 = Instantiate(unitPrefabs[3], new Vector3((float)mapSize/2-5, (float)mapSize/2-5, mapSize+5), Quaternion.identity) as GameObject;
 		wall2.transform.Rotate(new Vector3(90f, 0, 180f));
 		wall2.transform.localScale = new Vector3(mapSize, 0.0001f, (float)mapSize);
 		Texture2D walltex = Resources.Load("wall") as Texture2D;

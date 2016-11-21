@@ -3,15 +3,15 @@ using System.Collections;
 
 public abstract class Unit : MonoBehaviour {
 
-	public int CurrentX { set; get; }
-	public int CurrentY { set; get; }
+    public int CurrentX;
+    public int CurrentY;
 
-	public bool isPlayer = false;
+    public bool isPlayer = false;
 
 	public float cooldownMoveSeconds = 3.0f;
 	public float cooldownAttackSeconds = 5.0f;
-	public float timeStampMove = 0.0f;
-	public float timeStampAttack = 0.0f;
+	public float timeStampMove = Time.time;
+	public float timeStampAttack = Time.time;
 
     public int damageAmmount = 40;
 
@@ -21,18 +21,13 @@ public abstract class Unit : MonoBehaviour {
 		CurrentY = y;
 	}
 
-	public virtual bool[,] PossibleMove()
-	{
+	public virtual bool[,] PossibleMove(int CurrentX = -1, int CurrentY = -1)
+    {
 		return new bool[BoardManager.mapSize, BoardManager.mapSize];
 	}
 
-	public virtual bool[,] PossibleAttack()
-	{
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
-	}
-
-	public virtual bool[,] PossibleAbilities()
-	{
+	public virtual bool[,] PossibleAttack(int CurrentX = -1, int CurrentY = -1)
+    {
 		return new bool[BoardManager.mapSize, BoardManager.mapSize];
 	}
 }

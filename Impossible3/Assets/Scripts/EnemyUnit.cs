@@ -1,71 +1,99 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class EnemyUnit : Unit
 {
+    Unit unitInstance;
+    List<GameObject> playerUnits;
+    PlayerUnit enemyUnit;
+
+    private void Start()
+    {
+        playerUnits = BoardManager.playerUnits;
+        enemyUnit = this.GetComponentInParent<PlayerUnit>();
+        unitInstance = enemyUnit.GetComponent<PlayerUnit>();
+
+        //Enemy positions inherited from Unit
+        //CurrentX, CurrentY
+
+        unitInstance.timeStampAttack = Time.time + unitInstance.cooldownAttackSeconds;
+        unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
+    }
     private void Update()
     {
-        List<GameObject> playerUnits = BoardManager.playerUnits;
-        PlayerUnit enemyUnit = this.GetComponentInParent<PlayerUnit>();
-        int xpos = (int)enemyUnit.transform.position.x;
-        int ypos = (int)enemyUnit.transform.position.y;
-
-        Unit unitInstance = enemyUnit.GetComponent<PlayerUnit>();
 
         //Check Enemy Move / Attack Timer
-        bool[,] allowedEnemyAttacks = unitInstance.PossibleAttack();
-
-        for (int x = 0; x < allowedEnemyAttacks.GetLength(0); x++)
+        
+        if (unitInstance.timeStampAttack <= Time.time)
         {
-            for (int y = 0; y < allowedEnemyAttacks.GetLength(1); y++)
+            bool[,] allowedEnemyAttacks = unitInstance.PossibleAttack(CurrentX, CurrentY);
+            //BoardHighlights.Instance.Hidehighlights();
+            //BoardHighlights.Instance.HighlightAllowedAttacks(allowedEnemyAttacks);
+            //Determine if player is in Attack distance
+            foreach (GameObject player in playerUnits)
             {
-                //Determine if player is in Attack distance
-
-
-                if (allowedEnemyAttacks[x, y] && BoardManager.Instance.Units[x, y] != null)
+                if (player)
                 {
-                    if (BoardManager.Instance.Units[x, y].isPlayer && unitInstance.timeStampAttack <= Time.time)
+                    Debug.Log("Looking for players");
+                    Unit playerU = player.GetComponent<PlayerUnit>();
+                    int playerX = playerU.CurrentX;
+                    int playerY = playerU.CurrentY;
+                    if (allowedEnemyAttacks[playerX, playerY])
                     {
-                        /*
+                        Debug.Log("Found a Target");
                         //If yes then attack
-                        HealthSystem health = (HealthSystem)BoardManager.Instance.Units[x, y].GetComponent(typeof(HealthSystem));
+                        HealthSystem health = (HealthSystem)BoardManager.Instance.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
                         health.TakeDamage(damageAmmount);
                         unitInstance.timeStampAttack = Time.time + unitInstance.cooldownAttackSeconds;
-                        */
+                        return;
+
                     }
                 }
 
-            }
+             }
 
-            //Determine if player is in Attack distance
-
-
-            //Reset Attack Cooldown
-
+         
         }
 
-        bool[,] allowedEnemyMoves = unitInstance.PossibleMove();
+        
         //If Movemvent cooldown over and 
-
-        for (int x = 0; x < allowedEnemyMoves.GetLength(0); x++)
+        if (unitInstance.timeStampMove <= Time.time)
         {
-            for (int y = 0; y < allowedEnemyMoves.GetLength(1); y++)
+            bool[,] allowedEnemyMoves = unitInstance.PossibleMove(CurrentX, CurrentY);
+            //BoardHighlights.Instance.Hidehighlights();
+            //BoardHighlights.Instance.HighlightAllowedMoves(allowedEnemyMoves);
+            for (int x = 0; x < allowedEnemyMoves.GetLength(0); x++)
             {
-                if (unitInstance.timeStampMove <= Time.time)
+                for (int y = 0; y < allowedEnemyMoves.GetLength(1); y++)
                 {
-                    /*
-                    enemyUnit.transform.position = BoardManager.Instance.GetTileCenter(x, y, 0);
-                    //Move it there
-                    enemyUnit.SetPosition(x, y);
-                    //Set that unit's coordinates to desinations coordinates
-                    BoardManager.Instance.Units[x, y] = enemyUnit;
-                    unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
-                    */
+                    if (allowedEnemyMoves[x, y])
+                    {
+                        foreach (GameObject player in playerUnits)
+                        {
+                            if (player)
+                            {
+                                Unit playerU = player.GetComponent<PlayerUnit>();
+                                int playerX = playerU.CurrentX;
+                                int playerY = playerU.CurrentY;
+                                //Check if this will move enemy closer to a player
+                                Debug.Log("I'm trying as hard as I can");
+                                if (Math.Abs(CurrentX - playerX) > Math.Abs(x - playerX) || Math.Abs(CurrentY - playerY) > Math.Abs(y - playerY))
+                                {
+                                    this.transform.position = BoardManager.Instance.GetTileCenter(x, y, 0);
+                                    this.SetPosition(x, y);
+                                    BoardManager.Instance.Units[x, y] = enemyUnit;
+                                    unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
+                                    return;
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
         }
-
 
     }
 

@@ -11,19 +11,21 @@ public class PlayerUnit : Unit
     //In BoardManager do a deal damage function, which gets attack power of 1st GameObject and subtracts that from health of 2nd/target GameObject
     //If health <= 0 then destroy GameObject
 
-    public int straightMoveRange = 4;
-    public int diagMoveRange = 3;
-    public int circMoveRange = 2;
+    public int straightMoveRange;
+    public int diagMoveRange;
+    public int circMoveRange;
 
-    public int straightAttackRange = 3;
-    public int diagAttackRange = 0;
-    public int circAttackRange = 2;
+    public int straightAttackRange;
+    public int diagAttackRange;
+    public int circAttackRange;
 
     //this variable isnt used but it's references elsewhere so i cant remove it
     public bool isRanged;
 
-    public override bool[,] PossibleMove ()
+    public override bool[,] PossibleMove (int currentXPos = -1, int currentYPos = -1 )
 	{
+        if (currentXPos == -1) { currentXPos = CurrentX; }
+        if (currentYPos == -1) { currentYPos = CurrentY; }
         //I am become Flanders Destroyer of Code
 
         //Tile boundries are (0,0),(0,mapsize),(mapsize,0)&(mapsize,mapsize)
@@ -33,17 +35,17 @@ public class PlayerUnit : Unit
         //BoardManager.Instance.Units[x, y];
 
         //Current Unit
-        //BoardManager.Instance.Units[CurrentX,CurrentY]
+        //BoardManager.Instance.Units[currentXPos,currentYPos]
 
         //Current selection
-        //CurrentX
-        //CurrentY
+        //currentXPos
+        //currentYPos
 
         bool[,] isAcceptedMove = new bool[BoardManager.mapSize, BoardManager.mapSize];
 
         for(int i =1; i <= straightMoveRange; i++)
         {
-            foreach (List<int> pair in new List<List<int>>{ new List<int>{CurrentX,CurrentY+i },new List<int> { CurrentX+i,CurrentY },new List<int> {CurrentX,CurrentY-i },new List<int> {CurrentX-i,CurrentY } })
+            foreach (List<int> pair in new List<List<int>>{ new List<int>{currentXPos,currentYPos+i },new List<int> { currentXPos+i,currentYPos },new List<int> {currentXPos,currentYPos-i },new List<int> {currentXPos-i,currentYPos } })
             {
                 int x = pair[0];
                 int y = pair[1];
@@ -59,7 +61,7 @@ public class PlayerUnit : Unit
 
         for (int i = 1; i <= diagMoveRange; i++)
         {
-            foreach (List<int> pair in new List<List<int>> { new List<int> { CurrentX+i, CurrentY + i }, new List<int> { CurrentX + i, CurrentY-i }, new List<int> { CurrentX-i, CurrentY - i }, new List<int> { CurrentX - i, CurrentY+i } })
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos+i, currentYPos + i }, new List<int> { currentXPos + i, currentYPos-i }, new List<int> { currentXPos-i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos+i } })
             {
                 int x = pair[0];
                 int y = pair[1];
@@ -75,10 +77,10 @@ public class PlayerUnit : Unit
 
         for (int i = 0 - circMoveRange; i <= circMoveRange; i++)
         {
-            int x = CurrentX + i;
+            int x = currentXPos + i;
             for (int j = 0 - circMoveRange; j <= circMoveRange; j++)
             {
-                int y = CurrentY + j;
+                int y = currentYPos + j;
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedMove[x, y] != true)
                 {
                     if (BoardManager.Instance.Units[x, y] == null)
@@ -92,13 +94,15 @@ public class PlayerUnit : Unit
         
 	}
 
-	public override bool[,] PossibleAttack ()
-	{
+	public override bool[,] PossibleAttack(int currentXPos = -1, int currentYPos = -1)
+    {
+        if (currentXPos == -1) { currentXPos = CurrentX; }
+        if (currentYPos == -1) { currentYPos = CurrentY; }
         bool[,] isAcceptedAttack = new bool[BoardManager.mapSize, BoardManager.mapSize];
 
         for (int i = 1; i <= straightAttackRange; i++)
         {
-            foreach (List<int> pair in new List<List<int>> { new List<int> { CurrentX, CurrentY + i }, new List<int> { CurrentX + i, CurrentY }, new List<int> { CurrentX, CurrentY - i }, new List<int> { CurrentX - i, CurrentY } })
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos, currentYPos + i }, new List<int> { currentXPos + i, currentYPos }, new List<int> { currentXPos, currentYPos - i }, new List<int> { currentXPos - i, currentYPos } })
             {
                 int x = pair[0];
                 int y = pair[1];
@@ -114,7 +118,7 @@ public class PlayerUnit : Unit
 
         for (int i = 1; i <= diagAttackRange; i++)
         {
-            foreach (List<int> pair in new List<List<int>> { new List<int> { CurrentX + i, CurrentY + i }, new List<int> { CurrentX + i, CurrentY - i }, new List<int> { CurrentX - i, CurrentY - i }, new List<int> { CurrentX - i, CurrentY + i } })
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos + i, currentYPos + i }, new List<int> { currentXPos + i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos + i } })
             {
                 int x = pair[0];
                 int y = pair[1];
@@ -130,10 +134,10 @@ public class PlayerUnit : Unit
 
         for (int i = 0 - circAttackRange; i <= circAttackRange; i++)
         {
-            int x = CurrentX + i;
+            int x = currentXPos + i;
             for (int j = 0 - circAttackRange; j <= circAttackRange; j++)
             {
-                int y = CurrentY + j;
+                int y = currentYPos + j;
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedAttack[x, y] != true)
                 {
                     if (BoardManager.Instance.Units[x, y] == null || this.isPlayer != BoardManager.Instance.Units[x, y].isPlayer)
