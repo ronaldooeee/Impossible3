@@ -60,7 +60,9 @@ public class BoardManager : MonoBehaviour {
         }
         if (playerUnits.Count < 1)
         {
-            //DisplayDial
+            UnityEditor.EditorUtility.DisplayDialog("Failure!", "You have lost the game...", "Okay");
+            UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Play");
+            Application.Quit();
         }
         UpdateSelection();
         DrawBoard();
