@@ -19,7 +19,7 @@ public class HealthSystem : MonoBehaviour {
 		SetHealthUI ();
 	}
 
-	public void TakeDamage (int amount)
+	public bool takeDamageAndDie (int amount)
 	{
 		currentHealth -= amount;
 
@@ -27,8 +27,10 @@ public class HealthSystem : MonoBehaviour {
 
 		if (currentHealth <= 0) 
 		{
-			Destroy (gameObject);
+            return true;
 		}
+
+        return false;
 	}
 
 	private void SetHealthUI()

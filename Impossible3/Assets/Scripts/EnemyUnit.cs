@@ -43,7 +43,18 @@ public class EnemyUnit : Unit
                     {
                         //If yes then attack
                         HealthSystem health = (HealthSystem)BoardManager.Instance.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
-                        health.TakeDamage(damageAmmount);
+                        if (health.takeDamageAndDie(damageAmmount))
+                        {
+                            // Remove player from list.
+                            foreach (GameObject spawn in playerUnits)
+                            {
+                                if (System.Object.ReferenceEquals(spawn, BoardManager.Instance.Units[playerX, playerY].gameObject))
+                                {
+                                    playerUnits.Remove(spawn);
+                                    Destroy(spawn);
+                                }
+                            }
+                        }
                         unitInstance.timeStampAttack = Time.time + unitInstance.cooldownAttackSeconds;
                         return;
 

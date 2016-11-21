@@ -223,20 +223,23 @@ public class BoardManager : MonoBehaviour {
         {
             GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
-			health.TakeDamage (50);
+			if (health.takeDamageAndDie(50))
+            {
+                // Remove enemy from list.
+                foreach (GameObject spawn in enemyUnits)
+                {
+                    if (Object.ReferenceEquals(spawn, selectedTarget.gameObject))
+                    {
+                        enemyUnits.Remove(spawn);
+                        Destroy(spawn);
+                    }
+                }
+            }
             selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         } else if (selectedUnit.timeStampMove > Time.time) {
 			return;
 		}
 		BoardHighlights.Instance.Hidehighlights();
-
-        // Remove enemy from list.
-        foreach(GameObject enemy in enemyUnits)
-        {
-            if (Object.ReferenceEquals(enemy, selectedTarget.gameObject)) {
-                enemyUnits.Remove(enemy);
-            }
-        }
 
         selectedTarget = null;
         selectedUnit = null;
