@@ -54,10 +54,13 @@ public class BoardManager : MonoBehaviour {
     // Update world to show changes
     private void Update()
     {
-        Debug.Log(enemyUnits.Count);
         while (enemyUnits.Count < quota)
         {
             SpawnUnit(1, random.Next(3, 5), random.Next(6, 10), random.Next(6, 10));
+        }
+        if (playerUnits.Count < 1)
+        {
+            //DisplayDial
         }
         UpdateSelection();
         DrawBoard();
