@@ -26,8 +26,8 @@ public class BoardManager : MonoBehaviour {
     public List<GameObject> mapTiles;
     public static List<GameObject> playerUnits;
     public static List<GameObject> enemyUnits;
-    private int quota; // Amount of enemy units to keep on board at a time.
-    private System.Random random; // For generating random numbers.
+    private int quota = 2; // Amount of enemy units to keep on board at a time.
+    private System.Random random = new System.Random();  // For generating random numbers.
 
     private Material previousMat;
 	public Material selectedMat;
@@ -41,8 +41,6 @@ public class BoardManager : MonoBehaviour {
         playerUnits = new List<GameObject>();
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
-        quota = 2;
-        random = new System.Random(); 
         Instance = this;
 
 		SpawnAllUnits();
@@ -63,7 +61,7 @@ public class BoardManager : MonoBehaviour {
             UnityEditor.EditorUtility.DisplayDialog("Failure!", "You have lost the game...", "Okay");
             UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Play");
             Application.Quit();
-        }
+       }
         UpdateSelection();
         DrawBoard();
 
@@ -113,9 +111,11 @@ public class BoardManager : MonoBehaviour {
                 }
                 else if (selectedTarget != null)
                 {
+                    int damage = Units[selectionX, selectionY].damageAmmount;
+
                     if (allowedAttacks[selectionX, selectionY])
                     {
-                        AttackTarget(selectionX, selectionY);
+                        AttackTarget(selectionX, selectionY, damage);
                     }
                     else
                     {
@@ -141,9 +141,11 @@ public class BoardManager : MonoBehaviour {
 				}
 				else if (selectedTarget != null)
 				{
-					if (allowedAttacks[selectionX, selectionY])
+                    int damage = Units[selectionX, selectionY].damageAmmount;
+
+                    if (allowedAttacks[selectionX, selectionY])
 					{
-						AttackTarget(selectionX, selectionY);
+						AttackTarget(selectionX, selectionY, damage);
 					}
 					else
 					{
@@ -221,14 +223,14 @@ public class BoardManager : MonoBehaviour {
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
 	}
 
-	private void AttackTarget(int x, int y)
+	private void AttackTarget(int x, int y, int damage)
 	{
 		selectedTarget = Units[x,y];
 		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer)
         {
             GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
-			if (health.takeDamageAndDie(50))
+			if (health.takeDamageAndDie(damage))
             {
                 // Remove enemy from list.
                 foreach (GameObject spawn in enemyUnits)
