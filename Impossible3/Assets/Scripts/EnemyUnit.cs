@@ -25,7 +25,7 @@ public class EnemyUnit : Unit
     {
 
         //Check Enemy Move / Attack Timer
-        
+
         if (unitInstance.timeStampAttack <= Time.time)
         {
             bool[,] allowedEnemyAttacks = unitInstance.PossibleAttack(CurrentX, CurrentY);
@@ -36,13 +36,11 @@ public class EnemyUnit : Unit
             {
                 if (player)
                 {
-                    Debug.Log("Looking for players");
                     Unit playerU = player.GetComponent<PlayerUnit>();
                     int playerX = playerU.CurrentX;
                     int playerY = playerU.CurrentY;
                     if (allowedEnemyAttacks[playerX, playerY])
                     {
-                        Debug.Log("Found a Target");
                         //If yes then attack
                         HealthSystem health = (HealthSystem)BoardManager.Instance.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
                         health.TakeDamage(damageAmmount);
@@ -52,49 +50,80 @@ public class EnemyUnit : Unit
                     }
                 }
 
-             }
+            }
 
-         
+
         }
 
-        
+
         //If Movemvent cooldown over and 
         if (unitInstance.timeStampMove <= Time.time)
         {
-            bool[,] allowedEnemyMoves = unitInstance.PossibleMove(CurrentX, CurrentY);
+            List<int[]> allowedEnemyMoves = getTrueMoves();
+            Shuffle(allowedEnemyMoves);
             //BoardHighlights.Instance.Hidehighlights();
             //BoardHighlights.Instance.HighlightAllowedMoves(allowedEnemyMoves);
-            for (int x = 0; x < allowedEnemyMoves.GetLength(0); x++)
+            foreach (int[] move in allowedEnemyMoves)
             {
-                for (int y = 0; y < allowedEnemyMoves.GetLength(1); y++)
+                foreach (GameObject player in playerUnits)
                 {
-                    if (allowedEnemyMoves[x, y])
+                    if (player)
                     {
-                        foreach (GameObject player in playerUnits)
+                        Unit playerU = player.GetComponent<PlayerUnit>();
+                        int playerX = playerU.CurrentX;
+                        int playerY = playerU.CurrentY;
+                        //Check if this will move enemy closer to a player
+                        if (Math.Abs(CurrentX - playerX) > Math.Abs(move[0] - playerX) || Math.Abs(CurrentY - playerY) > Math.Abs(move[1] - playerY))
                         {
-                            if (player)
-                            {
-                                Unit playerU = player.GetComponent<PlayerUnit>();
-                                int playerX = playerU.CurrentX;
-                                int playerY = playerU.CurrentY;
-                                //Check if this will move enemy closer to a player
-                                Debug.Log("I'm trying as hard as I can");
-                                if (Math.Abs(CurrentX - playerX) > Math.Abs(x - playerX) || Math.Abs(CurrentY - playerY) > Math.Abs(y - playerY))
-                                {
-                                    this.transform.position = BoardManager.Instance.GetTileCenter(x, y, 0);
-                                    this.SetPosition(x, y);
-                                    BoardManager.Instance.Units[x, y] = enemyUnit;
-                                    unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
-                                    return;
-                                }
-                            }
+                            this.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
+                            this.SetPosition(move[0], move[1]);
+                            BoardManager.Instance.Units[move[0], move[1]] = enemyUnit;
+                            unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
+                            return;
                         }
-
                     }
+
+                }
+
+
+
+            }
+        }
+    }
+
+    
+
+    private List<int[]> getTrueMoves()
+    {
+        bool[,] allowedEnemyMoves = unitInstance.PossibleMove(CurrentX, CurrentY);
+        List<int[]> trueMoves = new List<int[]> { };
+        for (int x = 0; x < allowedEnemyMoves.GetLength(0); x++)
+        {
+            for (int y = 0; y < allowedEnemyMoves.GetLength(1); y++)
+            {
+                if (allowedEnemyMoves[x, y])
+                {
+                    trueMoves.Add(new int[] {x,y});
                 }
             }
         }
-
+        return trueMoves;
     }
 
+
+
+    public void Shuffle(List<int[]> list)
+    {
+        System.Random rng = new System.Random();
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            int[] value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+    }
 }
+
