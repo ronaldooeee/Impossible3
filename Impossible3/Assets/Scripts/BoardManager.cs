@@ -26,6 +26,8 @@ public class BoardManager : MonoBehaviour {
     public List<GameObject> mapTiles;
     public static List<GameObject> playerUnits;
     public static List<GameObject> enemyUnits;
+    private int quota; // Amount of enemy units to keep on board at a time.
+    private System.Random random; // For generating random numbers.
 
     private Material previousMat;
 	public Material selectedMat;
@@ -39,9 +41,11 @@ public class BoardManager : MonoBehaviour {
         playerUnits = new List<GameObject>();
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
+        quota = 2;
+        random = new System.Random(); 
         Instance = this;
 
-		SpawnAllUnits ();
+		SpawnAllUnits();
 		SpawnMapTiles();
 		ColorMapTiles();
 		SpawnWalls();
@@ -50,6 +54,11 @@ public class BoardManager : MonoBehaviour {
     // Update world to show changes
     private void Update()
     {
+        Debug.Log(enemyUnits.Count);
+        while (enemyUnits.Count < quota)
+        {
+            SpawnUnit(1, random.Next(3, 5), random.Next(6, 10), random.Next(6, 10));
+        }
         UpdateSelection();
         DrawBoard();
 
@@ -220,9 +229,18 @@ public class BoardManager : MonoBehaviour {
 			return;
 		}
 		BoardHighlights.Instance.Hidehighlights();
-		selectedTarget = null;
-		selectedUnit = null;
-	}
+
+        // Remove enemy from list.
+        foreach(GameObject enemy in enemyUnits)
+        {
+            if (Object.ReferenceEquals(enemy, selectedTarget.gameObject)) {
+                enemyUnits.Remove(enemy);
+            }
+        }
+
+        selectedTarget = null;
+        selectedUnit = null;
+    }
 
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
 	private void SpawnUnit(int unit, int index, int x, int y)
@@ -272,17 +290,15 @@ public class BoardManager : MonoBehaviour {
 
 	private void SpawnAllUnits()
 	{
-
 		Units = new Unit[mapSize, mapSize];
-
 		//Spawn Player Units (0 = Player,Sprite number, x value, y value)
 		SpawnUnit (0, 0, 2, 0);
 		SpawnUnit (0, 1, 4, 0);
         SpawnUnit (0, 2, 6, 0);
 
         //Spawn Enemy Units (1 = Enemy,Sprite number, x value, y value)
-        SpawnUnit (1, 3, 1, 7);
-        SpawnUnit (1, 4, 2, 9);
+        SpawnUnit (1, 3, random.Next(6, 10), random.Next(6, 10));
+        SpawnUnit (1, 4, random.Next(6, 10), random.Next(6, 10));
     }
 
 	private void SpawnEnvironment(int index, int x, int y)
