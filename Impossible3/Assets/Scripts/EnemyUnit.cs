@@ -86,6 +86,7 @@ public class EnemyUnit : Unit
                         //Check if this will move enemy closer to a player
                         if (Math.Abs(CurrentX - playerX) > Math.Abs(move[0] - playerX) || Math.Abs(CurrentY - playerY) > Math.Abs(move[1] - playerY))
                         {
+                            BoardManager.Instance.Units[CurrentX, CurrentY] = null;
                             this.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
                             this.SetPosition(move[0], move[1]);
                             BoardManager.Instance.Units[move[0], move[1]] = enemyUnit;
