@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Frenzy : MonoBehaviour {
+public class Frenzy : Ability {
 
 	// Use this for initialization
 	void Start () {

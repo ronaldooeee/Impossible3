@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Rally : MonoBehaviour {
+public class Rally : Ability {
 
 	// Use this for initialization
 	void Start () {

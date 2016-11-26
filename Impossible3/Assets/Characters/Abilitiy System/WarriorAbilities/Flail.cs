@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Flail : MonoBehaviour {
+public class Flail : Ability {
 
 	// Use this for initialization
 	void Start () {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Counter : MonoBehaviour {
+public class Counter : Ability {
 
 	// Use this for initialization
 	void Start () {

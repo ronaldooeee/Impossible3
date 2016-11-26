@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShieldBash : MonoBehaviour {
+public class ShieldBash : Ability {
 
 	// Use this for initialization
 	void Start () {

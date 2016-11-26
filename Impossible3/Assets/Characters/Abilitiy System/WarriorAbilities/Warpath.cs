@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Warpath : MonoBehaviour {
+public class Warpath : Ability {
 
 	// Use this for initialization
 	void Start () {
