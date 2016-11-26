@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShadowStep : MonoBehaviour {
+public class ShadowStep : Ability{
+	private const string aName = "Black Bomb Arrow!";
+	private const int rangeX = 5;
+	private const int rangeY = 5;
+	private const int baseDamage = 0;
+	private const int tier = 2;
+	private const string character = "Ranger";
+	private const int coolDown = 5;
+	private const int spellDurationBuff = 3;
 
-	// Use this for initialization
-	void Start () {
-	
+	public ShadowStep(int spellDuration) : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
+
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public int spellDuration{
+		get{ return spellDuration;}
+		set{ spellDuration = spellDurationBuff; }
 	}
 }

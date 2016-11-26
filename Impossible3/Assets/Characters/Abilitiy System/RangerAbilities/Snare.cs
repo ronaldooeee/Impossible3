@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Snare : MonoBehaviour {
+public class Snare : Ability {
+	private const string aName = "Snare!";
+	private const int rangeX = 3;
+	private const int rangeY = 3;
+	private const int baseDamage = 0;
+	private const int tier = 1;
+	private const string character = "Ranger";
+	private const int coolDown = 5;
 
-	// Use this for initialization
-	void Start () {
-	
+	public Snare() : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
+
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+//need help with this one
 }
