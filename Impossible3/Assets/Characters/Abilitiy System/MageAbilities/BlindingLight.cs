@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BlindingLight : MonoBehaviour {
+public class BlindingLight : Ability {
 	private const string aName = "Blinding Light!";
 	private const int rangeX = 1;
 	private const int rangeY = 5;

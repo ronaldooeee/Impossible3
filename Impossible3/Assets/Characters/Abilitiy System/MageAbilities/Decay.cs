@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Decay : MonoBehaviour {
+public class Decay : Ability {
 	private const string aName = "Decay!";
 	private const int rangeX = 5;
 	private const int rangeY = 5;
