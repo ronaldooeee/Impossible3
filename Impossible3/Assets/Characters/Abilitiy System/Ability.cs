@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Ability : AbilityBehaviors {
 
 	//Abiltiy Description
-	private string name; //ability 
+	private string aName; //ability 
 	private string description; //ability description
 	private Sprite icon; //icon of ability
 	private List<AbilityBehaviors> behaviors; 
@@ -15,12 +15,28 @@ public class Ability : AbilityBehaviors {
 	private int cooldown; //ability cooldown
 	private List<AbilityBehaviors> affectedStats; //list of affected stats
 	private GameObject particleEffect; //needs assigned when we create the ability 
-	private int range; //range of ability
+	private int rangeX; //rangeX of ability
+	private int rangeY;
 	private bool aoe; //area of effect ability
 	private bool singleTarget; // single target ability 
+	private int damage; 
+	private int tier;
+	private string type; 
+
+	public Ability(string abilityName){
+		this.aName = abilityName;
+	}
+	public Ability(string abilityName, int rangeX, int rangeY, int damage, int tier, string type){
+		this.aName = abilityName;
+		this.rangeX = rangeX;
+		this.rangeY = rangeY; 
+		this.damage = damage; 
+		this.tier = tier; 
+		this.type = type; 
+	}
 
 	public Ability(string abilityName, string abilityDescription, Sprite abilityIcon, List<AbilityBehaviors> abilityBehaviors, GameObject abilityParticle, bool abilityRequiresTarget, int abilityRange){ //basic ability / basic attack
-		name = abilityName; 
+		aName = abilityName; 
 		description = abilityDescription;
 		icon = abilityIcon;
 		behaviors = new List<AbilityBehaviors> ();
@@ -29,13 +45,13 @@ public class Ability : AbilityBehaviors {
 		requiresTarget = abilityRequiresTarget; 
 		canCastOnSelf = false;
 		canCastOnParty = false; 
-		range = abilityRange;
+		rangeX = abilityRange;
 		aoe = false; 
 		singleTarget = false; 
 
 	}
 	public Ability(string abilityName, string abilityDescription, Sprite abilityIcon, List<AbilityBehaviors> abilityBehaviors, int abilityCooldown, GameObject particle, bool abilityRequiresTarget, int abilityRange, bool abilitySingleTarget){ //single target ability
-		name = abilityName;
+		aName = abilityName;
 		description = abilityDescription; 
 		icon = abilityIcon;
 		behaviors = new List<AbilityBehaviors> ();
@@ -44,19 +60,44 @@ public class Ability : AbilityBehaviors {
 		requiresTarget = abilityRequiresTarget; 
 		canCastOnSelf = false;
 		canCastOnParty = false; 
-		range = abilityRange; 
+		rangeX = abilityRange; 
 		aoe = false;
 		singleTarget = abilitySingleTarget;
 	}
 
 	public string AbilityName{
 		get{
-			return name; 
+			return aName; 
 		}
 	}
 	public string AbilityDescription{
 		get{
 			return description; 
+		}
+	}
+	public int AbilityRangeX{
+		get {
+			return rangeX;
+		}
+	}
+	public int AbilityRangeY {
+		get {
+			return rangeY;
+		}
+	}
+	public int AbilityDamage {
+		get {
+			return damage;
+		}
+	}
+	public int AbilityTier {
+		get {
+			return tier;
+		}
+	}
+	public string AbilityClass {
+		get {
+			return type;
 		}
 	}
 	public Sprite AbilityIcon{

@@ -30,4 +30,8 @@ public abstract class Unit : MonoBehaviour {
     {
 		return new bool[BoardManager.mapSize, BoardManager.mapSize];
 	}
+	public virtual bool[,] PossibleAbility(int CurrentX = -1, int CurrentY = -1)
+	{
+		return new bool[BoardManager.mapSize, BoardManager.mapSize];
+	}
 }
