@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FireStorm : MonoBehaviour {
+public class FireStorm : Ability {
+	private const string aName = "FireStorm!";
+	private const int rangeX = 3;
+	private const int rangeY = 3;
+	private const int baseDamage = 15;
+	private const int tier = 2;
+	private const string character = "Mage";
+	private const int coolDown = 5;
+	private int spellRanges = 3;
 
-	// Use this for initialization
-	void Start () {
-	
+	public FireStorm(int spellRange) : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
+
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public int spellRange{
+		get{return spellRange;}
+		set{ spellRange = 3; }
 	}
 }

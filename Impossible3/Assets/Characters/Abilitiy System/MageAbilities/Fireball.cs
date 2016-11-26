@@ -8,8 +8,9 @@ public class Fireball : Ability {
 	private const int baseDamage = 25;
 	private const int tier = 1;
 	private const string character = "Mage";
+	private const int coolDown = 5; 
 
-	public Fireball() : base(aName, rangeX, rangeY, baseDamage, tier, character){
+	public Fireball() : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
 		
 	}
 }
