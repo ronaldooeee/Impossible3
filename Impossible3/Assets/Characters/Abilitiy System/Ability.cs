@@ -26,13 +26,14 @@ public class Ability : AbilityBehaviors {
 	public Ability(string abilityName){
 		this.aName = abilityName;
 	}
-	public Ability(string abilityName, int rangeX, int rangeY, int damage, int tier, string type){
+	public Ability(string abilityName, int rangeX, int rangeY, int damage, int tier, string type, int coolDown){
 		this.aName = abilityName;
 		this.rangeX = rangeX;
 		this.rangeY = rangeY; 
 		this.damage = damage; 
 		this.tier = tier; 
 		this.type = type; 
+		this.cooldown = coolDown;
 	}
 
 	public Ability(string abilityName, string abilityDescription, Sprite abilityIcon, List<AbilityBehaviors> abilityBehaviors, GameObject abilityParticle, bool abilityRequiresTarget, int abilityRange){ //basic ability / basic attack

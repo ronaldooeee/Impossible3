@@ -2,14 +2,20 @@
 using System.Collections;
 
 public class BlindingLight : MonoBehaviour {
+	private const string aName = "Blinding Light!";
+	private const int rangeX = 1;
+	private const int rangeY = 5;
+	private const int baseDamage = 0;
+	private const int tier = 1;
+	private const string character = "Mage";
+	private const int coolDown = 5;
+	private int statDecrease = 3;
 
-	// Use this for initialization
-	void Start () {
-	
+	public BlindingLight(int decrease) : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
+
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public int decrease{
+		get{return decrease;}
+		set{ decrease = statDecrease; }
 	}
 }
