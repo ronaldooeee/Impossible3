@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BlackBombArrow : MonoBehaviour {
+public class BlackBombArrow : Ability {
+	private const string aName = "Black Bomb Arrow!";
+	private const int rangeX = 5;
+	private const int rangeY = 5;
+	private const int baseDamage = 25;
+	private const int tier = 2;
+	private const string character = "Ranger";
+	private const int coolDown = 5;
+	private const int spellRangeArea = 2;
 
-	// Use this for initialization
-	void Start () {
-	
+	public BlackBombArrow(int spellRange) : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
+
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public int spellRange{
+		get{return spellRange;}
+		set{ spellRange = spellRangeArea; }
 	}
 }
