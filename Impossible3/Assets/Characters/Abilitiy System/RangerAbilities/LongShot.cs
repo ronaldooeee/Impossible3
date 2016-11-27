@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LongShot : MonoBehaviour {
+public class LongShot : Ability {
+	private const string aName = "Long Shot!";
+	private const int rangeX = 5;
+	private const int rangeY = 5;
+	private const int baseDamage = 35;
+	private const int tier = 1;
+	private const string character = "Ranger";
+	private const int coolDown = 5;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public LongShot() : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
+
 	}
 }

@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TripleShot : MonoBehaviour {
+public class TripleShot : Ability {
+	private const string aName = "Triple Shot!";
+	private const int rangeX = 5;
+	private const int rangeY = 5;
+	private const int baseDamage = 25;
+	private const int tier = 2;
+	private const string character = "Ranger";
+	private const int coolDown = 5;
+	private const int hitsLeft = 3;
 
-	// Use this for initialization
-	void Start () {
-	
+	public TripleShot(int hits) : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
+
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public int hits{
+		get{ return hits; }
+		set{ hits = hitsLeft;}
 	}
 }
