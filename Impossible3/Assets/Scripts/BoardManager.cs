@@ -162,7 +162,7 @@ public class BoardManager : MonoBehaviour {
 	{
 		if (!Camera.main)
 			return;
-		// Measures where mouse is hitting from Camera Perspective, puts it in the out parameter to use later, only extends 25 units,
+		// Measures where mouse is hitting from Camera Perspective, puts it in the out parameter to use later, only extends 50 units,
 		// and will only hit things on the "BoardPlane" Layer
 		RaycastHit hit;
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out hit, 50.0f, LayerMask.GetMask ("BoardPlane"))) 
@@ -255,7 +255,7 @@ public class BoardManager : MonoBehaviour {
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
 	private void SpawnUnit(int unit, int index, int x, int y)
 	{
-		GameObject go = Instantiate (unitPrefabs [unit+4], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
+		GameObject go = Instantiate (unitPrefabs [unit], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
         Sprite[] spriteArray = new Sprite[] {
             Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("knight2"), Resources.Load<Sprite>("knight3"),
             Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("skeleton_knight") };
@@ -266,10 +266,11 @@ public class BoardManager : MonoBehaviour {
         go.transform.localScale = new Vector3(2, 2, 1);
         Units [x, y] = go.GetComponent<Unit> ();
 		Units [x, y].SetPosition (x, y);
-        if (unit == 0){
+		if (unit == 0 || unit == 4 || unit == 5){
             playerUnits.Add(go);
-        }
-        else{enemyUnits.Add(go); }
+        } else {
+			enemyUnits.Add(go); 
+		}
         setUnitAttributes(go);
     }
 
@@ -303,8 +304,8 @@ public class BoardManager : MonoBehaviour {
 		Units = new Unit[mapSize, mapSize];
 		//Spawn Player Units (0 = Player,Sprite number, x value, y value)
 		SpawnUnit (0, 0, 2, 0);
-		SpawnUnit (0, 1, 4, 0);
-        SpawnUnit (0, 2, 6, 0);
+		SpawnUnit (4, 1, 4, 0);
+        SpawnUnit (5, 2, 6, 0);
 
         //Spawn Enemy Units (1 = Enemy,Sprite number, x value, y value)
         SpawnUnit (1, 3, random.Next(6, 10), random.Next(6, 10));

@@ -9,7 +9,7 @@ public class EnemyUnit : Unit
     List<GameObject> playerUnits;
     PlayerUnit enemyUnit;
 
-    private void Start()
+    /*private void Start()
     {
         playerUnits = BoardManager.playerUnits;
         enemyUnit = this.GetComponentInParent<PlayerUnit>();
@@ -136,6 +136,6 @@ public class EnemyUnit : Unit
             list[k] = list[n];
             list[n] = value;
         }
-    }
+    }*/
 }
 

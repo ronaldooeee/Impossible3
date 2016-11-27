@@ -45,7 +45,7 @@ public class PlayerUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        for (int i = 0; i<UIs.Count; i++)
+        for (int i = 0; i < UIs.Count; i++)
         {
 
             Image[] bars = UIs[i].GetComponentsInChildren<Image>();
