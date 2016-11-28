@@ -8,17 +8,29 @@ public abstract class Unit : MonoBehaviour {
 
     public bool isPlayer = false;
 
-	public float cooldownMoveSeconds = 3.0f;
-	public float cooldownAttackSeconds = 5.0f;
+	public float cooldownMoveSeconds;
+	public float cooldownAttackSeconds;
 	public float timeStampMove = Time.time;
 	public float timeStampAttack = Time.time;
 
-    public int damageAmmount = 50;
+    public int damageAmount;
 
     public void SetPosition(int x, int y)
 	{
 		CurrentX = x;
 		CurrentY = y;
+	}
+
+	public void SetMoveCooldown(float cdMove){
+		cooldownMoveSeconds = cdMove;
+	}
+
+	public void SetAttackCooldown(float cdAttack){
+		cooldownAttackSeconds = cdAttack;
+	}
+
+	public void SetDamage(int damage) {
+		damageAmount = damage;
 	}
 
 	public virtual bool[,] PossibleMove(int CurrentX = -1, int CurrentY = -1)

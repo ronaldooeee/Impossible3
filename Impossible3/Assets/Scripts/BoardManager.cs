@@ -9,7 +9,7 @@ public class BoardManager : MonoBehaviour {
 	private bool[,] allowedAttacks{ set; get; }
 	private bool[,] allowedAbilities{ set; get; }
 
-	public Unit[,] Units{ set; get; }
+	public static Unit[,] Units{ set; get; }
 	private Unit selectedUnit;
 	private Unit selectedTarget;
 	private Component selectedTargetsHealth;
@@ -19,8 +19,8 @@ public class BoardManager : MonoBehaviour {
 	private const float TILE_SIZE = 1.0f;
 	private const float TILE_OFFSET = 0.5f;
 
-	private int selectionX = -1;
-	private int selectionY = -1;
+	public static int selectionX = -1;
+	public static int selectionY = -1;
 
 	public List<GameObject> unitPrefabs;
     public List<GameObject> mapTiles;
@@ -54,7 +54,7 @@ public class BoardManager : MonoBehaviour {
     {
         while (enemyUnits.Count < quota)
         {
-            SpawnUnit(1, random.Next(3, 5), random.Next(6, 10), random.Next(6, 10));
+            SpawnUnit(1, random.Next(3, 5), random.Next(6, 10), random.Next(6, 10), 2, 2, 1);
         }
         if (playerUnits.Count < 1)
         {
@@ -111,11 +111,11 @@ public class BoardManager : MonoBehaviour {
                 }
                 else if (selectedTarget != null)
                 {
-                    int damage = Units[selectionX, selectionY].damageAmmount;
+                    int damage = Units[selectionX, selectionY].damageAmount;
 
                     if (allowedAttacks[selectionX, selectionY])
                     {
-                        AttackTarget(selectionX, selectionY, damage);
+						AttackTarget(selectionX, selectionY, damage, 1.0f);
                     }
                     else
                     {
@@ -141,14 +141,15 @@ public class BoardManager : MonoBehaviour {
 				}
 				else if (selectedTarget != null)
 				{
-                    int damage = Units[selectionX, selectionY].damageAmmount;
+                    /*int damage = Units[selectionX, selectionY].damageAmount;
 
                     if (allowedAttacks[selectionX, selectionY])
 					{
 						AttackTarget(selectionX, selectionY, damage);
-					}
-					else
-					{
+					}*/
+					if(Input.GetKeyDown("Alpha1")){
+						Abilities.Fireball(selectedTarget);
+					} else {
 						BoardHighlights.Instance.Hidehighlights();
 						selectedTarget = null;
 						selectedUnit = null;
@@ -216,14 +217,14 @@ public class BoardManager : MonoBehaviour {
         selectedTarget = null;
 	}
 
-	private void SelectTarget(int x, int y)
+	public static void SelectTarget(int x, int y)
 	{
 		allowedAttacks = Units [x, y].PossibleAttack ();
 		selectedTarget = Units [x, y];
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
 	}
 
-	private void AttackTarget(int x, int y, int damage)
+	public static void AttackTarget(int x, int y, int damage, float cooldownAttackSeconds)
 	{
 		selectedTarget = Units[x,y];
 		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer)
@@ -253,7 +254,7 @@ public class BoardManager : MonoBehaviour {
     }
 
 	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
-	private void SpawnUnit(int unit, int index, int x, int y)
+	private void SpawnUnit(int unit, int index, int x, int y, int straightAttack, int diagAttack, int circAttack)
 	{
 		GameObject go = Instantiate (unitPrefabs [unit], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
         Sprite[] spriteArray = new Sprite[] {
@@ -271,20 +272,20 @@ public class BoardManager : MonoBehaviour {
         } else {
 			enemyUnits.Add(go); 
 		}
-        setUnitAttributes(go);
+		setUnitAttributes(go, straightAttack, diagAttack, circAttack);
     }
 
-    public void setUnitAttributes(GameObject go)
+	public static void setUnitAttributes(GameObject go, int straightAttack, int diagAttack, int circAttack)
     {
         PlayerUnit unit = go.GetComponent<PlayerUnit>();
-        unit.straightMoveRange = 2 ;
-        unit.diagMoveRange= 2;
-        unit.circMoveRange=1 ;
+        unit.straightMoveRange = 2;
+        unit.diagMoveRange = 1;
+        unit.circMoveRange = 1;
 
-        unit.straightAttackRange = 2;
-        unit.diagAttackRange = 2;
-        unit.circAttackRange = 1;
-}
+		unit.straightAttackRange = straightAttack;
+		unit.diagAttackRange = diagAttack;
+		unit.circAttackRange = circAttack;
+	}
 
     private void SpawnWalls()
 	{
@@ -302,14 +303,17 @@ public class BoardManager : MonoBehaviour {
 	private void SpawnAllUnits()
 	{
 		Units = new Unit[mapSize, mapSize];
-		//Spawn Player Units (0 = Player,Sprite number, x value, y value)
-		SpawnUnit (0, 0, 2, 0);
-		SpawnUnit (4, 1, 4, 0);
-        SpawnUnit (5, 2, 6, 0);
+		//Spawn Player Units (PrefabList #, Sprite number, x location, y location, straightAttack, diagAttack, circAttack)
+		//Knight Stats
+		SpawnUnit (0, 0, 2, 0, 1, 1, 1);
+		//Mage Stats
+		SpawnUnit (4, 1, 4, 0, 0, 0, 5);
+		//Archer Stats
+        SpawnUnit (5, 2, 6, 0, 0, 0, 3);
 
-        //Spawn Enemy Units (1 = Enemy,Sprite number, x value, y value)
-        SpawnUnit (1, 3, random.Next(6, 10), random.Next(6, 10));
-        SpawnUnit (1, 4, random.Next(6, 10), random.Next(6, 10));
+        //Spawn Enemy Units (1 = Enemy Prefab,Sprite number, x value, y value)
+        SpawnUnit (1, 3, random.Next(6, 10), random.Next(6, 10), 2, 2, 1);
+        SpawnUnit (1, 4, random.Next(6, 10), random.Next(6, 10), 2, 2 ,1);
     }
 
 	private void SpawnEnvironment(int index, int x, int y)
