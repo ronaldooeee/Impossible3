@@ -21,9 +21,10 @@ public class EnemyUnit : Unit
         unitInstance.timeStampAttack = Time.time + unitInstance.cooldownAttackSeconds;
         unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
     }
+
     private void Update()
     {
-
+		int damage = this.GetComponent<PlayerUnit> ().damageAmount;
         //Check Enemy Move / Attack Timer
 
         if (unitInstance.timeStampAttack <= Time.time)
@@ -43,8 +44,10 @@ public class EnemyUnit : Unit
                     {
                         //If yes then attack
                         HealthSystem health = (HealthSystem)BoardManager.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
-                        if (health.takeDamageAndDie(damageAmount))
+						Debug.Log (damageAmount);
+                        if (health.takeDamageAndDie(damage))
                         {
+							
                             // Remove player from list.
                             foreach (GameObject spawn in playerUnits)
                             {

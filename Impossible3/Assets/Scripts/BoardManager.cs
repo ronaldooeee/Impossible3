@@ -111,11 +111,12 @@ public class BoardManager : MonoBehaviour {
                 }
                 else if (selectedTarget != null)
                 {
-                    int damage = Units[selectionX, selectionY].damageAmount;
+                    //int damage = Units[selectionX, selectionY].damageAmount;
 
                     if (allowedAttacks[selectionX, selectionY])
                     {
-						AttackTarget(selectionX, selectionY, damage, 1.0f);
+						//AttackTarget(selectionX, selectionY, damage, 1.0f);
+						selectedUnit.GetComponent<MageAbilities>().RegAttack(selectedTarget);
                     }
                     else
                     {
@@ -148,7 +149,7 @@ public class BoardManager : MonoBehaviour {
 						AttackTarget(selectionX, selectionY, damage);
 					}*/
 					if(Input.GetKeyDown("Alpha1")){
-						selectedUnit.GetComponent<Abilities>().Fireball(selectedTarget);
+						selectedUnit.GetComponent<MageAbilities>().Fireball(selectedUnit);
 					} else {
 						BoardHighlights.Instance.Hidehighlights();
 						selectedTarget = null;
