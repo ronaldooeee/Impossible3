@@ -115,8 +115,14 @@ public class BoardManager : MonoBehaviour {
 
                     if (allowedAttacks[selectionX, selectionY])
                     {
-						//AttackTarget(selectionX, selectionY, damage, 1.0f);
-						selectedUnit.GetComponent<MageAbilities>().RegAttack(selectedTarget);
+                        Abilities abilityScript = null;
+                        abilityScript = selectedUnit.GetComponent<MageAbilities>();
+                        if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<WarriorAbilities>(); }
+                        if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<RangerAbilities>(); }
+                        //AttackTarget(selectionX, selectionY, damage, 1.0f);
+                        Debug.Log(abilityScript);
+                        Debug.Log(selectedTarget);
+                        abilityScript.RegAttack(selectedTarget);
                     }
                     else
                     {

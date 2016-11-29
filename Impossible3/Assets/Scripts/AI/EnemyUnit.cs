@@ -44,7 +44,6 @@ public class EnemyUnit : Unit
                     {
                         //If yes then attack
                         HealthSystem health = (HealthSystem)BoardManager.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
-						Debug.Log (damageAmount);
                         if (health.takeDamageAndDie(damage))
                         {
 							

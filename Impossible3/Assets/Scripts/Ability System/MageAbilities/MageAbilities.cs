@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MageAbilities : MonoBehaviour {
+public class MageAbilities : Abilities {
 	
 	public int x;
 	public int y;
@@ -9,7 +9,7 @@ public class MageAbilities : MonoBehaviour {
 	public int damage;
 
 	private void Start(){
-		this.GetComponentInParent<PlayerUnit>().SetDamage (10);
+		this.GetComponentInParent<PlayerUnit>().SetDamage (20);
 	}
 
 	private void Update() {
@@ -18,7 +18,7 @@ public class MageAbilities : MonoBehaviour {
 		y = BoardManager.Instance.selectionY;
 	}
 
-	public void RegAttack(Unit selectedUnit) {
+	public override void RegAttack(Unit selectedUnit) {
 		selectedUnit.SetAttackCooldown (1.0f);
 		damage = 5 * damage;
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
