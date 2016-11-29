@@ -217,14 +217,14 @@ public class BoardManager : MonoBehaviour {
         selectedTarget = null;
 	}
 
-	public static void SelectTarget(int x, int y)
+	public void SelectTarget(int x, int y)
 	{
 		allowedAttacks = Units [x, y].PossibleAttack ();
 		selectedTarget = Units [x, y];
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
 	}
 
-	public static void AttackTarget(int x, int y, int damage, float cooldownAttackSeconds)
+	public void AttackTarget(int x, int y, int damage, float cooldownAttackSeconds)
 	{
 		selectedTarget = Units[x,y];
 		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer)

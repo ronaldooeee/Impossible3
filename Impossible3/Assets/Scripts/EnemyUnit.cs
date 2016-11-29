@@ -9,7 +9,7 @@ public class EnemyUnit : Unit
     List<GameObject> playerUnits;
     PlayerUnit enemyUnit;
 
-    /*private void Start()
+    private void Start()
     {
         playerUnits = BoardManager.playerUnits;
         enemyUnit = this.GetComponentInParent<PlayerUnit>();
@@ -42,13 +42,13 @@ public class EnemyUnit : Unit
                     if (allowedEnemyAttacks[playerX, playerY])
                     {
                         //If yes then attack
-                        HealthSystem health = (HealthSystem)BoardManager.Instance.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
-                        if (health.takeDamageAndDie(damageAmmount))
+                        HealthSystem health = (HealthSystem)BoardManager.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
+                        if (health.takeDamageAndDie(damageAmount))
                         {
                             // Remove player from list.
                             foreach (GameObject spawn in playerUnits)
                             {
-                                if (System.Object.ReferenceEquals(spawn, BoardManager.Instance.Units[playerX, playerY].gameObject))
+                                if (System.Object.ReferenceEquals(spawn, BoardManager.Units[playerX, playerY].gameObject))
                                 {
                                     playerUnits.Remove(spawn);
                                     Destroy(spawn);
@@ -86,10 +86,10 @@ public class EnemyUnit : Unit
                         //Check if this will move enemy closer to a player
                         if (Math.Abs(CurrentX - playerX) > Math.Abs(move[0] - playerX) || Math.Abs(CurrentY - playerY) > Math.Abs(move[1] - playerY))
                         {
-                            BoardManager.Instance.Units[CurrentX, CurrentY] = null;
+                            BoardManager.Units[CurrentX, CurrentY] = null;
                             this.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
                             this.SetPosition(move[0], move[1]);
-                            BoardManager.Instance.Units[move[0], move[1]] = enemyUnit;
+                            BoardManager.Units[move[0], move[1]] = enemyUnit;
                             unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
                             return;
                         }
@@ -136,6 +136,6 @@ public class EnemyUnit : Unit
             list[k] = list[n];
             list[n] = value;
         }
-    }*/
+    }
 }
 

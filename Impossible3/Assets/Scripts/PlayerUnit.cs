@@ -52,7 +52,7 @@ public class PlayerUnit : Unit
                 int y = pair[1];
                 if(x< BoardManager.mapSize && y< BoardManager.mapSize && x>=0 && y>=0)
                 {
-                    if (BoardManager.Instance.Units[x, y] == null)
+                    if (BoardManager.Units[x, y] == null)
                     {
                         isAcceptedMove[x, y] = true;
                     }
@@ -68,7 +68,7 @@ public class PlayerUnit : Unit
                 int y = pair[1];
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
                 {
-                    if (BoardManager.Instance.Units[x, y] == null)
+                    if (BoardManager.Units[x, y] == null)
                     {
                         isAcceptedMove[x, y] = true;
                     }
@@ -84,7 +84,7 @@ public class PlayerUnit : Unit
                 int y = currentYPos + j;
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedMove[x, y] != true)
                 {
-                    if (BoardManager.Instance.Units[x, y] == null)
+                    if (BoardManager.Units[x, y] == null)
                     {
                         isAcceptedMove[x, y] = true;
                     }
@@ -109,7 +109,7 @@ public class PlayerUnit : Unit
                 int y = pair[1];
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
                 {
-                    if (BoardManager.Instance.Units[x, y] == null || this.isPlayer!= BoardManager.Instance.Units[x, y].isPlayer)
+                    if (BoardManager.Units[x, y] == null || this.isPlayer!= BoardManager.Units[x, y].isPlayer)
                     {
                         isAcceptedAttack[x, y] = true;
                     }
@@ -125,7 +125,7 @@ public class PlayerUnit : Unit
                 int y = pair[1];
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
                 {
-                    if (BoardManager.Instance.Units[x, y] == null || this.isPlayer != BoardManager.Instance.Units[x, y].isPlayer)
+                    if (BoardManager.Units[x, y] == null || this.isPlayer != BoardManager.Units[x, y].isPlayer)
                     {
                         isAcceptedAttack[x, y] = true;
                     }
@@ -141,7 +141,7 @@ public class PlayerUnit : Unit
                 int y = currentYPos + j;
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedAttack[x, y] != true)
                 {
-                    if (BoardManager.Instance.Units[x, y] == null || this.isPlayer != BoardManager.Instance.Units[x, y].isPlayer)
+                    if (BoardManager.Units[x, y] == null || this.isPlayer != BoardManager.Units[x, y].isPlayer)
                     {
                         isAcceptedAttack[x, y] = true;
                     }
