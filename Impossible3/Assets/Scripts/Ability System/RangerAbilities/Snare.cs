@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Snare : Ability {
-	private const string aName = "Snare!";
+public class Snare : Abilities {
+	/*private const string aName = "Snare!";
 	private const int rangeX = 3;
 	private const int rangeY = 3;
 	private const int baseDamage = 0;
@@ -12,6 +12,6 @@ public class Snare : Ability {
 
 	public Snare() : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
 
-	}
+	}*/
 //need help with this one
 }

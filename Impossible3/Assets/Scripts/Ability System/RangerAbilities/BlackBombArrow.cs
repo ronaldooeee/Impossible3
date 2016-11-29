@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BlackBombArrow : Ability {
-	private const string aName = "Black Bomb Arrow!";
+public class BlackBombArrow : Abilities {
+	/*private const string aName = "Black Bomb Arrow!";
 	private const int rangeX = 5;
 	private const int rangeY = 5;
 	private const int baseDamage = 25;
@@ -17,5 +17,5 @@ public class BlackBombArrow : Ability {
 	public int spellRange{
 		get{return spellRange;}
 		set{ spellRange = spellRangeArea; }
-	}
+	}*/
 }

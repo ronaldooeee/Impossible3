@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShieldBash : Ability {
-	private const string aName = "Shield Bash!";
+public class ShieldBash : Abilities {
+	/*private const string aName = "Shield Bash!";
 	private const int rangeX = 1;
 	private const int rangeY = 1;
 	private const int baseDamage = 15;
@@ -17,5 +17,5 @@ public class ShieldBash : Ability {
 	public int pushBack{
 		get{ return pushBack; }
 		set{pushBack = pushBackTile;}
-	}
+	}*/
 }

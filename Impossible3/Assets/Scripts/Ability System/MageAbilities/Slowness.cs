@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Slowness : Ability {
-	private const string aName = "Slowness!";
+public class Slowness : Abilities {
+	/*private const string aName = "Slowness!";
 	private const int rangeX = 5;
 	private const int rangeY = 5;
 	private const int baseDamage = 0;
@@ -16,5 +16,5 @@ public class Slowness : Ability {
 	public int spellDuration{
 		get{return spellDuration;}
 		set{ spellDuration = duration; }
-	}
+	}*/
 }

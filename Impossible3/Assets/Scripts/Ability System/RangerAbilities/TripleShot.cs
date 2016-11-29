@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TripleShot : Ability {
-	private const string aName = "Triple Shot!";
+public class TripleShot : Abilities {
+	/*private const string aName = "Triple Shot!";
 	private const int rangeX = 5;
 	private const int rangeY = 5;
 	private const int baseDamage = 25;
@@ -17,5 +17,5 @@ public class TripleShot : Ability {
 	public int hits{
 		get{ return hits; }
 		set{ hits = hitsLeft;}
-	}
+	}*/
 }

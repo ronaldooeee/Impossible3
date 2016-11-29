@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Counter : Ability {
-	private const string aName = "Counter!";
+public class Counter : Abilities {
+	/*private const string aName = "Counter!";
 	private const int rangeX = 0;
 	private const int rangeY = 0;
 	private const int baseDamage = 0;
@@ -27,5 +27,5 @@ public class Counter : Ability {
 	public int returnDamageDone {
 		get{ return returnDamageDone; }
 		set{ returnDamageDone = returnDamage; }
-	}
+	}*/
 }

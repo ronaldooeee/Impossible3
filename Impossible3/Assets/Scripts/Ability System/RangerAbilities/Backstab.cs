@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Backstab : Ability{
-	private const string aName = "Backstab!";
+public class Backstab : Abilities {
+	/*private const string aName = "Backstab!";
 	private const int rangeX = 5;
 	private const int rangeY = 5;
 	private const int baseDamage = 25;
@@ -12,5 +12,5 @@ public class Backstab : Ability{
 
 	public Backstab() : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
 
-	}
+	}*/
 }

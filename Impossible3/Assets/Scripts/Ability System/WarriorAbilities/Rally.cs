@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Rally : Ability {
-	private const string aName = "Rally!";
+public class Rally : Abilities {
+	/*private const string aName = "Rally!";
 	private const int rangeX = 3;
 	private const int rangeY = 3;
 	private const int baseDamage = 0;
@@ -17,5 +17,5 @@ public class Rally : Ability {
 	public int cooldownReduction{
 		get{ return cooldownReduction; }
 		set{cooldownReduction = reduction;}
-	}
+	}*/
 }

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Decay : Ability {
-	private const string aName = "Decay!";
+public class Decay : Abilities {
+	/*private const string aName = "Decay!";
 	private const int rangeX = 5;
 	private const int rangeY = 5;
 	private const int baseDamage = 0;
@@ -17,5 +17,5 @@ public class Decay : Ability {
 	public int decrease{
 		get{return decrease;}
 		set{ decrease = statDecrease; }
-	}
+	}*/
 }

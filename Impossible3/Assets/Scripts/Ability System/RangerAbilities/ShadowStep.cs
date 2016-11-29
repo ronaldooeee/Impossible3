@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShadowStep : Ability{
-	private const string aName = "Black Bomb Arrow!";
+public class ShadowStep : Abilities {
+	/*private const string aName = "Black Bomb Arrow!";
 	private const int rangeX = 5;
 	private const int rangeY = 5;
 	private const int baseDamage = 0;
@@ -17,5 +17,5 @@ public class ShadowStep : Ability{
 	public int spellDuration{
 		get{ return spellDuration;}
 		set{ spellDuration = spellDurationBuff; }
-	}
+	}*/
 }

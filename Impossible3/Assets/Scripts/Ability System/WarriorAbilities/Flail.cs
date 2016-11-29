@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Flail : Ability {
-	private const string aName = "Flail!";
+public class Flail : Abilities {
+	/*private const string aName = "Flail!";
 	private const int rangeX = 3;
 	private const int rangeY = 3;
 	private const int baseDamage = 10;
@@ -12,5 +12,5 @@ public class Flail : Ability {
 
 	public Flail() : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
 
-	}
+	}*/
 }

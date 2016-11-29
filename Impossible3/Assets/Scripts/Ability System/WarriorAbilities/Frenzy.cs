@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Frenzy : Ability {
-	private const string aName = "Frenzy!";
+public class Frenzy : Abilities {
+	/*private const string aName = "Frenzy!";
 	private const int rangeX = 1;
 	private const int rangeY = 1;
 	private const int baseDamage = 40;
@@ -17,5 +17,5 @@ public class Frenzy : Ability {
 	public int damageToSelf{
 		get{ return damageToSelf;}
 		set{damageToSelf = selfDamage;}
-	}
+	}*/
 }

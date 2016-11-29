@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Warpath : Ability {
-	private const string aName = "Warpath!";
+public class Warpath : Abilities {
+	/*private const string aName = "Warpath!";
 	private const int rangeX = 1;
 	private const int rangeY = 10;
 	private const int baseDamage = 40;
@@ -32,5 +32,5 @@ public class Warpath : Ability {
 	public int damageBoosted{
 		get{ return damageBoosted; }
 		set{damageBoosted = damageBoost;}
-	}
+	}*/
 }

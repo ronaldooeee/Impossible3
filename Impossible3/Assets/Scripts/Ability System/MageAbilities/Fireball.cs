@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Fireball : Ability {
-	private const string aName = "Fireball!";
+public class Fireball : Abilities {
+	/*private const string aName = "Fireball!";
 	private const int rangeX = 3;
 	private const int rangeY = 3;
 	private const int baseDamage = 25;
@@ -12,5 +12,5 @@ public class Fireball : Ability {
 
 	public Fireball() : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
 		
-	}
+	}*/
 }

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LongShot : Ability {
-	private const string aName = "Long Shot!";
+public class LongShot : Abilities {
+	/*private const string aName = "Long Shot!";
 	private const int rangeX = 5;
 	private const int rangeY = 5;
 	private const int baseDamage = 35;
@@ -12,5 +12,5 @@ public class LongShot : Ability {
 
 	public LongShot() : base(aName, rangeX, rangeY, baseDamage, tier, character, coolDown){
 
-	}
+	}*/
 }

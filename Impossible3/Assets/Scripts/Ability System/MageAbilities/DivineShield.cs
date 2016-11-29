@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DivineShield : Ability {
-	private const string aName = "Divine Shield!";
+public class DivineShield : Abilities {
+	/*private const string aName = "Divine Shield!";
 	private const int rangeX = 3;
 	private const int rangeY = 3;
 	private const int baseDamage = 0;
@@ -18,5 +18,5 @@ public class DivineShield : Ability {
 	public int buff{
 		get{return buff;}
 		set{ buff = statIncrease; }
-	}
+	}*/
 }

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BlindingLight : Ability {
-	private const string aName = "Blinding Light!";
+public class BlindingLight : Abilities {
+	/*private const string aName = "Blinding Light!";
 	private const int rangeX = 1;
 	private const int rangeY = 5;
 	private const int baseDamage = 0;
@@ -17,5 +17,5 @@ public class BlindingLight : Ability {
 	public int decrease{
 		get{return decrease;}
 		set{ decrease = statDecrease; }
-	}
+	}*/
 }
