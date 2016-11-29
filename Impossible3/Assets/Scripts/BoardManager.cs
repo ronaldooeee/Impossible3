@@ -19,8 +19,8 @@ public class BoardManager : MonoBehaviour {
 	private const float TILE_SIZE = 1.0f;
 	private const float TILE_OFFSET = 0.5f;
 
-	public static int selectionX = -1;
-	public static int selectionY = -1;
+	public int selectionX = -1;
+	public int selectionY = -1;
 
 	public List<GameObject> unitPrefabs;
     public List<GameObject> mapTiles;
@@ -148,7 +148,7 @@ public class BoardManager : MonoBehaviour {
 						AttackTarget(selectionX, selectionY, damage);
 					}*/
 					if(Input.GetKeyDown("Alpha1")){
-						Abilities.Fireball(selectedTarget);
+						selectedUnit.GetComponent<Abilities>().Fireball(selectedTarget);
 					} else {
 						BoardHighlights.Instance.Hidehighlights();
 						selectedTarget = null;
