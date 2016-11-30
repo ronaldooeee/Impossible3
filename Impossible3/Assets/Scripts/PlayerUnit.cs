@@ -11,14 +11,6 @@ public class PlayerUnit : Unit
     //In BoardManager do a deal damage function, which gets attack power of 1st GameObject and subtracts that from health of 2nd/target GameObject
     //If health <= 0 then destroy GameObject
 
-    public int straightMoveRange;
-    public int diagMoveRange;
-    public int circMoveRange;
-
-    public int straightAttackRange;
-    public int diagAttackRange;
-    public int circAttackRange;
-
     //this variable isnt used but it's references elsewhere so i cant remove it
     public bool isRanged;
 

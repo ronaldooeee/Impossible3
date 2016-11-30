@@ -10,7 +10,21 @@ public class WarriorAbilities : Abilities {
 
     private void Start()
     {
-        this.GetComponentInParent<PlayerUnit>().SetDamage(50);
+        PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
+
+        stats.health = 80;
+        stats.damageAmount = 70;
+
+        stats.straightMoveRange = 2;
+        stats.diagMoveRange = 1;
+        stats.circMoveRange = 0;
+
+        stats.straightAttackRange = 2;
+        stats.diagAttackRange = 1;
+        stats.circAttackRange = 0;
+
+        stats.cooldownMoveSeconds = 4;
+        stats.cooldownAttackSeconds = 3;
     }
 
     private void Update()
@@ -23,7 +37,6 @@ public class WarriorAbilities : Abilities {
     public override void RegAttack(Unit selectedUnit)
     {
         selectedUnit.SetAttackCooldown(1.0f);
-        damage = 5 * damage;
         BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
     }
 }

@@ -4,7 +4,9 @@ using System.Collections;
 
 public class HealthSystem : MonoBehaviour {
 
-	public int startingHealth = 100;
+
+
+	public int startingHealth;
 	public int currentHealth;
 
 	public Slider healthSlider;
@@ -12,18 +14,22 @@ public class HealthSystem : MonoBehaviour {
 	public Color fullHealth = Color.green;
 	public Color noHealth = Color.red;
 
-	private void OnEnable ()
-	{
-		currentHealth = startingHealth;
 
-		SetHealthUI ();
-	}
+	private void Start ()
+	{
+        startingHealth = this.GetComponentInParent<PlayerUnit>().health;
+
+        currentHealth = (int)startingHealth;
+
+        SetHealthUI();
+    }
 
 	public bool takeDamageAndDie (int amount)
 	{
 		currentHealth -= amount;
+        this.GetComponentInParent<PlayerUnit>().health = currentHealth;
 
-		SetHealthUI ();
+        SetHealthUI ();
 
 		if (currentHealth <= 0) 
 		{

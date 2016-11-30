@@ -11,7 +11,21 @@ public class RangerAbilities : Abilities {
 
     private void Start()
     {
-        this.GetComponentInParent<PlayerUnit>().SetDamage(10);
+        PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
+
+        stats.health = 30;
+        stats.damageAmount = 30;
+
+        stats.straightMoveRange = 3;
+        stats.diagMoveRange = 2;
+        stats.circMoveRange = 1;
+
+        stats.straightAttackRange = 5;
+        stats.diagAttackRange = 4;
+        stats.circAttackRange = 3;
+
+        stats.cooldownMoveSeconds = 1;
+        stats.cooldownAttackSeconds = 1;
     }
 
     private void Update()
@@ -24,7 +38,6 @@ public class RangerAbilities : Abilities {
     public override void RegAttack(Unit selectedUnit)
     {
         selectedUnit.SetAttackCooldown(1.0f);
-        damage = 5 * damage;
         BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
     }
 }

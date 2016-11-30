@@ -7,6 +7,8 @@ public class PlayerUI : MonoBehaviour {
     public List<GameObject> unitPrefabs;
     private List<GameObject> UIs;
     public Canvas mainCanvas;
+    public GameObject KillScore;
+    public GameObject killScore;
     public GameObject mainUI;
     public GameObject[] units;
 
@@ -40,6 +42,15 @@ public class PlayerUI : MonoBehaviour {
         UIs.Add(player1UI);
         UIs.Add(player2UI);
         UIs.Add(player3UI);
+
+        //Kill Score
+
+        killScore = Instantiate(KillScore, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
+        killScore.transform.localScale = new Vector3(.04f, .04f, .04f);
+        killScore.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
+        killScore.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
+        killScore.transform.parent = mainCanvas.transform;
+        killScore.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0, 0 + Screen.height / 2- 50, 0);
     }
 
 	
@@ -87,5 +98,7 @@ public class PlayerUI : MonoBehaviour {
 
             
         }
-	}
+        killScore.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0, 0 + Screen.height / 2 - 50, 0);
+        killScore.GetComponent<Text>().text = BoardManager.score.ToString();
+    }
 }

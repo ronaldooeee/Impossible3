@@ -22,6 +22,8 @@ public class BoardManager : MonoBehaviour {
 	public int selectionX = -1;
 	public int selectionY = -1;
 
+    public static int score;
+
 	public List<GameObject> unitPrefabs;
     public List<GameObject> mapTiles;
     public static List<GameObject> playerUnits;
@@ -38,6 +40,7 @@ public class BoardManager : MonoBehaviour {
 
 	private void Start ()
 	{
+        score = 0;
         playerUnits = new List<GameObject>();
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
@@ -120,8 +123,8 @@ public class BoardManager : MonoBehaviour {
                         if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<WarriorAbilities>(); }
                         if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<RangerAbilities>(); }
                         //AttackTarget(selectionX, selectionY, damage, 1.0f);
-                        Debug.Log(abilityScript);
-                        Debug.Log(selectedTarget);
+                        //Debug.Log(abilityScript);
+                        //Debug.Log(selectedTarget);
                         abilityScript.RegAttack(selectedTarget);
                     }
                     else
@@ -247,6 +250,7 @@ public class BoardManager : MonoBehaviour {
                     {
                         enemyUnits.Remove(spawn);
                         Destroy(spawn);
+                        score += 1;
                         break;
                     }
                 }

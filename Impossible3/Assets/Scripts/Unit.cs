@@ -8,12 +8,21 @@ public abstract class Unit : MonoBehaviour {
 
     public bool isPlayer = false;
 
-	public float cooldownMoveSeconds;
+    public int health = -1;
+    public int damageAmount;
+
+    public float cooldownMoveSeconds;
 	public float cooldownAttackSeconds;
 	public float timeStampMove = Time.time;
 	public float timeStampAttack = Time.time;
 
-    public int damageAmount;
+    public int straightMoveRange;
+    public int diagMoveRange;
+    public int circMoveRange;
+
+    public int straightAttackRange;
+    public int diagAttackRange;
+    public int circAttackRange;
 
     public void SetPosition(int x, int y)
 	{

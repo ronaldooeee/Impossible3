@@ -9,8 +9,22 @@ public class SkeletonAbilties : Abilities {
 	public int damage;
 
 	private void Start(){
-		this.GetComponentInParent<PlayerUnit>().SetDamage (10);
-	}
+        PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
+
+        stats.health = 100;
+        stats.damageAmount = 20;
+
+        stats.straightMoveRange = 0;
+        stats.diagMoveRange = 0;
+        stats.circMoveRange = 1;
+
+        stats.straightAttackRange = 2;
+        stats.diagAttackRange = 1;
+        stats.circAttackRange = 0;
+
+        stats.cooldownMoveSeconds = 1;
+        stats.cooldownAttackSeconds = 3;
+    }
 
 	private void Update() {
 		damage = this.GetComponentInParent<PlayerUnit>().damageAmount;
