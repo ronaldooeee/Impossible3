@@ -247,11 +247,12 @@ public class BoardManager : MonoBehaviour {
                     {
                         enemyUnits.Remove(spawn);
                         Destroy(spawn);
+                        break;
                     }
                 }
             }
             selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-        } else if (selectedUnit.timeStampMove > Time.time) {
+        } else  {
 			return;
 		}
 		BoardHighlights.Instance.Hidehighlights();
@@ -265,7 +266,7 @@ public class BoardManager : MonoBehaviour {
 	{
 		GameObject go = Instantiate (unitPrefabs [unit], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
         Sprite[] spriteArray = new Sprite[] {
-            Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("knight2"), Resources.Load<Sprite>("knight3"),
+            Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("mage1"), Resources.Load<Sprite>("archer1"),
             Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("skeleton_knight") };
         RuntimeAnimatorController[] animationArray = {null, null, null, null, Resources.Load<RuntimeAnimatorController>("skeleton_knight") };
         go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
