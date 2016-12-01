@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public class BoardManager : MonoBehaviour {
 
-	public static BoardManager Instance { set; get; }
+    public Transform pauseMenu, pSettingsMenu, pExitMenu, pAudioMenu, pGraphicMenu;
+
+    public static BoardManager Instance { set; get; }
 	private bool[,] allowedMoves{ set; get; }
 	private bool[,] allowedAttacks{ set; get; }
 	private bool[,] allowedAbilities{ set; get; }
@@ -167,6 +169,20 @@ public class BoardManager : MonoBehaviour {
 				}
 			}
 		}
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Time.timeScale == 1)
+            {
+                pauseMenu.gameObject.SetActive(true);
+                Time.timeScale = 0;
+            }
+            else
+            {
+                Time.timeScale = 1;
+                pauseMenu.gameObject.SetActive(false);
+            }
+
+        }
     }
 
     private void UpdateSelection()
