@@ -54,6 +54,7 @@ public class EnemyUnit : Unit
                                 {
                                     playerUnits.Remove(spawn);
                                     Destroy(spawn);
+                                    BoardHighlights.Instance.Hidehighlights();
                                 }
                             }
                         }
