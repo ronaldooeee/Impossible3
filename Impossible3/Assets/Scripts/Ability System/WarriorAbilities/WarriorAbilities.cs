@@ -23,7 +23,7 @@ public class WarriorAbilities : Abilities {
         stats.diagAttackRange = 1;
         stats.circAttackRange = 0;
 
-        stats.cooldownMoveSeconds = 4;
+        stats.cooldownMoveSeconds = 3;
         stats.cooldownAttackSeconds = 3;
     }
 

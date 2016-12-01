@@ -12,7 +12,7 @@ public class MageAbilities : Abilities {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
         stats.health = 70;
-        stats.damageAmount= 40;
+        stats.damageAmount= 50;
 
         stats.straightMoveRange = 3;
         stats.diagMoveRange = 2;

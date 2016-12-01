@@ -12,7 +12,7 @@ public class SkeletonAbilties : Abilities {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
         stats.health = 100;
-        stats.damageAmount = 20;
+        stats.damageAmount = 30;
 
         stats.straightMoveRange = 0;
         stats.diagMoveRange = 0;
@@ -32,9 +32,8 @@ public class SkeletonAbilties : Abilities {
 		y = BoardManager.Instance.selectionY;
 	}
 
-	public void RegAttack(Unit selectedUnit) {
+	public override void RegAttack(Unit selectedUnit) {
 		selectedUnit.SetAttackCooldown (1.0f);
-		damage = 2 * damage;
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
 	}
 }
