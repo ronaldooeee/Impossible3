@@ -13,8 +13,8 @@ public abstract class Unit : MonoBehaviour {
 
     public float cooldownMoveSeconds;
 	public float cooldownAttackSeconds;
-	public float timeStampMove = Time.time;
-	public float timeStampAttack = Time.time;
+    public float timeStampMove;
+    public float timeStampAttack;
 
     public int straightMoveRange;
     public int diagMoveRange;
@@ -23,6 +23,12 @@ public abstract class Unit : MonoBehaviour {
     public int straightAttackRange;
     public int diagAttackRange;
     public int circAttackRange;
+
+    private void Awake()
+    {
+        timeStampMove = Time.time;
+        timeStampAttack = Time.time;
+    }
 
     public void SetPosition(int x, int y)
 	{

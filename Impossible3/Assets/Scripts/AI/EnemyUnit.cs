@@ -9,8 +9,11 @@ public class EnemyUnit : Unit
     List<GameObject> playerUnits;
     PlayerUnit enemyUnit;
 
+    public float timeStampDelay;
+
     private void Start()
     {
+        timeStampDelay = Time.time;
         playerUnits = BoardManager.playerUnits;
         enemyUnit = this.GetComponentInParent<PlayerUnit>();
         unitInstance = enemyUnit.GetComponent<PlayerUnit>();
@@ -27,7 +30,7 @@ public class EnemyUnit : Unit
 		int damage = this.GetComponent<PlayerUnit> ().damageAmount;
         //Check Enemy Move / Attack Timer
 
-        if (unitInstance.timeStampAttack <= Time.time)
+        if (unitInstance.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
         {
             bool[,] allowedEnemyAttacks = unitInstance.PossibleAttack(CurrentX, CurrentY);
             //BoardHighlights.Instance.Hidehighlights();
@@ -94,6 +97,7 @@ public class EnemyUnit : Unit
                             this.SetPosition(move[0], move[1]);
                             BoardManager.Units[move[0], move[1]] = enemyUnit;
                             unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
+                            timeStampDelay = Time.time + 1;
                             return;
                         }
                     }
