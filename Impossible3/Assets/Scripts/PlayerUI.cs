@@ -56,6 +56,9 @@ public class PlayerUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        killScore.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0, 0 + Screen.height / 2 - 50, 0);
+        killScore.GetComponent<Text>().text = BoardManager.score.ToString();
+
         for (int i = 0; i < UIs.Count; i++)
         {
 
@@ -98,7 +101,5 @@ public class PlayerUI : MonoBehaviour {
 
             
         }
-        killScore.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0, 0 + Screen.height / 2 - 50, 0);
-        killScore.GetComponent<Text>().text = BoardManager.score.ToString();
     }
 }

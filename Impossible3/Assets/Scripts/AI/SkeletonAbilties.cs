@@ -22,7 +22,7 @@ public class SkeletonAbilties : Abilities {
         stats.diagAttackRange = 1;
         stats.circAttackRange = 0;
 
-        stats.cooldownMoveSeconds = 1;
+        stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 3;
     }
 
