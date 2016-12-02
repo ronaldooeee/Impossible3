@@ -66,11 +66,11 @@ public class BoardManager : MonoBehaviour {
             UnityEditor.EditorUtility.DisplayDialog("Failure!", "You have lost the game...", "Okay");
             UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Play");
             Application.Quit();
-       }
+        }
         UpdateSelection();
         DrawBoard();
 
-        //Measure when right mouse button is clicked
+        //Measure when right mouse button is clicked for Movement
         if (Input.GetMouseButtonDown(1))
         {
             //Make sure x and y value is on the board
@@ -86,7 +86,7 @@ public class BoardManager : MonoBehaviour {
                 }
                 else if (selectedUnit != null)
                 {
-                    if(allowedMoves[selectionX, selectionY])
+                    if (allowedMoves[selectionX, selectionY])
                     {
                         MoveUnit(selectionX, selectionY);
                     }
@@ -100,17 +100,17 @@ public class BoardManager : MonoBehaviour {
             }
         }
 
-        //Measure when left mouse button is clicked
+        //Measure when left mouse button is clicked For Regular Attack
         if (Input.GetMouseButtonDown(0))
         {
             if (selectionX >= 0 && selectionY >= 0)
             {
                 //Clear existing movement higlights
-                
+
                 SelectUnit(selectionX, selectionY);
                 BoardHighlights.Instance.Hidehighlights();
                 //If you click on a player bring up the attack UI
-                if (selectedTarget == null && Units[selectionX,selectionY] && Units[selectionX, selectionY].isPlayer)
+                if (selectedTarget == null && Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
                     SelectTarget(selectionX, selectionY);
                 }
@@ -125,8 +125,6 @@ public class BoardManager : MonoBehaviour {
                         if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<WarriorAbilities>(); }
                         if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<RangerAbilities>(); }
                         //AttackTarget(selectionX, selectionY, damage, 1.0f);
-                        //Debug.Log(abilityScript);
-                        //Debug.Log(selectedTarget);
                         abilityScript.RegAttack(selectedTarget);
                     }
                     else
@@ -136,39 +134,38 @@ public class BoardManager : MonoBehaviour {
                         selectedUnit = null;
                     }
                 }
-             }
+            }
         }
-		if (Input.GetKeyDown("space"))
-		{
-			if (selectionX >= 0 && selectionY >= 0)
-			{
-				//Clear existing movement higlights
 
-				SelectUnit(selectionX, selectionY);
-				BoardHighlights.Instance.Hidehighlights();
-				//If you click on a player bring up the attack UI
-				if (selectedTarget == null && Units[selectionX,selectionY]!=null && Units[selectionX, selectionY].isPlayer)
-				{
-					SelectTarget(selectionX, selectionY);
-				}
-				else if (selectedTarget != null)
-				{
-                    /*int damage = Units[selectionX, selectionY].damageAmount;
+        //Abilties
+        if (selectedTarget != null) { 
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                selectedUnit.GetComponent<Abilities>().Ability1(selectedUnit);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                selectedUnit.GetComponent<Abilities>().Ability2(selectedUnit);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                selectedUnit.GetComponent<Abilities>().Ability3(selectedUnit);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                selectedUnit.GetComponent<Abilities>().Ability4(selectedUnit);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                selectedUnit.GetComponent<Abilities>().Ability5(selectedUnit);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                selectedUnit.GetComponent<Abilities>().Ability6(selectedUnit);
+            }
+        }
 
-                    if (allowedAttacks[selectionX, selectionY])
-					{
-						AttackTarget(selectionX, selectionY, damage);
-					}*/
-					if(Input.GetKeyDown("Alpha1")){
-						selectedUnit.GetComponent<MageAbilities>().Fireball(selectedUnit);
-					} else {
-						BoardHighlights.Instance.Hidehighlights();
-						selectedTarget = null;
-						selectedUnit = null;
-					}
-				}
-			}
-		}
+        //In Game Menu
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (Time.timeScale == 1)

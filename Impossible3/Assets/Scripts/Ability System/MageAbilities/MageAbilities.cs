@@ -44,4 +44,16 @@ public class MageAbilities : Abilities {
 		damage = 2* damage;
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
 	}
+
+    public override void Ability1(Unit selectedUnit) { Fireball(selectedUnit); }
+
+    public override void Ability2(Unit selectedUnit) { }
+
+    public override void Ability3(Unit selectedUnit) { }
+
+    public override void Ability4(Unit selectedUnit) { }
+
+    public override void Ability5(Unit selectedUnit) { }
+
+    public override void Ability6(Unit selectedUnit) { }
 }

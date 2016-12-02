@@ -46,7 +46,7 @@ public class PlayerUI : MonoBehaviour {
         //Kill Score
 
         killScore = Instantiate(KillScore, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
-        killScore.transform.localScale = new Vector3(.04f, .04f, .04f);
+        killScore.transform.localScale = new Vector3(.02f, .02f, .02f);
         killScore.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
         killScore.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
         killScore.transform.parent = mainCanvas.transform;

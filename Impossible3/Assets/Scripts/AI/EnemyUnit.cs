@@ -28,9 +28,9 @@ public class EnemyUnit : Unit
     private void Update()
     {
 		int damage = this.GetComponent<PlayerUnit> ().damageAmount;
-        //Check Enemy Move / Attack Timer
 
-        if (unitInstance.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
+        //If Attack cooldown over, then attack
+                if (unitInstance.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
         {
             bool[,] allowedEnemyAttacks = unitInstance.PossibleAttack(CurrentX, CurrentY);
             //BoardHighlights.Instance.Hidehighlights();
@@ -73,7 +73,7 @@ public class EnemyUnit : Unit
         }
 
 
-        //If Movemvent cooldown over and 
+        //If Movemvent cooldown over, then Move
         if (unitInstance.timeStampMove <= Time.time)
         {
             List<int[]> allowedEnemyMoves = getTrueMoves();
@@ -92,13 +92,16 @@ public class EnemyUnit : Unit
                         //Check if this will move enemy closer to a player
                         if (Math.Abs(CurrentX - playerX) > Math.Abs(move[0] - playerX) || Math.Abs(CurrentY - playerY) > Math.Abs(move[1] - playerY))
                         {
-                            BoardManager.Units[CurrentX, CurrentY] = null;
-                            this.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
-                            this.SetPosition(move[0], move[1]);
-                            BoardManager.Units[move[0], move[1]] = enemyUnit;
-                            unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
-                            timeStampDelay = Time.time + 1;
-                            return;
+                            if (BoardManager.Units[move[0], move[1]] == null)
+                            {
+                                BoardManager.Units[CurrentX, CurrentY] = null;
+                                this.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
+                                this.SetPosition(move[0], move[1]);
+                                BoardManager.Units[move[0], move[1]] = enemyUnit;
+                                unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
+                                timeStampDelay = Time.time + 1;
+                                return;
+                            }
                         }
                     }
 
