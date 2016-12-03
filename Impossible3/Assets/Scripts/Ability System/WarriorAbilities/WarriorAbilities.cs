@@ -83,15 +83,15 @@ public class WarriorAbilities : Abilities {
         //does somehting
     }
 
-    public override void Ability1(Unit selectedUnit) { }
+    public override void Ability1(Unit selectedUnit) { Counter(selectedUnit); }
 
-    public override void Ability2(Unit selectedUnit) { }
+    public override void Ability2(Unit selectedUnit) { Flail(selectedUnit); }
 
-    public override void Ability3(Unit selectedUnit) { }
+    public override void Ability3(Unit selectedUnit) { Frenzy(selectedUnit); }
 
-    public override void Ability4(Unit selectedUnit) { }
+    public override void Ability4(Unit selectedUnit) { Rally(selectedUnit); }
 
-    public override void Ability5(Unit selectedUnit) { }
+    public override void Ability5(Unit selectedUnit) { Warpath(selectedUnit); }
 
-    public override void Ability6(Unit selectedUnit) { }
+    public override void Ability6(Unit selectedUnit) { ShieldBash(selectedUnit); }
 }
