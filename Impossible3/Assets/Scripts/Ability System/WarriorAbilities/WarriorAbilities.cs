@@ -7,6 +7,10 @@ public class WarriorAbilities : Abilities {
     public int y;
 
     public int damage;
+    public int selfDamage;
+    public int buff;
+
+    public Unit target;
 
     private void Start()
     {
@@ -38,6 +42,45 @@ public class WarriorAbilities : Abilities {
     {
         selectedUnit.SetAttackCooldown(1.0f);
         BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
+    }
+
+    public void Counter(Unit selectedUnit)
+    {
+        //does somehting
+    }
+    public void Flail(Unit selectedUnit)
+    {
+        //does somehting
+    }
+    public void Frenzy(Unit selectedUnit)
+    {
+        HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
+        selfDamage = damage / 7;
+        if (health.currentHealth <= selfDamage)
+        {
+            health.currentHealth = 1;
+        }
+        else
+        {
+            health.currentHealth = health.currentHealth - selfDamage;
+        }
+        BoardManager.Instance.AttackTarget(x, y, damage * 2, selectedUnit.cooldownAttackSeconds);
+    }
+    public void Rally(Unit selectedUnit)
+    {
+        buff = 0;
+        BoardManager.Instance.BuffTarget(x, y, buff, selectedUnit.cooldownAttackSeconds);
+    }
+    public void Warpath(Unit selectedUnit)
+    {
+        //does somehting
+    }
+    public void ShieldBash(Unit selectedUnit)
+    {
+        //Debug.Log(x + "mouse X");
+        //Debug.Log(y + "mouse Y");
+        BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
+        //does somehting
     }
 
     public override void Ability1(Unit selectedUnit) { }

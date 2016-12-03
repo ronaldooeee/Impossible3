@@ -278,8 +278,28 @@ public class BoardManager : MonoBehaviour {
         selectedUnit = null;
     }
 
-	//Spawns whatever unit is in the index of prefabs on BoardManager.cs
-	private void SpawnUnit(int unit, int index, int x, int y, int straightAttack, int diagAttack, int circAttack)
+    public void BuffTarget(int x, int y, int buff, float cooldownAttackSeconds)
+    {
+        selectedTarget = Units[x, y];
+        if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer == selectedUnit.isPlayer)
+        {
+            GameObject ally = selectedTarget.gameObject;
+            HealthSystem health = (HealthSystem)ally.GetComponent(typeof(HealthSystem));
+            health = health + buff;
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+        }
+        else
+        {
+            return;
+        }
+        BoardHighlights.Instance.Hidehighlights();
+
+        selectedTarget = null;
+        selectedUnit = null;
+    }
+
+    //Spawns whatever unit is in the index of prefabs on BoardManager.cs
+    private void SpawnUnit(int unit, int index, int x, int y, int straightAttack, int diagAttack, int circAttack)
 	{
 		GameObject go = Instantiate (unitPrefabs [unit], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
         Sprite[] spriteArray = new Sprite[] {
