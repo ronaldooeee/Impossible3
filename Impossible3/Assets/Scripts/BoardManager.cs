@@ -12,8 +12,8 @@ public class BoardManager : MonoBehaviour {
 	private bool[,] allowedAbilities{ set; get; }
 
 	public static Unit[,] Units{ set; get; }
-	private Unit selectedUnit;
-	private Unit selectedTarget;
+	public Unit selectedUnit;
+	public Unit selectedTarget;
 	private Component selectedTargetsHealth;
 
 	public OpenMapSpots[,] Spots{ set; get; }
@@ -284,7 +284,7 @@ public class BoardManager : MonoBehaviour {
         if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer == selectedUnit.isPlayer)
         {
             GameObject ally = selectedTarget.gameObject;
-            HealthSystem health = (HealthSystem)ally.GetComponent(typeof(HealthSystem));
+            int health = ally.GetComponent<PlayerUnit>().health;
             health = health + buff;
             selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
