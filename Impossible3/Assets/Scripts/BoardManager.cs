@@ -16,6 +16,8 @@ public class BoardManager : MonoBehaviour {
 	public Unit selectedTarget;
 	private Component selectedTargetsHealth;
 
+    public int selectedAbility = 0;
+
 	public OpenMapSpots[,] Spots{ set; get; }
 
 	private const float TILE_SIZE = 1.0f;
@@ -114,6 +116,7 @@ public class BoardManager : MonoBehaviour {
                 if (selectedTarget == null && Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
                     SelectTarget(selectionX, selectionY);
+                    selectedAbility = 0;
                 }
                 else if (selectedTarget != null)
                 {
@@ -121,19 +124,41 @@ public class BoardManager : MonoBehaviour {
 
                     if (allowedAttacks[selectionX, selectionY])
                     {
-                        Abilities abilityScript = null;
-                        abilityScript = selectedUnit.GetComponent<MageAbilities>();
-                        if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<WarriorAbilities>(); }
-                        if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<RangerAbilities>(); }
-                        //AttackTarget(selectionX, selectionY, damage, 1.0f);
-                        abilityScript.RegAttack(selectedTarget, selectedTarget);
-                    }
-                    else
-                    {
-                        BoardHighlights.Instance.Hidehighlights();
-                        selectedTarget = null;
-                        selectedUnit = null;
-                    }
+                        if (selectedAbility == 0)
+                        {
+                            selectedUnit.GetComponent<Abilities>().RegAttack(selectedTarget, selectedTarget);
+                        }
+                        else if (selectedAbility == 1)
+                        {
+                            selectedUnit.GetComponent<Abilities>().Ability1(selectedUnit, selectedTarget);
+                        }
+                        else if (selectedAbility == 2)
+                        {
+                            selectedUnit.GetComponent<Abilities>().Ability2(selectedUnit, selectedTarget);
+                        }
+                        else if (selectedAbility == 3)
+                        {
+                            selectedUnit.GetComponent<Abilities>().Ability3(selectedUnit, selectedTarget);
+                        }
+                        else if (selectedAbility == 4)
+                        {
+                            selectedUnit.GetComponent<Abilities>().Ability4(selectedUnit, selectedTarget);
+                        }
+                        else if (selectedAbility == 5)
+                        {
+                            selectedUnit.GetComponent<Abilities>().Ability5(selectedUnit, selectedTarget);
+                        }
+                        else if (selectedAbility == 6)
+                        {
+                            selectedUnit.GetComponent<Abilities>().Ability6(selectedUnit, selectedTarget);
+                        }
+                }
+                else
+                {
+                    BoardHighlights.Instance.Hidehighlights();
+                    selectedTarget = null;
+                    selectedUnit = null;
+                }
                 }
             }
         }
@@ -144,26 +169,32 @@ public class BoardManager : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 selectedUnit.GetComponent<Abilities>().Ability1(selectedUnit, selectedTarget);
+                selectedAbility = 1;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 selectedUnit.GetComponent<Abilities>().Ability2(selectedUnit, selectedTarget);
+                selectedAbility = 2;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
                 selectedUnit.GetComponent<Abilities>().Ability3(selectedUnit, selectedTarget);
+                selectedAbility = 3;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha4))
             {
                 selectedUnit.GetComponent<Abilities>().Ability4(selectedUnit, selectedTarget);
+                selectedAbility = 4;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha5))
             {
                 selectedUnit.GetComponent<Abilities>().Ability5(selectedUnit, selectedTarget);
+                selectedAbility = 5;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha6))
             {
                 selectedUnit.GetComponent<Abilities>().Ability6(selectedUnit, selectedTarget);
+                selectedAbility = 6;
             }
         }
 
@@ -275,7 +306,7 @@ public class BoardManager : MonoBehaviour {
 			return;
 		}
 		BoardHighlights.Instance.Hidehighlights();
-
+        selectedAbility = 0;
         selectedTarget = null;
         selectedUnit = null;
     }

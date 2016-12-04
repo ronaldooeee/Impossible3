@@ -45,7 +45,17 @@ public class MageAbilities : Abilities {
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
 	}
 
-    public override void Ability1(Unit selectedUnit, Unit selectedTarget) { Fireball(selectedUnit, selectedTarget); }
+    public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
+        if (BoardManager.Instance.selectedAbility == 1)
+        {
+            Fireball(selectedUnit, selectedTarget);
+        }else
+        {
+            OverlaySelect(selectedUnit, 0, 3, 2, 1);
+        }
+
+        
+    }
 
     public override void Ability2(Unit selectedUnit, Unit selectedTarget) { }
 
