@@ -63,13 +63,9 @@ public class EnemyUnit : Unit
                         }
                         unitInstance.timeStampAttack = Time.time + unitInstance.cooldownAttackSeconds;
                         return;
-
                     }
                 }
-
             }
-
-
         }
 
 
@@ -104,11 +100,7 @@ public class EnemyUnit : Unit
                             }
                         }
                     }
-
                 }
-
-
-
             }
         }
     }

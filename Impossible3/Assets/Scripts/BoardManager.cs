@@ -126,7 +126,7 @@ public class BoardManager : MonoBehaviour {
                         if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<WarriorAbilities>(); }
                         if (abilityScript == null) { abilityScript = selectedUnit.GetComponent<RangerAbilities>(); }
                         //AttackTarget(selectionX, selectionY, damage, 1.0f);
-                        abilityScript.RegAttack(selectedTarget);
+                        abilityScript.RegAttack(selectedTarget, selectedTarget);
                     }
                     else
                     {
@@ -140,29 +140,30 @@ public class BoardManager : MonoBehaviour {
 
         //Abilties
         if (selectedTarget != null) { 
+
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                selectedUnit.GetComponent<Abilities>().Ability1(selectedUnit);
+                selectedUnit.GetComponent<Abilities>().Ability1(selectedUnit, selectedTarget);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                selectedUnit.GetComponent<Abilities>().Ability2(selectedUnit);
+                selectedUnit.GetComponent<Abilities>().Ability2(selectedUnit, selectedTarget);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                selectedUnit.GetComponent<Abilities>().Ability3(selectedUnit);
+                selectedUnit.GetComponent<Abilities>().Ability3(selectedUnit, selectedTarget);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha4))
             {
-                selectedUnit.GetComponent<Abilities>().Ability4(selectedUnit);
+                selectedUnit.GetComponent<Abilities>().Ability4(selectedUnit, selectedTarget);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha5))
             {
-                selectedUnit.GetComponent<Abilities>().Ability5(selectedUnit);
+                selectedUnit.GetComponent<Abilities>().Ability5(selectedUnit, selectedTarget);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha6))
             {
-                selectedUnit.GetComponent<Abilities>().Ability6(selectedUnit);
+                selectedUnit.GetComponent<Abilities>().Ability6(selectedUnit, selectedTarget);
             }
         }
 

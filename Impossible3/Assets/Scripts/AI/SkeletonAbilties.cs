@@ -32,20 +32,20 @@ public class SkeletonAbilties : Abilities {
 		y = BoardManager.Instance.selectionY;
 	}
 
-	public override void RegAttack(Unit selectedUnit) {
+	public override void RegAttack(Unit selectedUnit, Unit selectedTarget) {
 		selectedUnit.SetAttackCooldown (1.0f);
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
 	}
 
-    public override void Ability1(Unit selectedUnit) { }
+    public override void Ability1(Unit selectedUnit, Unit selectedTarget) { }
 
-    public override void Ability2(Unit selectedUnit) { }
+    public override void Ability2(Unit selectedUnit, Unit selectedTarget) { }
 
-    public override void Ability3(Unit selectedUnit) { }
+    public override void Ability3(Unit selectedUnit, Unit selectedTarget) { }
 
-    public override void Ability4(Unit selectedUnit) { }
+    public override void Ability4(Unit selectedUnit, Unit selectedTarget) { }
 
-    public override void Ability5(Unit selectedUnit) { }
+    public override void Ability5(Unit selectedUnit, Unit selectedTarget) { }
 
-    public override void Ability6(Unit selectedUnit) { }
+    public override void Ability6(Unit selectedUnit, Unit selectedTarget) { }
 }

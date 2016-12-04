@@ -38,21 +38,21 @@ public class WarriorAbilities : Abilities {
         y = BoardManager.Instance.selectionY;
     }
 
-    public override void RegAttack(Unit selectedUnit)
+    public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
         selectedUnit.SetAttackCooldown(1.0f);
         BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
     }
 
-    public void Counter(Unit selectedUnit)
+    public void Counter(Unit selectedUnit, Unit selectedTarget)
     {
         //does somehting
     }
-    public void Flail(Unit selectedUnit)
+    public void Flail(Unit selectedUnit, Unit selectedTarget)
     {
         //does somehting
     }
-    public void Frenzy(Unit selectedUnit)
+    public void Frenzy(Unit selectedUnit, Unit selectedTarget)
     {
         HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
         selfDamage = damage / 7;
@@ -66,16 +66,16 @@ public class WarriorAbilities : Abilities {
         }
         BoardManager.Instance.AttackTarget(x, y, damage * 2, selectedUnit.cooldownAttackSeconds);
     }
-    public void Rally(Unit selectedUnit)
+    public void Rally(Unit selectedUnit, Unit selectedTarget)
     {
         buff = 0;
         BoardManager.Instance.BuffTarget(x, y, buff, selectedUnit.cooldownAttackSeconds);
     }
-    public void Warpath(Unit selectedUnit)
+    public void Warpath(Unit selectedUnit, Unit selectedTarget)
     {
         //does somehting
     }
-    public void ShieldBash(Unit selectedUnit)
+    public void ShieldBash(Unit selectedUnit, Unit selectedTarget)
     {
         //Debug.Log(x + "mouse X");
         //Debug.Log(y + "mouse Y");
@@ -83,15 +83,15 @@ public class WarriorAbilities : Abilities {
         //does somehting
     }
 
-    public override void Ability1(Unit selectedUnit) { Counter(selectedUnit); }
+    public override void Ability1(Unit selectedUnit, Unit selectedTarget) { Counter(selectedUnit, selectedTarget); }
 
-    public override void Ability2(Unit selectedUnit) { Flail(selectedUnit); }
+    public override void Ability2(Unit selectedUnit, Unit selectedTarget) { Flail(selectedUnit, selectedTarget); }
 
-    public override void Ability3(Unit selectedUnit) { Frenzy(selectedUnit); }
+    public override void Ability3(Unit selectedUnit, Unit selectedTarget) { Frenzy(selectedUnit, selectedTarget); }
 
-    public override void Ability4(Unit selectedUnit) { Rally(selectedUnit); }
+    public override void Ability4(Unit selectedUnit, Unit selectedTarget) { Rally(selectedUnit, selectedTarget); }
 
-    public override void Ability5(Unit selectedUnit) { Warpath(selectedUnit); }
+    public override void Ability5(Unit selectedUnit, Unit selectedTarget) { Warpath(selectedUnit, selectedTarget); }
 
-    public override void Ability6(Unit selectedUnit) { ShieldBash(selectedUnit); }
+    public override void Ability6(Unit selectedUnit, Unit selectedTarget) { ShieldBash(selectedUnit, selectedTarget); }
 }

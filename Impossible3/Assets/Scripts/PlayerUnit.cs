@@ -145,4 +145,61 @@ public class PlayerUnit : Unit
     }
 
 
+    public override bool[,] PossibleAbility(int currentXPos = -1, int currentYPos = -1)
+    {
+        if (currentXPos == -1) { currentXPos = CurrentX; }
+        if (currentYPos == -1) { currentYPos = CurrentY; }
+        bool[,] isAcceptedAbility = new bool[BoardManager.mapSize, BoardManager.mapSize];
+
+        for (int i = 1; i <= straightAttackRange; i++)
+        {
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos, currentYPos + i }, new List<int> { currentXPos + i, currentYPos }, new List<int> { currentXPos, currentYPos - i }, new List<int> { currentXPos - i, currentYPos } })
+            {
+                int x = pair[0];
+                int y = pair[1];
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
+                {
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer == BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                    {
+                        isAcceptedAbility[x, y] = true;
+                    }
+                }
+            }
+        }
+
+        for (int i = 1; i <= diagAttackRange; i++)
+        {
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos + i, currentYPos + i }, new List<int> { currentXPos + i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos + i } })
+            {
+                int x = pair[0];
+                int y = pair[1];
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
+                {
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer == BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                    {
+                        isAcceptedAbility[x, y] = true;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0 - circAttackRange; i <= circAttackRange; i++)
+        {
+            int x = currentXPos + i;
+            for (int j = 0 - circAttackRange; j <= circAttackRange; j++)
+            {
+                int y = currentYPos + j;
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedAbility[x, y] != true)
+                {
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer == BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                    {
+                        isAcceptedAbility[x, y] = true;
+                    }
+                }
+            }
+        }
+
+        return isAcceptedAbility;
+    }
+
 }
