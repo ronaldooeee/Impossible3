@@ -52,7 +52,7 @@ public class BoardManager : MonoBehaviour {
 		SpawnMapTiles();
 		ColorMapTiles();
 		SpawnWalls();
-        //SpawnObstacles();
+        SpawnObstacles();
 	}
 
     // Update world to show changes
@@ -347,10 +347,17 @@ public class BoardManager : MonoBehaviour {
 
     private void SpawnObstacles()
     {
-        GameObject cube = Instantiate(unitPrefabs[6], GetTileCenter(3, 5, 0), Quaternion.identity) as GameObject;
+        int x = 5;
+        int y = 6;
+        GameObject cube = Instantiate(unitPrefabs[6], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
         Vector3 temp = new Vector3(0, 0.5f, 0);
         cube.transform.position += temp;
-
+        cube.transform.rotation = Camera.main.transform.rotation;
+        cube.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("boulder");
+        cube.transform.localScale = new Vector3(2, 2, 1);
+        Units[x, y] = cube.GetComponent<Unit>();
+        Units[x, y].SetPosition(x, y);
+        
     }
 
     private void SpawnAllUnits()

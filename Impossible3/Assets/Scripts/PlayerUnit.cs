@@ -46,7 +46,7 @@ public class PlayerUnit : Unit
                 {
                     if (BoardManager.Units[x, y] == null)
                     {
-                        isAcceptedMove[x, y] = true;
+                            isAcceptedMove[x, y] = true;
                     }
                 }
             }
@@ -62,7 +62,7 @@ public class PlayerUnit : Unit
                 {
                     if (BoardManager.Units[x, y] == null)
                     {
-                        isAcceptedMove[x, y] = true;
+                            isAcceptedMove[x, y] = true;
                     }
                 }
             }
@@ -78,7 +78,7 @@ public class PlayerUnit : Unit
                 {
                     if (BoardManager.Units[x, y] == null)
                     {
-                        isAcceptedMove[x, y] = true;
+                            isAcceptedMove[x, y] = true;
                     }
                 }
             }
@@ -101,9 +101,9 @@ public class PlayerUnit : Unit
                 int y = pair[1];
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
                 {
-                    if (BoardManager.Units[x, y] == null || this.isPlayer!= BoardManager.Units[x, y].isPlayer)
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer!= BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
                     {
-                        isAcceptedAttack[x, y] = true;
+                            isAcceptedAttack[x, y] = true;
                     }
                 }
             }
@@ -117,9 +117,9 @@ public class PlayerUnit : Unit
                 int y = pair[1];
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
                 {
-                    if (BoardManager.Units[x, y] == null || this.isPlayer != BoardManager.Units[x, y].isPlayer)
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
                     {
-                        isAcceptedAttack[x, y] = true;
+                            isAcceptedAttack[x, y] = true;
                     }
                 }
             }
@@ -133,9 +133,9 @@ public class PlayerUnit : Unit
                 int y = currentYPos + j;
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedAttack[x, y] != true)
                 {
-                    if (BoardManager.Units[x, y] == null || this.isPlayer != BoardManager.Units[x, y].isPlayer)
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
                     {
-                        isAcceptedAttack[x, y] = true;
+                            isAcceptedAttack[x, y] = true;
                     }
                 }
             }

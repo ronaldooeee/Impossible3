@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class Unit : MonoBehaviour {
+public class Unit : MonoBehaviour {
 
     public int CurrentX;
     public int CurrentY;
 
     public bool isPlayer = false;
+    public bool isObstacle = false;
 
     public int health = -1;
     public int damageAmount;
