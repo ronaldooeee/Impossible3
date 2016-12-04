@@ -52,6 +52,7 @@ public class BoardManager : MonoBehaviour {
 		SpawnMapTiles();
 		ColorMapTiles();
 		SpawnWalls();
+        //SpawnObstacles();
 	}
 
     // Update world to show changes
@@ -344,7 +345,15 @@ public class BoardManager : MonoBehaviour {
 		wall2.GetComponent<Renderer>().material.mainTexture = walltex;
 	}
 
-	private void SpawnAllUnits()
+    private void SpawnObstacles()
+    {
+        GameObject cube = Instantiate(unitPrefabs[6], GetTileCenter(3, 5, 0), Quaternion.identity) as GameObject;
+        Vector3 temp = new Vector3(0, 0.5f, 0);
+        cube.transform.position += temp;
+
+    }
+
+    private void SpawnAllUnits()
 	{
 		Units = new Unit[mapSize, mapSize];
 		//Spawn Player Units (PrefabList #, Sprite number, x location, y location)
