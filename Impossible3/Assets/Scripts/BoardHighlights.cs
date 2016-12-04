@@ -18,6 +18,36 @@ public class BoardHighlights : MonoBehaviour
 		highlights = new List<GameObject> ();
 	}
 
+    private void Update()
+    {
+        Unit selectedUnit = BoardManager.Instance.selectedUnit;
+        if(selectedUnit != null)
+        {
+            if (selectedUnit.timeStampAttack <= Time.time) {
+                Color highlight = aHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color;
+                highlight.a = (float)0.8;
+                aHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color = highlight;
+            }
+            else
+            {
+                Color highlight = aHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color;
+                highlight.a = (float)0.5;
+                aHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color = highlight;
+            }
+
+            if (selectedUnit.timeStampMove <= Time.time) {
+                Color highlight =mHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color;
+                highlight.a = (float)0.6;
+                mHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color = highlight;
+            } else
+            {
+                Color highlight = mHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color;
+                highlight.a = (float)0.3;
+                mHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color = highlight;
+            }
+        }
+    }
+
 	//Check if highlights are on or off
 	private GameObject GetMovementHighlightObject() 
 	{
