@@ -59,7 +59,7 @@ public class BoardManager : MonoBehaviour {
     {
         while (enemyUnits.Count < quota)
         {
-            SpawnUnit(1, random.Next(3, 5), random.Next(6, 10), random.Next(6, 10), 2, 2, 1);
+            SpawnUnit(1, random.Next(3, 6), random.Next(6, 10), random.Next(6, 10));
         }
         if (playerUnits.Count < 1)
         {
@@ -299,13 +299,13 @@ public class BoardManager : MonoBehaviour {
     }
 
     //Spawns whatever unit is in the index of prefabs on BoardManager.cs
-    private void SpawnUnit(int unit, int index, int x, int y, int straightAttack, int diagAttack, int circAttack)
+    private void SpawnUnit(int unit, int index, int x, int y)
 	{
 		GameObject go = Instantiate (unitPrefabs [unit], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
         Sprite[] spriteArray = new Sprite[] {
             Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("mage1"), Resources.Load<Sprite>("archer1"),
-            Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("skeleton_knight") };
-        RuntimeAnimatorController[] animationArray = {null, null, null, null, Resources.Load<RuntimeAnimatorController>("skeleton_knight") };
+            Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("skeleton_knight"), Resources.Load<Sprite>("Skeleton_Spear") };
+        RuntimeAnimatorController[] animationArray = {null, null, null, null, Resources.Load<RuntimeAnimatorController>("skeleton_knight") ,  Resources.Load<RuntimeAnimatorController>("Skeleton_Spear") };
         go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
         if (animationArray[index] != null) { go.GetComponent<Animator>().runtimeAnimatorController = animationArray[index]; }
         go.transform.rotation = Camera.main.transform.rotation;
@@ -317,7 +317,6 @@ public class BoardManager : MonoBehaviour {
         } else {
 			enemyUnits.Add(go); 
 		}
-		setUnitAttributes(go, straightAttack, diagAttack, circAttack);
     }
 
 	public static void setUnitAttributes(GameObject go, int straightAttack, int diagAttack, int circAttack)
@@ -348,17 +347,18 @@ public class BoardManager : MonoBehaviour {
 	private void SpawnAllUnits()
 	{
 		Units = new Unit[mapSize, mapSize];
-		//Spawn Player Units (PrefabList #, Sprite number, x location, y location, straightAttack, diagAttack, circAttack)
+		//Spawn Player Units (PrefabList #, Sprite number, x location, y location)
 		//Knight Stats
-		SpawnUnit (0, 0, 2, 0, 1, 1, 1);
+		SpawnUnit (0, 0, 2, 0);
 		//Mage Stats
-		SpawnUnit (4, 1, 4, 0, 0, 0, 5);
+		SpawnUnit (4, 1, 4, 0);
 		//Archer Stats
-        SpawnUnit (5, 2, 6, 0, 0, 0, 3);
+        SpawnUnit (5, 2, 6, 0);
 
         //Spawn Enemy Units (1 = Enemy Prefab,Sprite number, x value, y value)
-        SpawnUnit (1, 3, random.Next(6, 10), random.Next(6, 10), 2, 2, 1);
-        SpawnUnit (1, 4, random.Next(6, 10), random.Next(6, 10), 2, 2 ,1);
+        SpawnUnit (1, 3, random.Next(6, 10), random.Next(6, 10));
+        //SpawnUnit (1, 4, random.Next(6, 10), random.Next(6, 10));
+        SpawnUnit(1, 5, random.Next(6, 10), random.Next(6, 10));
     }
 
 	private void SpawnEnvironment(int index, int x, int y)

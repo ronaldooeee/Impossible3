@@ -19,8 +19,8 @@ public class SkeletonAbilties : Abilities {
         stats.circMoveRange = 1;
 
         stats.straightAttackRange = 2;
-        stats.diagAttackRange = 1;
-        stats.circAttackRange = 0;
+        stats.diagAttackRange = 2;
+        stats.circAttackRange = 1;
 
         stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 3;
