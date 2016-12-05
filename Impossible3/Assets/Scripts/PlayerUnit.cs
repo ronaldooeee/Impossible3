@@ -14,7 +14,7 @@ public class PlayerUnit : Unit
     //this variable isnt used but it's references elsewhere so i cant remove it
     public bool isRanged;
 
-    public override bool[,] PossibleMove (int currentXPos = -1, int currentYPos = -1 )
+	public override HashSet<Coord>[] PossibleMove (int currentXPos = -1, int currentYPos = -1 )
 	{
         if (currentXPos == -1) { currentXPos = CurrentX; }
         if (currentYPos == -1) { currentYPos = CurrentY; }
@@ -34,9 +34,16 @@ public class PlayerUnit : Unit
         //currentXPos
         //currentYPos
 
-        bool[,] isAcceptedMove = new bool[BoardManager.mapSize, BoardManager.mapSize];
+		HashSet<Coord>[] isAcceptedMove = new HashSet<Coord>[maxMoveRange + 1];
 
-        for(int i =1; i <= straightMoveRange; i++)
+		for (int i = 1; i < isAcceptedMove.Length; i++) 
+		{
+			isAcceptedMove[i] = new HashSet<Coord>();
+		}
+
+
+
+        /*for(int i = 1; i <= straightMoveRange; i++)
         {
             foreach (List<int> pair in new List<List<int>>{ new List<int>{currentXPos,currentYPos+i },new List<int> { currentXPos+i,currentYPos },new List<int> {currentXPos,currentYPos-i },new List<int> {currentXPos-i,currentYPos } })
             {
@@ -82,18 +89,18 @@ public class PlayerUnit : Unit
                     }
                 }
             }
-        }
+        }*/
         return isAcceptedMove;
         
 	}
 
-	public override bool[,] PossibleAttack(int currentXPos = -1, int currentYPos = -1)
+	public override HashSet<Coord>[] PossibleAttack(int currentXPos = -1, int currentYPos = -1)
     {
         if (currentXPos == -1) { currentXPos = CurrentX; }
         if (currentYPos == -1) { currentYPos = CurrentY; }
-        bool[,] isAcceptedAttack = new bool[BoardManager.mapSize, BoardManager.mapSize];
+		HashSet<Coord>[] isAcceptedAttack = new HashSet<Coord>[maxAttackRange + 1];
 
-        for (int i = 1; i <= straightAttackRange; i++)
+        /*for (int i = 1; i <= straightAttackRange; i++)
         {
             foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos, currentYPos + i }, new List<int> { currentXPos + i, currentYPos }, new List<int> { currentXPos, currentYPos - i }, new List<int> { currentXPos - i, currentYPos } })
             {
@@ -139,19 +146,19 @@ public class PlayerUnit : Unit
                     }
                 }
             }
-        }
+        }*/
 
         return isAcceptedAttack;
     }
 
 
-    public override bool[,] PossibleAbility(int currentXPos = -1, int currentYPos = -1)
+	public override HashSet<Coord>[] PossibleAbility(int currentXPos = -1, int currentYPos = -1)
     {
         if (currentXPos == -1) { currentXPos = CurrentX; }
         if (currentYPos == -1) { currentYPos = CurrentY; }
-        bool[,] isAcceptedAbility = new bool[BoardManager.mapSize, BoardManager.mapSize];
+		HashSet<Coord>[] isAcceptedAbility = new HashSet<Coord>[maxAttackRange + 1];
 
-        for (int i = 1; i <= straightAttackRange; i++)
+        /*for (int i = 1; i <= straightAttackRange; i++)
         {
             foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos, currentYPos + i }, new List<int> { currentXPos + i, currentYPos }, new List<int> { currentXPos, currentYPos - i }, new List<int> { currentXPos - i, currentYPos } })
             {
@@ -197,7 +204,7 @@ public class PlayerUnit : Unit
                     }
                 }
             }
-        }
+        }*/
 
         return isAcceptedAbility;
     }

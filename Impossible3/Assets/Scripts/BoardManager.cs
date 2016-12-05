@@ -7,9 +7,9 @@ public class BoardManager : MonoBehaviour {
     public Transform pauseMenu, pSettingsMenu, pExitMenu, pAudioMenu, pGraphicMenu;
 
     public static BoardManager Instance { set; get; }
-	private bool[,] allowedMoves{ set; get; }
-	private bool[,] allowedAttacks{ set; get; }
-	private bool[,] allowedAbilities{ set; get; }
+	private HashSet<Coord>[] allowedMoves{ set; get; }
+	private HashSet<Coord>[] allowedAttacks{ set; get; }
+	private HashSet<Coord>[] allowedAbilities{ set; get; }
 
 	public static Unit[,] Units{ set; get; }
 	public Unit selectedUnit;
@@ -89,16 +89,16 @@ public class BoardManager : MonoBehaviour {
                 }
                 else if (selectedUnit != null)
                 {
-                    if (allowedMoves[selectionX, selectionY])
-                    {
-                        MoveUnit(selectionX, selectionY);
-                    }
-                    else
-                    {
-                        BoardHighlights.Instance.Hidehighlights();
-                        selectedTarget = null;
-                        selectedUnit = null;
-                    }
+					Coord newMove = new Coord (selectionX, selectionY);
+					for (int i = 0; i < allowedMoves.Length; i++) {
+						if (allowedMoves [i].Contains (newMove)) {
+							MoveUnit (selectionX, selectionY);
+						} else {
+							BoardHighlights.Instance.Hidehighlights ();
+							selectedTarget = null;
+							selectedUnit = null;
+						}
+					}
                 }
             }
         }
@@ -121,44 +121,30 @@ public class BoardManager : MonoBehaviour {
                 else if (selectedTarget != null)
                 {
                     //int damage = Units[selectionX, selectionY].damageAmount;
-
-                    if (allowedAttacks[selectionX, selectionY])
-                    {
-                        if (selectedAbility == 0)
-                        {
-                            selectedUnit.GetComponent<Abilities>().RegAttack(selectedTarget, selectedTarget);
-                        }
-                        else if (selectedAbility == 1)
-                        {
-                            selectedUnit.GetComponent<Abilities>().Ability1(selectedUnit, selectedTarget);
-                        }
-                        else if (selectedAbility == 2)
-                        {
-                            selectedUnit.GetComponent<Abilities>().Ability2(selectedUnit, selectedTarget);
-                        }
-                        else if (selectedAbility == 3)
-                        {
-                            selectedUnit.GetComponent<Abilities>().Ability3(selectedUnit, selectedTarget);
-                        }
-                        else if (selectedAbility == 4)
-                        {
-                            selectedUnit.GetComponent<Abilities>().Ability4(selectedUnit, selectedTarget);
-                        }
-                        else if (selectedAbility == 5)
-                        {
-                            selectedUnit.GetComponent<Abilities>().Ability5(selectedUnit, selectedTarget);
-                        }
-                        else if (selectedAbility == 6)
-                        {
-                            selectedUnit.GetComponent<Abilities>().Ability6(selectedUnit, selectedTarget);
-                        }
-                }
-                else
-                {
-                    BoardHighlights.Instance.Hidehighlights();
-                    selectedTarget = null;
-                    selectedUnit = null;
-                }
+					Coord attackSpot = new Coord(selectionX, selectionY);
+					for (int i = 0; i < allowedAttacks.Length; i++) {
+						if (allowedAttacks [i].Contains (attackSpot)) {
+							if (selectedAbility == 0) {
+								selectedUnit.GetComponent<Abilities> ().RegAttack (selectedTarget, selectedTarget);
+							} else if (selectedAbility == 1) {
+								selectedUnit.GetComponent<Abilities> ().Ability1 (selectedUnit, selectedTarget);
+							} else if (selectedAbility == 2) {
+								selectedUnit.GetComponent<Abilities> ().Ability2 (selectedUnit, selectedTarget);
+							} else if (selectedAbility == 3) {
+								selectedUnit.GetComponent<Abilities> ().Ability3 (selectedUnit, selectedTarget);
+							} else if (selectedAbility == 4) {
+								selectedUnit.GetComponent<Abilities> ().Ability4 (selectedUnit, selectedTarget);
+							} else if (selectedAbility == 5) {
+								selectedUnit.GetComponent<Abilities> ().Ability5 (selectedUnit, selectedTarget);
+							} else if (selectedAbility == 6) {
+								selectedUnit.GetComponent<Abilities> ().Ability6 (selectedUnit, selectedTarget);
+							}
+						} else {
+							BoardHighlights.Instance.Hidehighlights ();
+							selectedTarget = null;
+							selectedUnit = null;
+						}
+					}
                 }
             }
         }
@@ -254,18 +240,21 @@ public class BoardManager : MonoBehaviour {
 	private void MoveUnit(int x, int y)
 	{
 		//If you movement to selected space is allowed, do this
-		if (allowedMoves [x, y] && selectedTarget == null && selectedUnit.timeStampMove <= Time.time) {
-			//Deselect any other unit that might be selected by accident
-			Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
-			//Find the coordinates for destination
-			selectedUnit.transform.position = GetTileCenter (x, y, 0);
-			//Move it there
-			selectedUnit.SetPosition (x, y);
-			//Set that unit's coordinates to desinations coordinates
-			Units [x, y] = selectedUnit;           
-            selectedUnit.timeStampMove = Time.time + selectedUnit.cooldownMoveSeconds;
-        } else if (selectedUnit.timeStampMove > Time.time) {
-			return;
+		Coord moveHere = new Coord(x,y);
+		for (int i = 0; i < allowedMoves.Length; i++) {
+			if (allowedMoves[i].Contains(moveHere) && selectedTarget == null && selectedUnit.timeStampMove <= Time.time) {
+				//Deselect any other unit that might be selected by accident
+				Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+				//Find the coordinates for destination
+				selectedUnit.transform.position = GetTileCenter (x, y, 0);
+				//Move it there
+				selectedUnit.SetPosition (x, y);
+				//Set that unit's coordinates to desinations coordinates
+				Units [x, y] = selectedUnit;           
+				selectedUnit.timeStampMove = Time.time + selectedUnit.cooldownMoveSeconds;
+			} else if (selectedUnit.timeStampMove > Time.time) {
+				return;
+			}
 		}
 		//Deselect unit and get rid of highlight
 		BoardHighlights.Instance.Hidehighlights();
@@ -355,13 +344,13 @@ public class BoardManager : MonoBehaviour {
 	public static void setUnitAttributes(GameObject go, int straightAttack, int diagAttack, int circAttack)
     {
         PlayerUnit unit = go.GetComponent<PlayerUnit>();
-        unit.straightMoveRange = 2;
+        /*unit.straightMoveRange = 2;
         unit.diagMoveRange = 1;
         unit.circMoveRange = 1;
 
 		unit.straightAttackRange = straightAttack;
 		unit.diagAttackRange = diagAttack;
-		unit.circAttackRange = circAttack;
+		unit.circAttackRange = circAttack;*/
 	}
 
     private void SpawnWalls()

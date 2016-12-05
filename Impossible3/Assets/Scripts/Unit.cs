@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Unit : MonoBehaviour {
 
@@ -17,13 +18,19 @@ public class Unit : MonoBehaviour {
     public float timeStampMove;
     public float timeStampAttack;
 
-    public int straightMoveRange;
+    /*public int straightMoveRange;
     public int diagMoveRange;
     public int circMoveRange;
 
     public int straightAttackRange;
     public int diagAttackRange;
-    public int circAttackRange;
+    public int circAttackRange;*/
+
+	public int minMoveRange;
+	public int maxMoveRange;
+
+	public int minAttackRange;
+	public int maxAttackRange;
 
     private void Awake()
     {
@@ -49,17 +56,17 @@ public class Unit : MonoBehaviour {
 		damageAmount = damage;
 	}
 
-	public virtual bool[,] PossibleMove(int CurrentX = -1, int CurrentY = -1)
+	public virtual HashSet<Coord>[] PossibleMove(int CurrentX = -1, int CurrentY = -1)
     {
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
+		return new HashSet<Coord>[maxMoveRange + 1];
 	}
 
-	public virtual bool[,] PossibleAttack(int CurrentX = -1, int CurrentY = -1)
+	public virtual HashSet<Coord>[] PossibleAttack(int CurrentX = -1, int CurrentY = -1)
     {
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
+		return new HashSet<Coord>[maxAttackRange + 1];
 	}
-	public virtual bool[,] PossibleAbility(int CurrentX = -1, int CurrentY = -1)
+	public virtual HashSet<Coord>[] PossibleAbility(int CurrentX = -1, int CurrentY = -1)
 	{
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
+		return new HashSet<Coord>[maxAttackRange + 1];
 	}
 }

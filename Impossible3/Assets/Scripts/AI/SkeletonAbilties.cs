@@ -14,13 +14,11 @@ public class SkeletonAbilties : Abilities {
         stats.health = 100;
         stats.damageAmount = 30;
 
-        stats.straightMoveRange = 0;
-        stats.diagMoveRange = 0;
-        stats.circMoveRange = 1;
+        stats.minMoveRange = 0;
+        stats.maxMoveRange = 0;
 
-        stats.straightAttackRange = 2;
-        stats.diagAttackRange = 2;
-        stats.circAttackRange = 1;
+        stats.minAttackRange = 2;
+        stats.maxAttackRange = 2;
 
         stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 3;

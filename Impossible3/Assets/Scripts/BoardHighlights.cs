@@ -57,17 +57,20 @@ public class BoardHighlights : MonoBehaviour
 		return go;
 	}
 
-	public void HighlightAllowedMoves(bool[,] moves)
+	public void HighlightAllowedMoves(HashSet<Coord>[] moves)
 	{
 		for (int i = 0; i < BoardManager.mapSize; i++) 
 		{
 			for (int j = 0; j < BoardManager.mapSize; j++) 
 			{
-				if (moves [i, j]) 
+				Coord tempCoords = new Coord (i, j);
+				for (int k = 0; k < moves.Length; k++) 
 				{
-					GameObject go = GetMovementHighlightObject ();
-					go.SetActive (true);
-					go.transform.position = new Vector3 (i+0.5f, -0.004f, j+0.5f);
+					if (moves[k].Contains(tempCoords)) {
+						GameObject go = GetMovementHighlightObject ();
+						go.SetActive (true);
+						go.transform.position = new Vector3 (i + 0.5f, -0.004f, j + 0.5f);
+					}
 				}
 			}
 		}
@@ -80,17 +83,20 @@ public class BoardHighlights : MonoBehaviour
 		return go;
 	}
 
-	public void HighlightAllowedAttacks(bool[,] moves)
+	public void HighlightAllowedAttacks(HashSet<Coord>[] moves)
 	{
 		for (int i = 0; i < BoardManager.mapSize; i++) 
 		{
 			for (int j = 0; j < BoardManager.mapSize; j++) 
 			{
-				if (moves [i, j]) 
+				Coord tempCoords = new Coord (i, j);
+				for (int k = 0; k < moves.Length; k++) 
 				{
-					GameObject go = GetAttackHighlightObject ();
-					go.SetActive (true);
-					go.transform.position = new Vector3 (i+0.5f, -0.004f, j+0.5f);
+					if (moves[k].Contains(tempCoords)) {
+						GameObject go = GetAttackHighlightObject ();
+						go.SetActive (true);
+						go.transform.position = new Vector3 (i + 0.5f, -0.004f, j + 0.5f);
+					}
 				}
 			}
 		}
@@ -103,18 +109,21 @@ public class BoardHighlights : MonoBehaviour
         return go;
     }
 
-    public void HighlightAllowedAbilities(bool[,] moves)
+	public void HighlightAllowedAbilities(HashSet<Coord>[] moves)
     {
         for (int i = 0; i < BoardManager.mapSize; i++)
         {
             for (int j = 0; j < BoardManager.mapSize; j++)
             {
-                if (moves[i, j])
-                {
-                    GameObject go = GetAbilityHighlightObject();
-                    go.SetActive(true);
-                    go.transform.position = new Vector3(i + 0.5f, -0.004f, j + 0.5f);
-                }
+				Coord tempCoords = new Coord (i, j);
+				for (int k = 0; k < moves.Length; k++) 
+				{
+					if (moves[k].Contains(tempCoords)) {
+						GameObject go = GetAbilityHighlightObject ();
+						go.SetActive (true);
+						go.transform.position = new Vector3 (i + 0.5f, -0.004f, j + 0.5f);
+					}
+				}
             }
         }
     }

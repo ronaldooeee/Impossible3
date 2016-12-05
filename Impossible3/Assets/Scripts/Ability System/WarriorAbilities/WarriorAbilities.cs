@@ -19,13 +19,11 @@ public class WarriorAbilities : Abilities {
         stats.health = 80;
         stats.damageAmount = 70;
 
-        stats.straightMoveRange = 2;
-        stats.diagMoveRange = 1;
-        stats.circMoveRange = 0;
+        stats.minMoveRange = 1;
+        stats.maxMoveRange = 2;
 
-        stats.straightAttackRange = 2;
-        stats.diagAttackRange = 1;
-        stats.circAttackRange = 0;
+        stats.minAttackRange = 1;
+        stats.maxAttackRange = 2;
 
         stats.cooldownMoveSeconds = 3;
         stats.cooldownAttackSeconds = 3;
