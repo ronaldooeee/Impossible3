@@ -14,11 +14,13 @@ public class MageAbilities : Abilities {
         stats.health = 70;
         stats.damageAmount= 50;
 
-        stats.minMoveRange = 1;
-        stats.maxMoveRange = 3;
+        stats.straightMoveRange = 3;
+        stats.diagMoveRange = 2;
+        stats.circMoveRange =  1;
    
-        stats.minAttackRange = 1;
-        stats.maxAttackRange = 5;
+        stats.straightAttackRange = 4;
+        stats.diagAttackRange = 3;
+        stats.circAttackRange = 2;
 
         stats.cooldownMoveSeconds = 3;
         stats.cooldownAttackSeconds = 4;
@@ -49,7 +51,7 @@ public class MageAbilities : Abilities {
             Fireball(selectedUnit, selectedTarget);
         }else
         {
-            OverlaySelect(selectedUnit, 0, 1, 5);
+            OverlaySelect(selectedUnit, 0, 3, 2, 1);
         }
 
         

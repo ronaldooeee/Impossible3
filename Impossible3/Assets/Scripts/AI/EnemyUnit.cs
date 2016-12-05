@@ -31,9 +31,9 @@ public class EnemyUnit : Unit
 		int damage = this.GetComponent<PlayerUnit> ().damageAmount;
 
         //If Attack cooldown over, then attack
-        if (unitInstance.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
+                if (unitInstance.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
         {
-			HashSet<Coord>[] allowedEnemyAttacks = unitInstance.PossibleAttack(CurrentX, CurrentY);
+            bool[,] allowedEnemyAttacks = unitInstance.PossibleAttack(CurrentX, CurrentY);
             //BoardHighlights.Instance.Hidehighlights();
             //BoardHighlights.Instance.HighlightAllowedAttacks(allowedEnemyAttacks);
             //Determine if player is in Attack distance
@@ -44,29 +44,27 @@ public class EnemyUnit : Unit
                     Unit playerU = player.GetComponent<PlayerUnit>();
                     int playerX = playerU.CurrentX;
                     int playerY = playerU.CurrentY;
-					Coord playerCoord = new Coord(playerX, playerY);
-					for(int i = 0; i < allowedEnemyAttacks.Length; i ++)
-						if (allowedEnemyAttacks[i].Contains(playerCoord))
-	                    {
-	                        //If yes then attack
-	                        HealthSystem health = (HealthSystem)BoardManager.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
-	                        if (health.takeDamageAndDie(damage))
-	                        {
-								
-	                            // Remove player from list.
-	                            foreach (GameObject spawn in playerUnits)
-	                            {
-	                                if (System.Object.ReferenceEquals(spawn, BoardManager.Units[playerX, playerY].gameObject))
-	                                {
-	                                    playerUnits.Remove(spawn);
-	                                    Destroy(spawn);
-	                                    BoardHighlights.Instance.Hidehighlights();
-	                                }
-	                            }
-	                        }
-	                        unitInstance.timeStampAttack = Time.time + unitInstance.cooldownAttackSeconds;
-	                        return;
-	                    }
+                    if (allowedEnemyAttacks[playerX, playerY])
+                    {
+                        //If yes then attack
+                        HealthSystem health = (HealthSystem)BoardManager.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
+                        if (health.takeDamageAndDie(damage))
+                        {
+							
+                            // Remove player from list.
+                            foreach (GameObject spawn in playerUnits)
+                            {
+                                if (System.Object.ReferenceEquals(spawn, BoardManager.Units[playerX, playerY].gameObject))
+                                {
+                                    playerUnits.Remove(spawn);
+                                    Destroy(spawn);
+                                    BoardHighlights.Instance.Hidehighlights();
+                                }
+                            }
+                        }
+                        unitInstance.timeStampAttack = Time.time + unitInstance.cooldownAttackSeconds;
+                        return;
+                    }
                 }
             }
         }
@@ -112,18 +110,16 @@ public class EnemyUnit : Unit
 
     private List<int[]> getTrueMoves()
     {
-		HashSet<Coord>[] allowedEnemyMoves = unitInstance.PossibleMove(CurrentX, CurrentY);
+        bool[,] allowedEnemyMoves = unitInstance.PossibleMove(CurrentX, CurrentY);
         List<int[]> trueMoves = new List<int[]> { };
-		for (int x = 0; x < allowedEnemyMoves.Length; x++)
+        for (int x = 0; x < allowedEnemyMoves.GetLength(0); x++)
         {
-            for (int y = 0; y < allowedEnemyMoves.Length; y++)
+            for (int y = 0; y < allowedEnemyMoves.GetLength(1); y++)
             {
-				Coord enemyMove = new Coord(x, y);
-				for(int i = 0; i < allowedEnemyMoves.Length; i++)
-					if (allowedEnemyMoves[i].Contains(enemyMove))
-	                {
-	                    trueMoves.Add(new int[] {x,y});
-	                }
+                if (allowedEnemyMoves[x, y])
+                {
+                    trueMoves.Add(new int[] {x,y});
+                }
             }
         }
         return trueMoves;
