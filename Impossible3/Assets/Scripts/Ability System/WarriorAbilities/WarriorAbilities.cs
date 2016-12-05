@@ -6,6 +6,12 @@ public class WarriorAbilities : Abilities {
     public int x;
     public int y;
 
+	public int selectedTargetX;
+	public int selectedTargetY;
+
+	public int selectedUnitX;
+	public int selectedUnitY;
+
     public int damage;
     public int selfDamage;
     public int buff;
@@ -50,10 +56,16 @@ public class WarriorAbilities : Abilities {
     }
     public void Flail(Unit selectedUnit, Unit selectedTarget)
     {
-        //does somehting
+		for (int a = selectedUnit.straightMoveRange; selectedUnit.CurrentX < a; a = a - 1) {
+			Debug.Log (a);
+			for (int b = selectedUnit.straightMoveRange; selectedUnit.CurrentY <b; b = b -1){
+				Debug.Log(b);
+			}
+		}
     }
     public void Frenzy(Unit selectedUnit, Unit selectedTarget)
     {
+		selectedUnit.SetAttackCooldown(2.0f);
         HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
         selfDamage = damage / 7;
         if (health.currentHealth <= selfDamage)
@@ -77,13 +89,37 @@ public class WarriorAbilities : Abilities {
     }
     public void ShieldBash(Unit selectedUnit, Unit selectedTarget)
     {
+		selectedTargetX = selectedTarget.CurrentX;
+		selectedTargetY = selectedTarget.CurrentY;
+
+		selectedUnitX = selectedUnit.CurrentX;
+		selectedUnitY = selectedUnit.CurrentY; 
+		if (selectedUnitX < selectedTargetX) {
+			selectedTarget.CurrentX = selectedTarget.CurrentX + 1;
+		} else if (selectedUnitX > selectedTargetX) {
+			selectedTarget.CurrentX = selectedTarget.CurrentX - 1;
+		} else if (selectedUnitY < selectedUnitY) {
+			selectedTarget.CurrentY = selectedTarget.CurrentY + 1;
+		} else {
+			selectedTarget.CurrentY = selectedTarget.CurrentY - 1;
+		}
         //Debug.Log(x + "mouse X");
         //Debug.Log(y + "mouse Y");
-        BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget(selectedTarget.CurrentX, selectedTarget.CurrentY, damage, selectedUnit.cooldownAttackSeconds);
         //does somehting
     }
 
-    public override void Ability1(Unit selectedUnit, Unit selectedTarget) { Counter(selectedUnit, selectedTarget); }
+	public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
+		if (BoardManager.Instance.selectedAbility == 1)
+		{
+			Counter(selectedUnit, selectedTarget);
+		}else
+		{
+			OverlaySelect(selectedUnit, 0, 0, 0, 0);//Unit selectedUnit, int attack, int straightrange, int diagrange, int circrange
+		}
+
+
+	}
 
     public override void Ability2(Unit selectedUnit, Unit selectedTarget) { Flail(selectedUnit, selectedTarget); }
 
