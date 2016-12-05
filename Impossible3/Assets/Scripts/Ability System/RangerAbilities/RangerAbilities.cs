@@ -17,12 +17,12 @@ public class RangerAbilities : Abilities {
         stats.damageAmount = 40;
 
         stats.straightMoveRange = 3;
-        stats.diagMoveRange = 2;
-        stats.circMoveRange = 1;
+        stats.diagMoveRange = 1;
+        stats.circMoveRange = 2;
 
-        stats.straightAttackRange = 5;
-        stats.diagAttackRange = 4;
-        stats.circAttackRange = 3;
+        stats.straightAttackRange = 3;
+        stats.diagAttackRange = 1;
+        stats.circAttackRange = 2;
 
         stats.cooldownMoveSeconds = 1;
         stats.cooldownAttackSeconds = 1;

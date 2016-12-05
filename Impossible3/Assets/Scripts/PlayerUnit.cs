@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class PlayerUnit : Unit 
 {
@@ -78,7 +79,10 @@ public class PlayerUnit : Unit
                 {
                     if (BoardManager.Units[x, y] == null)
                     {
+                        if ((x != currentXPos + circMoveRange && x != currentXPos - circMoveRange) || (y != currentYPos + circMoveRange && y != currentYPos - circMoveRange))
+                        {
                             isAcceptedMove[x, y] = true;
+                        }
                     }
                 }
             }
@@ -133,9 +137,12 @@ public class PlayerUnit : Unit
                 int y = currentYPos + j;
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedAttack[x, y] != true)
                 {
-                    if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                    if ((x != currentXPos + circAttackRange && x != currentXPos - circAttackRange) || (y != currentYPos + circAttackRange && y != currentYPos - circAttackRange))
                     {
+                        if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                        {
                             isAcceptedAttack[x, y] = true;
+                        }
                     }
                 }
             }
@@ -193,7 +200,13 @@ public class PlayerUnit : Unit
                 {
                     if (BoardManager.Units[x, y] == null || (this.isPlayer == BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
                     {
-                        isAcceptedAbility[x, y] = true;
+                        if ((x != currentXPos + circAttackRange && x != currentXPos - circAttackRange) || (y != currentYPos + circAttackRange && y != currentYPos - circAttackRange))
+                        {
+                            if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                            {
+                                isAcceptedAbility[x, y] = true;
+                            }
+                        }
                     }
                 }
             }
