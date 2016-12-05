@@ -17,8 +17,8 @@ public class PlayerUnit : Unit
 
     public override bool[,] PossibleMove (int currentXPos = -1, int currentYPos = -1 )
 	{
-        if (currentXPos == -1) { currentXPos = CurrentX; }
-        if (currentYPos == -1) { currentYPos = CurrentY; }
+        currentXPos = CurrentX; 
+        currentYPos = CurrentY; 
         //I am become Flanders Destroyer of Code
         //I am become Code Destroyer of Flanders
 
@@ -32,8 +32,8 @@ public class PlayerUnit : Unit
         //BoardManager.Instance.Units[currentXPos,currentYPos]
 
         //Current selection
-        //currentXPos
-        //currentYPos
+        //Debug.Log(currentXPos + " " + currentYPos);
+        //Debug.Log(CurrentX + " " + CurrentY);
 
         bool[,] isAcceptedMove = new bool[BoardManager.mapSize, BoardManager.mapSize];
 

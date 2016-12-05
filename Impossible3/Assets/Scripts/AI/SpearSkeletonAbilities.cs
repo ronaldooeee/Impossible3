@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GolemAbilities : Abilities
+public class SpearSkeletonAbilities : Abilities
 {
 
     public int x;

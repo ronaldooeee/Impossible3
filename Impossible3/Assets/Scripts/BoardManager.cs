@@ -62,7 +62,8 @@ public class BoardManager : MonoBehaviour {
     {
         while (enemyUnits.Count < quota)
         {
-            SpawnUnit(1, random.Next(3, 6), random.Next(6, 10), random.Next(6, 10));
+            int rand = random.Next(6, 10);
+            SpawnUnit(rand, rand-3, random.Next(6, 10), random.Next(6, 10));
         }
         if (playerUnits.Count < 1)
         {
@@ -337,14 +338,15 @@ public class BoardManager : MonoBehaviour {
 		GameObject go = Instantiate (unitPrefabs [unit], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
         Sprite[] spriteArray = new Sprite[] {
             Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("mage1"), Resources.Load<Sprite>("archer1"),
-            Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("skeleton_knight"), Resources.Load<Sprite>("Skeleton_Spear") };
-        RuntimeAnimatorController[] animationArray = {null, null, null, null, Resources.Load<RuntimeAnimatorController>("skeleton_knight") ,  Resources.Load<RuntimeAnimatorController>("Skeleton_Spear") };
+            Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("skeleton_knight"), Resources.Load<Sprite>("Skeleton_Spear"),Resources.Load<Sprite>("kaboocha") };
+        RuntimeAnimatorController[] animationArray = {null, null, null, null, Resources.Load<RuntimeAnimatorController>("skeleton_knight") ,  Resources.Load<RuntimeAnimatorController>("Skeleton_Spear"),null };
         go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
         if (animationArray[index] != null) { go.GetComponent<Animator>().runtimeAnimatorController = animationArray[index]; }
         go.transform.rotation = Camera.main.transform.rotation;
         go.transform.localScale = new Vector3(2, 2, 1);
         Units [x, y] = go.GetComponent<Unit> ();
 		Units [x, y].SetPosition (x, y);
+        //Debug.Log(x + " " + y);
 		if (unit == 0 || unit == 4 || unit == 5){
             playerUnits.Add(go);
         } else {
@@ -381,7 +383,7 @@ public class BoardManager : MonoBehaviour {
     {
         int x = 5;
         int y = 6;
-        GameObject cube = Instantiate(unitPrefabs[6], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
+        GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
         Vector3 temp = new Vector3(0, 0.5f, 0);
         cube.transform.position += temp;
         cube.transform.rotation = Camera.main.transform.rotation;
@@ -403,10 +405,12 @@ public class BoardManager : MonoBehaviour {
 		//Archer Stats
         SpawnUnit (5, 2, 6, 0);
 
+        /*
         //Spawn Enemy Units (1 = Enemy Prefab,Sprite number, x value, y value)
         SpawnUnit (1, 3, random.Next(6, 10), random.Next(6, 10));
         //SpawnUnit (1, 4, random.Next(6, 10), random.Next(6, 10));
         SpawnUnit(1, 5, random.Next(6, 10), random.Next(6, 10));
+        */
     }
 
 	private void SpawnEnvironment(int index, int x, int y)
