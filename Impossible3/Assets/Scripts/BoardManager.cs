@@ -42,6 +42,25 @@ public class BoardManager : MonoBehaviour {
 
 	public static int mapSize = 30;
 
+    private Coordinate findBound()
+    {
+        int xMax = -1;
+        int yMax = -1;
+        foreach (GameObject player in playerUnits)
+        {
+            if (player.transform.position.x > xMax)
+            {
+                xMax = (int)player.transform.position.x;
+            }
+
+            if (player.transform.position.y > yMax)
+            {
+                yMax = (int)player.transform.position.y;
+            }
+        }
+        return new Coordinate(xMax, yMax);
+    }
+
 	private void Start ()
 	{
         score = 0;
@@ -62,8 +81,8 @@ public class BoardManager : MonoBehaviour {
     {
         while (enemyUnits.Count < quota)
         {
-            int rand = random.Next(6, 10);
-            SpawnUnit(rand, rand-3, random.Next(6, 10), random.Next(6, 10));
+            Coordinate bound = findBound();
+            SpawnUnit(random.Next(6, 10), random.Next(3, 7), bound.x + random.Next(0, 5), bound.y + random.Next(0, 5));
         }
         if (playerUnits.Count < 1)
         {
