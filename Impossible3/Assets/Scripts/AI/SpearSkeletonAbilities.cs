@@ -13,7 +13,7 @@ public class SpearSkeletonAbilities : Abilities
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-        stats.health = 100;
+        stats.health = 80;
         stats.damageAmount = 30;
 
         stats.straightMoveRange = 0;
@@ -25,7 +25,7 @@ public class SpearSkeletonAbilities : Abilities
         stats.circAttackRange = 1;
 
         stats.cooldownMoveSeconds = 2;
-        stats.cooldownAttackSeconds = 3;
+        stats.cooldownAttackSeconds = 4;
     }
 
     private void Update()

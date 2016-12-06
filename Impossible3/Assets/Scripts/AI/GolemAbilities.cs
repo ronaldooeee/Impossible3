@@ -13,19 +13,19 @@ public class GolemAbilities : Abilities
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-        stats.health = 100;
-        stats.damageAmount = 30;
+        stats.health = 120;
+        stats.damageAmount = 60;
 
         stats.straightMoveRange = 0;
         stats.diagMoveRange = 0;
         stats.circMoveRange = 1;
 
         stats.straightAttackRange = 2;
-        stats.diagAttackRange = 2;
-        stats.circAttackRange = 1;
+        stats.diagAttackRange = 1;
+        stats.circAttackRange = 0;
 
-        stats.cooldownMoveSeconds = 2;
-        stats.cooldownAttackSeconds = 3;
+        stats.cooldownMoveSeconds = 4;
+        stats.cooldownAttackSeconds = 4;
     }
 
     private void Update()

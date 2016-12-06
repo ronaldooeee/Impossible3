@@ -11,16 +11,16 @@ public class SkeletonAbilties : Abilities {
 	private void Start(){
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-        stats.health = 100;
+        stats.health = 80;
         stats.damageAmount = 30;
 
         stats.straightMoveRange = 0;
         stats.diagMoveRange = 0;
         stats.circMoveRange = 1;
 
-        stats.straightAttackRange = 2;
-        stats.diagAttackRange = 2;
-        stats.circAttackRange = 1;
+        stats.straightAttackRange = 1;
+        stats.diagAttackRange = 1;
+        stats.circAttackRange = 0;
 
         stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 3;

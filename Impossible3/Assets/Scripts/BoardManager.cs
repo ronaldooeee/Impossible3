@@ -42,6 +42,25 @@ public class BoardManager : MonoBehaviour {
 
 	public static int mapSize = 30;
 
+    private Coordinate findBound()
+    {
+        int xMax = -1;
+        int yMax = -1;
+        foreach (GameObject player in playerUnits)
+        {
+            if (player.transform.position.x > xMax)
+            {
+                xMax = (int)player.transform.position.x;
+            }
+
+            if (player.transform.position.y > yMax)
+            {
+                yMax = (int)player.transform.position.y;
+            }
+        }
+        return new Coordinate(xMax, yMax);
+    }
+
 	private void Start ()
 	{
         score = 0;
@@ -62,8 +81,10 @@ public class BoardManager : MonoBehaviour {
     {
         while (enemyUnits.Count < quota)
         {
-            int rand = random.Next(6, 10);
-            SpawnUnit(rand, rand-3, random.Next(6, 10), random.Next(6, 10));
+            Coordinate bound = findBound();
+            SpawnUnit(random.Next(6, 10), bound.x + random.Next(6, 10), bound.y + random.Next(6, 10));
+
+            //SpawnUnit(random.Next(6, 10),  random.Next(6, 10), random.Next(6, 10));
         }
         if (playerUnits.Count < 1)
         {
@@ -333,8 +354,9 @@ public class BoardManager : MonoBehaviour {
     }
 
     //Spawns whatever unit is in the index of prefabs on BoardManager.cs
-    private void SpawnUnit(int unit, int index, int x, int y)
+    private void SpawnUnit(int unit, int x, int y)
 	{
+        int index = unit - 3 >= 0 ? unit - 3: 0 ;
 		GameObject go = Instantiate (unitPrefabs [unit], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
         Sprite[] spriteArray = new Sprite[] {
             Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("mage1"), Resources.Load<Sprite>("archer1"),
@@ -381,7 +403,7 @@ public class BoardManager : MonoBehaviour {
 
     private void SpawnObstacles()
     {
-        int x = 5;
+        int x = 6;
         int y = 6;
         GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
         Vector3 temp = new Vector3(0, 0.5f, 0);
@@ -397,13 +419,13 @@ public class BoardManager : MonoBehaviour {
     private void SpawnAllUnits()
 	{
 		Units = new Unit[mapSize, mapSize];
-		//Spawn Player Units (PrefabList #, Sprite number, x location, y location)
+		//Spawn Player Units (PrefabList #,  x location, y location)
 		//Knight Stats
-		SpawnUnit (0, 0, 2, 0);
+		SpawnUnit (0, 2, 0);
 		//Mage Stats
-		SpawnUnit (4, 1, 4, 0);
+		SpawnUnit (4, 4, 0);
 		//Archer Stats
-        SpawnUnit (5, 2, 6, 0);
+        SpawnUnit (5, 6, 0);
 
         /*
         //Spawn Enemy Units (1 = Enemy Prefab,Sprite number, x value, y value)
