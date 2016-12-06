@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RangerAbilities : Abilities {
-
+public class KaboochaAbilities : Abilities
+{
 
     public int x;
     public int y;
@@ -13,19 +13,19 @@ public class RangerAbilities : Abilities {
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-        stats.health = 40;
-        stats.damageAmount = 40;
+        stats.health = 100;
+        stats.damageAmount = 30;
 
-        stats.straightMoveRange = 3;
-        stats.diagMoveRange = 1;
-        stats.circMoveRange = 2;
+        stats.straightMoveRange = 0;
+        stats.diagMoveRange = 0;
+        stats.circMoveRange = 1;
 
-        stats.straightAttackRange = 3;
-        stats.diagAttackRange = 1;
-        stats.circAttackRange = 2;
+        stats.straightAttackRange = 2;
+        stats.diagAttackRange = 2;
+        stats.circAttackRange = 1;
 
-        stats.cooldownMoveSeconds = 1;
-        stats.cooldownAttackSeconds = 1;
+        stats.cooldownMoveSeconds = 2;
+        stats.cooldownAttackSeconds = 3;
     }
 
     private void Update()
