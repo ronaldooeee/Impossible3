@@ -81,8 +81,11 @@ public class BoardManager : MonoBehaviour {
     {
         while (enemyUnits.Count < quota)
         {
-            Coordinate bound = findBound();
-            SpawnUnit(random.Next(6, 10), random.Next(3, 7), bound.x + random.Next(0, 5), bound.y + random.Next(0, 5));
+            //Coordinate bound = findBound();
+            //SpawnUnit(random.Next(6, 10), random.Next(3, 7), bound.x + random.Next(0, 5), bound.y + random.Next(0, 5));
+
+            int rand = random.Next(6, 10);
+            SpawnUnit(rand, rand - 3, random.Next(6, 10), random.Next(6, 10));
         }
         if (playerUnits.Count < 1)
         {
@@ -400,7 +403,7 @@ public class BoardManager : MonoBehaviour {
 
     private void SpawnObstacles()
     {
-        int x = 5;
+        int x = 6;
         int y = 6;
         GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
         Vector3 temp = new Vector3(0, 0.5f, 0);

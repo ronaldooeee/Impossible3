@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class KaboochaUnit : Unit
 {
-    Unit unitInstance;
     List<GameObject> playerUnits;
     PlayerUnit enemyUnit;
 
@@ -16,89 +15,83 @@ public class KaboochaUnit : Unit
         timeStampDelay = Time.time;
         playerUnits = BoardManager.playerUnits;
         enemyUnit = this.GetComponentInParent<PlayerUnit>();
-        unitInstance = enemyUnit.GetComponent<PlayerUnit>();
 
-        //Enemy positions inherited from Unit
-        //CurrentX, CurrentY
-
-        unitInstance.timeStampAttack = Time.time + unitInstance.cooldownAttackSeconds;
-        unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
+        enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+        enemyUnit.timeStampMove = Time.time + enemyUnit.cooldownMoveSeconds;
     }
 
     private void Update()
     {
         int damage = this.GetComponent<PlayerUnit>().damageAmount;
+        Unit closestPlayer = null;
+        int playerDistance = 100;
+
+        //find closest player
+        for (int i = 0; i < playerUnits.Count; i++)
+        {
+            PlayerUnit currentPlayer = playerUnits[i].GetComponent<PlayerUnit>();
+            int xDist = Math.Abs(enemyUnit.CurrentX - currentPlayer.CurrentX);
+            int yDist = Math.Abs(enemyUnit.CurrentY - currentPlayer.CurrentY);
+            if (xDist + yDist < playerDistance)
+            {
+                closestPlayer = currentPlayer;
+                playerDistance = xDist + yDist;
+            }
+        }
 
         //If Attack cooldown over, then attack
-        if (unitInstance.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
+        if (enemyUnit.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
         {
-            bool[,] allowedEnemyAttacks = unitInstance.PossibleAttack(CurrentX, CurrentY);
+            bool[,] allowedEnemyAttacks = enemyUnit.PossibleAttack();
             //BoardHighlights.Instance.Hidehighlights();
             //BoardHighlights.Instance.HighlightAllowedAttacks(allowedEnemyAttacks);
-            //Determine if player is in Attack distance
-            foreach (GameObject player in playerUnits)
-            {
-                if (player)
-                {
-                    Unit playerU = player.GetComponent<PlayerUnit>();
-                    int playerX = playerU.CurrentX;
-                    int playerY = playerU.CurrentY;
-                    if (allowedEnemyAttacks[playerX, playerY])
-                    {
-                        //If yes then attack
-                        HealthSystem health = (HealthSystem)BoardManager.Units[playerX, playerY].GetComponent(typeof(HealthSystem));
-                        if (health.takeDamageAndDie(damage))
-                        {
 
-                            // Remove player from list.
-                            foreach (GameObject spawn in playerUnits)
-                            {
-                                if (System.Object.ReferenceEquals(spawn, BoardManager.Units[playerX, playerY].gameObject))
-                                {
-                                    playerUnits.Remove(spawn);
-                                    Destroy(spawn);
-                                    BoardHighlights.Instance.Hidehighlights();
-                                }
-                            }
+            //Determine if player is in Attack distance
+            if (allowedEnemyAttacks[closestPlayer.CurrentX, closestPlayer.CurrentY])
+            {
+                //If yes then attack
+                HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
+                if (health.takeDamageAndDie(damage))
+                {
+
+                    // Remove player from list.
+                    foreach (GameObject spawn in playerUnits)
+                    {
+                        if (System.Object.ReferenceEquals(spawn, BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].gameObject))
+                        {
+                            playerUnits.Remove(spawn);
+                            Destroy(spawn);
+                            BoardHighlights.Instance.Hidehighlights();
                         }
-                        unitInstance.timeStampAttack = Time.time + unitInstance.cooldownAttackSeconds;
-                        return;
                     }
                 }
+                enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+                return;
             }
         }
 
 
+
         //If Movemvent cooldown over, then Move
-        if (unitInstance.timeStampMove <= Time.time)
+        if (enemyUnit.timeStampMove <= Time.time)
         {
             List<int[]> allowedEnemyMoves = getTrueMoves();
             Shuffle(allowedEnemyMoves);
             //BoardHighlights.Instance.Hidehighlights();
-            //BoardHighlights.Instance.HighlightAllowedMoves(allowedEnemyMoves);
+            //BoardHighlights.Instance.HighlightAllowedMoves(enemyUnit.PossibleMove());
             foreach (int[] move in allowedEnemyMoves)
             {
-                foreach (GameObject player in playerUnits)
+                //Check if this will move enemy closer to a player
+                if (Math.Abs(enemyUnit.CurrentX - closestPlayer.CurrentX) > Math.Abs(move[0] - closestPlayer.CurrentX) || Math.Abs(enemyUnit.CurrentY - closestPlayer.CurrentY) > Math.Abs(move[1] - closestPlayer.CurrentY))
                 {
-                    if (player)
+                    if (BoardManager.Units[move[0], move[1]] == null)
                     {
-                        Unit playerU = player.GetComponent<PlayerUnit>();
-                        int playerX = playerU.CurrentX;
-                        int playerY = playerU.CurrentY;
-                        //Check if this will move enemy closer to a player
-                        if (Math.Abs(CurrentX - playerX) > Math.Abs(move[0] - playerX) || Math.Abs(CurrentY - playerY) > Math.Abs(move[1] - playerY))
-                        {
-                            if (BoardManager.Units[move[0], move[1]] == null)
-                            {
-                                BoardManager.Units[CurrentX, CurrentY] = null;
-                                this.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
-                                this.SetPosition(move[0], move[1]);
-                                BoardManager.Units[move[0], move[1]] = enemyUnit;
-                                unitInstance.timeStampMove = Time.time + unitInstance.cooldownMoveSeconds;
-                                timeStampDelay = Time.time + 1;
-                                return;
-                            }
-                        }
+                        BoardManager.Units[enemyUnit.CurrentX, enemyUnit.CurrentY] = null;
+                        enemyUnit.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
+                        enemyUnit.SetPosition(move[0], move[1]);
+                        BoardManager.Units[move[0], move[1]] = enemyUnit;
+                        enemyUnit.timeStampMove = Time.time + enemyUnit.cooldownMoveSeconds;
+                        return;
                     }
                 }
             }
@@ -107,9 +100,11 @@ public class KaboochaUnit : Unit
 
 
 
+
+
     private List<int[]> getTrueMoves()
     {
-        bool[,] allowedEnemyMoves = unitInstance.PossibleMove(CurrentX, CurrentY);
+        bool[,] allowedEnemyMoves = enemyUnit.PossibleMove();
         List<int[]> trueMoves = new List<int[]> { };
         for (int x = 0; x < allowedEnemyMoves.GetLength(0); x++)
         {

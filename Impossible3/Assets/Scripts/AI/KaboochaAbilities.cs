@@ -13,16 +13,16 @@ public class KaboochaAbilities : Abilities
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-        stats.health = 100;
-        stats.damageAmount = 30;
+        stats.health = 60;
+        stats.damageAmount = 10;
 
-        stats.straightMoveRange = 0;
-        stats.diagMoveRange = 0;
-        stats.circMoveRange = 1;
+        stats.straightMoveRange = 2;
+        stats.diagMoveRange = 1;
+        stats.circMoveRange = 0;
 
-        stats.straightAttackRange = 2;
+        stats.straightAttackRange = 4;
         stats.diagAttackRange = 2;
-        stats.circAttackRange = 1;
+        stats.circAttackRange = 3;
 
         stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 3;
