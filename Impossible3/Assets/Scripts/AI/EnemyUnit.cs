@@ -27,7 +27,6 @@ public class EnemyUnit : Unit
 
     private void Update()
     {
-        return;
 		int damage = this.GetComponent<PlayerUnit> ().damageAmount;
 
         //If Attack cooldown over, then attack

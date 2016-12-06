@@ -84,8 +84,8 @@ public class BoardManager : MonoBehaviour {
             //Coordinate bound = findBound();
             //SpawnUnit(random.Next(6, 10), random.Next(3, 7), bound.x + random.Next(0, 5), bound.y + random.Next(0, 5));
 
-            int rand = random.Next(6, 10);
-            SpawnUnit(rand, rand - 3, random.Next(6, 10), random.Next(6, 10));
+
+            SpawnUnit(random.Next(6, 10),  random.Next(6, 10), random.Next(6, 10));
         }
         if (playerUnits.Count < 1)
         {
@@ -355,8 +355,9 @@ public class BoardManager : MonoBehaviour {
     }
 
     //Spawns whatever unit is in the index of prefabs on BoardManager.cs
-    private void SpawnUnit(int unit, int index, int x, int y)
+    private void SpawnUnit(int unit, int x, int y)
 	{
+        int index = unit - 3 >= 0 ? unit - 3: 0 ;
 		GameObject go = Instantiate (unitPrefabs [unit], GetTileCenter(x,y,0), Quaternion.identity) as GameObject;
         Sprite[] spriteArray = new Sprite[] {
             Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("mage1"), Resources.Load<Sprite>("archer1"),
@@ -419,13 +420,13 @@ public class BoardManager : MonoBehaviour {
     private void SpawnAllUnits()
 	{
 		Units = new Unit[mapSize, mapSize];
-		//Spawn Player Units (PrefabList #, Sprite number, x location, y location)
+		//Spawn Player Units (PrefabList #,  x location, y location)
 		//Knight Stats
-		SpawnUnit (0, 0, 2, 0);
+		SpawnUnit (0, 2, 0);
 		//Mage Stats
-		SpawnUnit (4, 1, 4, 0);
+		SpawnUnit (4, 4, 0);
 		//Archer Stats
-        SpawnUnit (5, 2, 6, 0);
+        SpawnUnit (5, 6, 0);
 
         /*
         //Spawn Enemy Units (1 = Enemy Prefab,Sprite number, x value, y value)

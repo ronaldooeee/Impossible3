@@ -24,8 +24,8 @@ public class GolemAbilities : Abilities
         stats.diagAttackRange = 1;
         stats.circAttackRange = 0;
 
-        stats.cooldownMoveSeconds = 5;
-        stats.cooldownAttackSeconds = 5;
+        stats.cooldownMoveSeconds = 4;
+        stats.cooldownAttackSeconds = 4;
     }
 
     private void Update()
