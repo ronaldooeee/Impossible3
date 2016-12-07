@@ -47,6 +47,45 @@ public class RangerAbilities : Abilities {
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
 	}
 
+	public void BlackBombArrow(Unit selectedUnit, Unit selectedTarget){
+		selectedUnit.SetAttackCooldown (8.0f);
+		damage = 2 * damage;
+
+		if (BoardManager.Units [x, y]) {
+			BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
+		} 
+		if (BoardManager.Units [x, y + 1] != null) {
+			BoardManager.Instance.AttackTarget (x, y + 1, damage / 2, 0);
+		}
+		if (BoardManager.Units [x + 1, y + 1] != null) {
+			BoardManager.Instance.AttackTarget (x + 1, y + 1, damage / 2, 0);
+		}
+		if (BoardManager.Units [x + 1, y] != null) {
+			BoardManager.Instance.AttackTarget (x + 1, y, damage / 2, 0);
+		}
+		if (BoardManager.Units [x + 1, y - 1] != null) {
+			BoardManager.Instance.AttackTarget (x + 1, y - 1, damage / 2, 0);
+		}
+		if (BoardManager.Units [x, y - 1] != null) {
+			BoardManager.Instance.AttackTarget (x + 1, y - 1, damage / 2, 0);
+		}
+		if (BoardManager.Units [x - 1, y - 1] != null) {
+			BoardManager.Instance.AttackTarget (x + 1, y - 1, damage / 2, 0);
+		}
+		if (BoardManager.Units [x - 1, y] != null) {
+			BoardManager.Instance.AttackTarget (x - 1, y, damage / 2, 0);
+		}
+		if (BoardManager.Units [x - 1, y + 1] != null) {
+			BoardManager.Instance.AttackTarget (x - 1, y + 1, damage / 2, 0);
+		}
+	}
+
+	public void LongShot(Unit selectedUnit, Unit selectedTarget) {
+		selectedUnit.SetAttackCooldown (6.0f);
+		damage = damage + (damage / 2);
+		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
+	}
+
     public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
 		if (BoardManager.Instance.selectedAbility == 1)
 		{
@@ -56,9 +95,23 @@ public class RangerAbilities : Abilities {
 		}
 	}
 
-    public override void Ability2(Unit selectedUnit, Unit selectedTarget) { }
+    public override void Ability2(Unit selectedUnit, Unit selectedTarget) {
+		if (BoardManager.Instance.selectedAbility == 2)
+		{
+			BlackBombArrow(selectedUnit, selectedTarget);
+		}else{
+			OverlaySelect(selectedUnit, 1, 3, 1, 2);
+		}
+	}
 
-    public override void Ability3(Unit selectedUnit, Unit selectedTarget) { }
+    public override void Ability3(Unit selectedUnit, Unit selectedTarget) {
+		if (BoardManager.Instance.selectedAbility == 3)
+		{
+			LongShot(selectedUnit, selectedTarget);
+		}else{
+			OverlaySelect(selectedUnit, 1, 8, 6, 7);
+		}
+	}
 
     public override void Ability4(Unit selectedUnit, Unit selectedTarget) { }
 

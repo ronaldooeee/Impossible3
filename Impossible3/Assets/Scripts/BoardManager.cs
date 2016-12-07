@@ -427,12 +427,18 @@ public class BoardManager : MonoBehaviour {
 		//Archer Stats
         SpawnUnit (5, 6, 0);
 
-        /*
-        //Spawn Enemy Units (1 = Enemy Prefab,Sprite number, x value, y value)
-        SpawnUnit (1, 3, random.Next(6, 10), random.Next(6, 10));
-        //SpawnUnit (1, 4, random.Next(6, 10), random.Next(6, 10));
-        SpawnUnit(1, 5, random.Next(6, 10), random.Next(6, 10));
-        */
+        
+        //Spawn Enemy Units (PrefabList #, x value, y value)
+        SpawnUnit (7, 3, 3);
+        SpawnUnit (7, 3, 4);
+        SpawnUnit (7, 4, 4);
+		SpawnUnit (7, 4, 3);
+		SpawnUnit (7, 4, 2);
+		SpawnUnit (7, 3, 2);
+		SpawnUnit (7, 2, 2);
+		SpawnUnit (7, 2, 3);
+		SpawnUnit (7, 2, 4);
+        
     }
 
 	private void SpawnEnvironment(int index, int x, int y)

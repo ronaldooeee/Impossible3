@@ -10,7 +10,7 @@ public class SkeletonUnit : Unit
 
     public float timeStampDelay;
 
-    private void Start()
+    /*private void Start()
     {
         timeStampDelay = Time.time;
         playerUnits = BoardManager.playerUnits;
@@ -134,6 +134,6 @@ public class SkeletonUnit : Unit
             list[k] = list[n];
             list[n] = value;
         }
-    }
+    }*/
 }
 
