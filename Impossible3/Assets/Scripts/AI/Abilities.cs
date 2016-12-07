@@ -19,7 +19,7 @@ public class Abilities : MonoBehaviour {
 
     public virtual void Ability6(Unit selectedUnit, Unit selectedTarget) { }
 
-    public void OverlaySelect(Unit selectedUnit, int attack, int straightrange, int diagrange, int circrange) //attack = 0 -> ability, attack=1 -> attack
+    public void OverlaySelect(Unit selectedUnit, int highlight, int straightrange, int diagrange, int circrange) //attack = 0 -> ability, attack=1 -> attack
     {
         int[] tempRanges = { selectedUnit.straightAttackRange, selectedUnit.diagAttackRange, selectedUnit.circAttackRange };
         BoardHighlights.Instance.Hidehighlights();
@@ -27,11 +27,11 @@ public class Abilities : MonoBehaviour {
         selectedUnit.straightAttackRange = straightrange;
         selectedUnit.diagAttackRange = diagrange;
         selectedUnit.circAttackRange = circrange;
-        if (attack == 0) {
+        if (highlight == 0) {
             moves = selectedUnit.PossibleAbility();
             BoardHighlights.Instance.HighlightAllowedAbilities(moves);
         }
-        if (attack == 1) {
+        if (highlight == 1) {
             moves = selectedUnit.PossibleAttack();
             BoardHighlights.Instance.HighlightAllowedAttacks(moves);
         }

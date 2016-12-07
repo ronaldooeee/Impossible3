@@ -13,7 +13,7 @@ public class RangerAbilities : Abilities {
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-        stats.health = 40;
+        stats.health = 1000;
         stats.damageAmount = 40;
 
         stats.straightMoveRange = 3;
@@ -41,7 +41,20 @@ public class RangerAbilities : Abilities {
         BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
     }
 
-    public override void Ability1(Unit selectedUnit, Unit selectedTarget) { }
+	public void BackStab(Unit selectedUnit, Unit selectedTarget){
+		selectedUnit.SetAttackCooldown (4.0f);
+		damage = 3 * damage;
+		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
+	}
+
+    public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
+		if (BoardManager.Instance.selectedAbility == 1)
+		{
+			BackStab(selectedUnit, selectedTarget);
+		}else{
+			OverlaySelect(selectedUnit, 1, 1, 1, 0);
+		}
+	}
 
     public override void Ability2(Unit selectedUnit, Unit selectedTarget) { }
 
