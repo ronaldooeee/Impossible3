@@ -24,6 +24,9 @@ public class SkeletonAbilties : Abilities {
 
         stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 3;
+
+		stats.dodgeChance = 5;
+		stats.accuracy = 80;
     }
 
 	private void Update() {

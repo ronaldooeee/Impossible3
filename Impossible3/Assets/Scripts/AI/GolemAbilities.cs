@@ -26,6 +26,9 @@ public class GolemAbilities : Abilities
 
         stats.cooldownMoveSeconds = 4;
         stats.cooldownAttackSeconds = 4;
+
+		stats.dodgeChance = 0;
+		stats.accuracy = 80;
     }
 
     private void Update()

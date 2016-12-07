@@ -13,7 +13,7 @@ public class RangerAbilities : Abilities {
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-        stats.health = 1000;
+        stats.health = 10;
         stats.damageAmount = 40;
 
         stats.straightMoveRange = 3;
@@ -26,6 +26,9 @@ public class RangerAbilities : Abilities {
 
         stats.cooldownMoveSeconds = 1;
         stats.cooldownAttackSeconds = 1;
+
+		stats.dodgeChance = 10;
+		stats.accuracy = 90;
     }
 
     private void Update()
@@ -84,6 +87,12 @@ public class RangerAbilities : Abilities {
 		selectedUnit.SetAttackCooldown (6.0f);
 		damage = damage + (damage / 2);
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
+	}
+
+	public void ShadowStep(Unit selectedUnit, Unit selectedTarget) {
+		selectedUnit.SetAttackCooldown (2.0f);
+
+		BoardManager.Instance.AttackTarget (x, y, 0, selectedUnit.cooldownAttackSeconds);
 	}
 
     public override void Ability1(Unit selectedUnit, Unit selectedTarget) {

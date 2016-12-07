@@ -35,6 +35,9 @@ public class WarriorAbilities : Abilities {
 
         stats.cooldownMoveSeconds = 3;
         stats.cooldownAttackSeconds = 3;
+
+		stats.dodgeChance = 0;
+		stats.accuracy = 95;
     }
 
     private void Update()

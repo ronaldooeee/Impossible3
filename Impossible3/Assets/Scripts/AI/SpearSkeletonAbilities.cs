@@ -26,6 +26,9 @@ public class SpearSkeletonAbilities : Abilities
 
         stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 4;
+
+		stats.dodgeChance = 5;
+		stats.accuracy = 80;
     }
 
     private void Update()
