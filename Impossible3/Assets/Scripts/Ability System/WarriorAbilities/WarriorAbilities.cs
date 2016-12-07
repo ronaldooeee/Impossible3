@@ -64,10 +64,8 @@ public class WarriorAbilities : Abilities {
 		}
     }
     public void Frenzy(Unit selectedUnit, Unit selectedTarget)
-	{		selectedUnit.SetAttackCooldown (8.0f);
-		damage = 2* damage;
-		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
-		/*selectedUnit.SetAttackCooldown(2.0f);
+	{		
+		selectedUnit.SetAttackCooldown(2.0f);
         HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
         selfDamage = damage / 7;
 		if (health.currentHealth <= selfDamage)
@@ -78,17 +76,33 @@ public class WarriorAbilities : Abilities {
         {
             health.currentHealth = health.currentHealth - selfDamage;
         }
-        BoardManager.Instance.AttackTarget(x, y, damage * 2, selectedUnit.cooldownAttackSeconds);*/
+        BoardManager.Instance.AttackTarget(x, y, damage * 2, selectedUnit.cooldownAttackSeconds);
 
     }
     public void Rally(Unit selectedUnit, Unit selectedTarget)
     {
         buff = 0;
+		selectedTarget.SetAttackCooldown (2.0f);
+		selectedTarget.SetMoveCooldown (3.0f);
         BoardManager.Instance.BuffTarget(x, y, buff, selectedUnit.cooldownAttackSeconds);
     }
     public void Warpath(Unit selectedUnit, Unit selectedTarget)
     {
-        //does somehting
+		damage = 3 * damage;
+		HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
+		if (health.currentHealth < selectedUnit.health) {
+			selectedUnit.damageAmount = 100;
+		}
+		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
+		if (x > selectedUnit.CurrentX) {
+			selectedUnit.CurrentX = x - 1;
+		} else if (x < selectedUnit.CurrentX) {
+			selectedUnit.CurrentX = x + 1;
+		} else if (y > selectedUnit.CurrentY) {
+			selectedUnit.CurrentY = y + 1;
+		} else {
+			selectedUnit.CurrentY = y - 1;
+		}
     }
     public void ShieldBash(Unit selectedUnit, Unit selectedTarget)
     {
@@ -97,15 +111,21 @@ public class WarriorAbilities : Abilities {
 		selectedTargetY = selectedTarget.CurrentY;
 
 		selectedUnitX = selectedUnit.CurrentX;
-		selectedUnitY = selectedUnit.CurrentY; 
+		selectedUnitY = selectedUnit.CurrentY;
+		Debug.Log(selectedTarget.CurrentX + "Target's X");
+		Debug.Log (selectedTarget.CurrentY + "Target's Y");
 		if (selectedUnitX < selectedTargetX) {
 			selectedTarget.CurrentX = selectedTarget.CurrentX + 1;
+			Debug.Log("Right side");
 		} else if (selectedUnitX > selectedTargetX) {
 			selectedTarget.CurrentX = selectedTarget.CurrentX - 1;
-		} else if (selectedUnitY < selectedUnitY) {
+			Debug.Log("Left side");
+		} else if (selectedUnitY < selectedTargetY) {
 			selectedTarget.CurrentY = selectedTarget.CurrentY + 1;
+			Debug.Log("Front side");
 		} else {
 			selectedTarget.CurrentY = selectedTarget.CurrentY - 1;
+			Debug.Log("Back side");
 		}
 		selectedTarget.SetAttackCooldown (5.0f);
         //Debug.Log(x + "mouse X");
@@ -126,8 +146,14 @@ public class WarriorAbilities : Abilities {
 
 	}
 
-    public override void Ability2(Unit selectedUnit, Unit selectedTarget) { Flail(selectedUnit, selectedTarget); }
-
+    public override void Ability2(Unit selectedUnit, Unit selectedTarget) { 
+		if(BoardManager.Instance.selectedAbility ==2){
+			Flail(selectedUnit, selectedTarget); 
+		}
+		else{
+			OverlaySelect (selectedUnit, 1, 4, 2, 3);
+		}
+	}
     public override void Ability3(Unit selectedUnit, Unit selectedTarget) { 
 		if (BoardManager.Instance.selectedAbility == 3) {
 			Frenzy (selectedUnit, selectedTarget); 
@@ -138,9 +164,22 @@ public class WarriorAbilities : Abilities {
 		}
 	}
 
-    public override void Ability4(Unit selectedUnit, Unit selectedTarget) { Rally(selectedUnit, selectedTarget); }
+    public override void Ability4(Unit selectedUnit, Unit selectedTarget) { 
+		if (BoardManager.Instance.selectedAbility == 4) {
+			Rally (selectedUnit, selectedTarget); 
+		} else {
+			OverlaySelect (selectedUnit, 0, 3, 1, 2);
+		}
+	}
 
-    public override void Ability5(Unit selectedUnit, Unit selectedTarget) { Warpath(selectedUnit, selectedTarget); }
+    public override void Ability5(Unit selectedUnit, Unit selectedTarget) { 
+		if(BoardManager.Instance.selectedAbility == 5){
+			Warpath(selectedUnit, selectedTarget); 
+		}
+		else{
+			OverlaySelect (selectedUnit, 1, 10, 0, 0);
+		}
+	}
 
     public override void Ability6(Unit selectedUnit, Unit selectedTarget) { 
 		if (BoardManager.Instance.selectedAbility == 6) 
