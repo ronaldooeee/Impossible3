@@ -17,7 +17,7 @@ public class GolemAbilities : Abilities
         stats.damageAmount = 60;
 
         stats.straightMoveRange = 0;
-        stats.diagMoveRange = 0;
+        stats.diagMoveRange = 1;
         stats.circMoveRange = 1;
 
         stats.straightAttackRange = 2;

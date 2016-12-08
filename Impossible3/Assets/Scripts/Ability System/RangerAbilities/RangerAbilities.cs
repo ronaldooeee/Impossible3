@@ -52,34 +52,35 @@ public class RangerAbilities : Abilities {
 
 	public void BlackBombArrow(Unit selectedUnit, Unit selectedTarget){
 		selectedUnit.SetAttackCooldown (8.0f);
-		damage = 2 * damage;
-
-		if (BoardManager.Units [x, y]) {
-			BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
-		} 
-		if (BoardManager.Units [x, y + 1] != null) {
-			BoardManager.Instance.AttackTarget (x, y + 1, damage / 2, 0);
-		}
-		if (BoardManager.Units [x + 1, y + 1] != null) {
-			BoardManager.Instance.AttackTarget (x + 1, y + 1, damage / 2, 0);
-		}
-		if (BoardManager.Units [x + 1, y] != null) {
-			BoardManager.Instance.AttackTarget (x + 1, y, damage / 2, 0);
-		}
-		if (BoardManager.Units [x + 1, y - 1] != null) {
-			BoardManager.Instance.AttackTarget (x + 1, y - 1, damage / 2, 0);
-		}
-		if (BoardManager.Units [x, y - 1] != null) {
-			BoardManager.Instance.AttackTarget (x + 1, y - 1, damage / 2, 0);
-		}
-		if (BoardManager.Units [x - 1, y - 1] != null) {
-			BoardManager.Instance.AttackTarget (x + 1, y - 1, damage / 2, 0);
-		}
-		if (BoardManager.Units [x - 1, y] != null) {
-			BoardManager.Instance.AttackTarget (x - 1, y, damage / 2, 0);
-		}
-		if (BoardManager.Units [x - 1, y + 1] != null) {
-			BoardManager.Instance.AttackTarget (x - 1, y + 1, damage / 2, 0);
+		if (selectedUnit.timeStampAttack <= Time.time) {
+			if (BoardManager.Units [x, y] != null) {
+				BoardManager.Instance.AttackTarget (x, y, damage * 2, 0);
+			} 
+			if (BoardManager.Units [x, y + 1] != null) {
+				BoardManager.Instance.AttackTarget (x, y + 1, damage, 0);
+			}
+			if (BoardManager.Units [x + 1, y + 1] != null) {
+				BoardManager.Instance.AttackTarget (x + 1, y + 1, damage, 0);
+			}
+			if (BoardManager.Units [x + 1, y] != null) {
+				BoardManager.Instance.AttackTarget (x + 1, y, damage, 0);
+			}
+			if (BoardManager.Units [x + 1, y - 1] != null) {
+				BoardManager.Instance.AttackTarget (x + 1, y - 1, damage, 0);
+			}
+			if (BoardManager.Units [x, y - 1] != null) {
+				BoardManager.Instance.AttackTarget (x + 1, y - 1, damage, 0);
+			}
+			if (BoardManager.Units [x - 1, y - 1] != null) {
+				BoardManager.Instance.AttackTarget (x + 1, y - 1, damage, 0);
+			}
+			if (BoardManager.Units [x - 1, y] != null) {
+				BoardManager.Instance.AttackTarget (x - 1, y, damage, 0);
+			}
+			if (BoardManager.Units [x - 1, y + 1] != null) {
+				BoardManager.Instance.AttackTarget (x - 1, y + 1, damage, 0);
+			}
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 		}
 	}
 

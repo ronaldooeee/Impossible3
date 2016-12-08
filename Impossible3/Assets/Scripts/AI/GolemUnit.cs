@@ -23,6 +23,8 @@ public class GolemUnit : Unit
     private void Update()
     {
         int damage = this.GetComponent<PlayerUnit>().damageAmount;
+		int accuracy = this.GetComponent<PlayerUnit> ().accuracy;
+		int targetDodgeChance;
         Unit closestPlayer = null;
         int playerDistance = 100;
 
@@ -47,27 +49,30 @@ public class GolemUnit : Unit
             //BoardHighlights.Instance.HighlightAllowedAttacks(allowedEnemyAttacks);
 
             //Determine if player is in Attack distance
-            if (allowedEnemyAttacks[closestPlayer.CurrentX, closestPlayer.CurrentY])
-            {
-                //If yes then attack
-                HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
-                if (health.takeDamageAndDie(damage))
-                {
+			if (allowedEnemyAttacks [closestPlayer.CurrentX, closestPlayer.CurrentY]) {
+				//If yes then attack
+				targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range (0, 100);
+				if (accuracy >= targetDodgeChance) {
+					HealthSystem health = (HealthSystem)BoardManager.Units [closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent (typeof(HealthSystem));
+					if (health.takeDamageAndDie (damage)) {
 
-                    // Remove player from list.
-                    foreach (GameObject spawn in playerUnits)
-                    {
-                        if (System.Object.ReferenceEquals(spawn, BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].gameObject))
-                        {
-                            playerUnits.Remove(spawn);
-                            Destroy(spawn);
-                            BoardHighlights.Instance.Hidehighlights();
-                        }
-                    }
-                }
-                enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
-                return;
-            }
+						// Remove player from list.
+						foreach (GameObject spawn in playerUnits) {
+							if (System.Object.ReferenceEquals (spawn, BoardManager.Units [closestPlayer.CurrentX, closestPlayer.CurrentY].gameObject)) {
+								playerUnits.Remove (spawn);
+								Destroy (spawn);
+								BoardHighlights.Instance.Hidehighlights ();
+							}
+						}
+					}
+					enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+					return;
+				} else {
+					Debug.Log ("Golem Missed!");
+					enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+					return;
+				}
+			}
         }
 
 
