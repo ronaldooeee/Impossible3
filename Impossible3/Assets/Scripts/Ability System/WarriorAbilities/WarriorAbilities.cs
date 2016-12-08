@@ -59,11 +59,41 @@ public class WarriorAbilities : Abilities {
     }
     public void Flail(Unit selectedUnit, Unit selectedTarget)
     {
-		for (int a = selectedUnit.straightMoveRange; selectedUnit.CurrentX < a; a = a - 1) {
-			Debug.Log (a);
-			for (int b = selectedUnit.straightMoveRange; selectedUnit.CurrentY <b; b = b -1){
-				Debug.Log(b);
-			}
+		if (BoardManager.Units [x, y + 1] != null) {
+			BoardManager.Instance.AttackTarget (x, y + 1, damage, selectedUnit.cooldownAttackSeconds);
+		}
+		if (BoardManager.Units [x, y + 2] != null) {
+			BoardManager.Instance.AttackTarget (x, y + 2, damage, 0);
+		}
+		if (BoardManager.Units [x + 1, y + 1] != null) {
+			BoardManager.Instance.AttackTarget (x + 1, y + 1, damage, 0);
+		}
+		if (BoardManager.Units [x + 1, y] != null) {
+			BoardManager.Instance.AttackTarget (x + 1, y, damage, 0);
+		}
+		if (BoardManager.Units [x + 2, y] != null) {
+			BoardManager.Instance.AttackTarget (x + 2, y, damage, 0);
+		}
+		if (BoardManager.Units [x + 1, y - 1] != null) {
+			BoardManager.Instance.AttackTarget (x + 1, y - 1, damage, 0);
+		}
+		if (BoardManager.Units [x, y - 1] != null) {
+			BoardManager.Instance.AttackTarget (x, y - 1, damage, 0);
+		}
+		if (BoardManager.Units [x, y - 2] != null) {
+			BoardManager.Instance.AttackTarget (x, y - 2, damage, 0);
+		}
+		if (BoardManager.Units [x - 1, y - 1] != null) {
+			BoardManager.Instance.AttackTarget (x - 1, y - 1, damage, 0);
+		}
+		if (BoardManager.Units [x - 1, y] != null) {
+			BoardManager.Instance.AttackTarget (x - 1, y, damage, 0);
+		}
+		if (BoardManager.Units [x - 2, y] != null) {
+			BoardManager.Instance.AttackTarget (x - 2, y, damage, 0);
+		}
+		if (BoardManager.Units [x - 1, y + 1] != null) {
+			BoardManager.Instance.AttackTarget (x - 1, y + 1, damage, 0);
 		}
     }
     public void Frenzy(Unit selectedUnit, Unit selectedTarget)
@@ -91,20 +121,42 @@ public class WarriorAbilities : Abilities {
     }
     public void Warpath(Unit selectedUnit, Unit selectedTarget)
     {
-		damage = 3 * damage;
+		damage = 2 * damage;
 		HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
 		if (health.currentHealth < selectedUnit.health) {
 			selectedUnit.damageAmount = 100;
 		}
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
 		if (x > selectedUnit.CurrentX) {
-			selectedUnit.CurrentX = x - 1;
+			Debug.Log ("Move left side");
+			BoardManager.Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			selectedUnit.transform.position = BoardManager.Instance.GetTileCenter(x - 1, y);
+			selectedUnit.SetPosition(x - 1, y);
+			BoardManager.Units [x - 1, y]= selectedUnit; 
+
 		} else if (x < selectedUnit.CurrentX) {
-			selectedUnit.CurrentX = x + 1;
+			Debug.Log ("Move right side");
+			BoardManager.Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			selectedUnit.transform.position = BoardManager.Instance.GetTileCenter(x + 1, y);
+			selectedUnit.SetPosition(x + 1, y);
+			BoardManager.Units [x + 1, y]= selectedUnit; 
+
 		} else if (y > selectedUnit.CurrentY) {
-			selectedUnit.CurrentY = y + 1;
+			Debug.Log ("Move up");
+			BoardManager.Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			selectedUnit.transform.position = BoardManager.Instance.GetTileCenter (x, y - 1);
+			selectedUnit.SetPosition (x, y - 1);
+			BoardManager.Units [x, y - 1] = selectedUnit; 
+
+		} else if (y < selectedUnit.CurrentY) {
+			Debug.Log ("Move down");
+			BoardManager.Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			selectedUnit.transform.position = BoardManager.Instance.GetTileCenter (x, y + 1);
+			selectedUnit.SetPosition (x, y + 1);
+			BoardManager.Units [x, y + 1] = selectedUnit; 
 		} else {
-			selectedUnit.CurrentY = y - 1;
+			Debug.Log ("Bug");
+			return;
 		}
     }
     public void ShieldBash(Unit selectedUnit, Unit selectedTarget)
@@ -154,7 +206,7 @@ public class WarriorAbilities : Abilities {
 			Flail(selectedUnit, selectedTarget); 
 		}
 		else{
-			OverlaySelect (selectedUnit, 1, 4, 2, 3);
+			OverlaySelect (selectedUnit, 1, 3, 1, 2);
 		}
 	}
     public override void Ability3(Unit selectedUnit, Unit selectedTarget) { 
