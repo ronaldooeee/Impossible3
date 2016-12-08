@@ -25,6 +25,9 @@ public class Unit : MonoBehaviour {
     public int diagAttackRange;
     public int circAttackRange;
 
+	public int dodgeChance;
+	public int accuracy;
+
     private void Awake()
     {
         timeStampMove = Time.time;

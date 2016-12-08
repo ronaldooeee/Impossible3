@@ -24,6 +24,9 @@ public class MageAbilities : Abilities {
 
         stats.cooldownMoveSeconds = 3;
         stats.cooldownAttackSeconds = 4;
+
+		stats.dodgeChance = 5;
+		stats.accuracy = 90;
 }
 
 	private void Update() {
@@ -41,7 +44,7 @@ public class MageAbilities : Abilities {
 	public void Fireball(Unit selectedUnit, Unit selectedTarget) {
 		//BoardManager.SelectTarget (BoardManager.selectionX, BoardManager.selectionY);
 		selectedUnit.SetAttackCooldown (8.0f);
-		damage = 2* damage;
+		damage = 2 * damage;
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
 	}
 

@@ -17,7 +17,7 @@ public class SpearSkeletonAbilities : Abilities
         stats.damageAmount = 30;
 
         stats.straightMoveRange = 0;
-        stats.diagMoveRange = 0;
+        stats.diagMoveRange = 1;
         stats.circMoveRange = 1;
 
         stats.straightAttackRange = 2;
@@ -26,6 +26,9 @@ public class SpearSkeletonAbilities : Abilities
 
         stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 4;
+
+		stats.dodgeChance = 5;
+		stats.accuracy = 80;
     }
 
     private void Update()

@@ -15,7 +15,7 @@ public class SkeletonAbilties : Abilities {
         stats.damageAmount = 30;
 
         stats.straightMoveRange = 0;
-        stats.diagMoveRange = 0;
+        stats.diagMoveRange = 1;
         stats.circMoveRange = 1;
 
         stats.straightAttackRange = 1;
@@ -24,6 +24,9 @@ public class SkeletonAbilties : Abilities {
 
         stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 3;
+
+		stats.dodgeChance = 5;
+		stats.accuracy = 80;
     }
 
 	private void Update() {

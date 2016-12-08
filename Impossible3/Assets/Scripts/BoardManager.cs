@@ -42,6 +42,9 @@ public class BoardManager : MonoBehaviour {
 
 	public static int mapSize = 30;
 
+	public int unitAccuracy;
+	public int targetDodgeChance;
+
     private Coordinate findBound()
     {
         int xMax = -1;
@@ -299,33 +302,23 @@ public class BoardManager : MonoBehaviour {
 	{
 		allowedAttacks = Units [x, y].PossibleAttack ();
 		selectedTarget = Units [x, y];
+		unitAccuracy = Units [x, y].accuracy;
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
 	}
 
 	public void AttackTarget(int x, int y, int damage, float cooldownAttackSeconds)
 	{
 		selectedTarget = Units[x,y];
-		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer)
+		targetDodgeChance = selectedTarget.dodgeChance + Random.Range(0, 100);
+		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer && unitAccuracy >= targetDodgeChance)
         {
             GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
-			if (health.takeDamageAndDie(damage))
-            {
-                // Remove enemy from list.
-                foreach (GameObject spawn in enemyUnits)
-                {
-                    if (Object.ReferenceEquals(spawn, selectedTarget.gameObject))
-                    {
-                        enemyUnits.Remove(spawn);
-                        Destroy(spawn);
-                        score += 1;
-                        break;
-                    }
-                }
-            }
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			health.takeDamageAndDie (damage);
+            selectedUnit.timeStampAttack = Time.time + cooldownAttackSeconds;
         } else  {
-			return;
+			Debug.Log ("Player Missed!");
+			//return;
 		}
 		BoardHighlights.Instance.Hidehighlights();
         selectedAbility = 0;

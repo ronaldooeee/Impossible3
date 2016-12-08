@@ -17,7 +17,7 @@ public class GolemAbilities : Abilities
         stats.damageAmount = 60;
 
         stats.straightMoveRange = 0;
-        stats.diagMoveRange = 0;
+        stats.diagMoveRange = 1;
         stats.circMoveRange = 1;
 
         stats.straightAttackRange = 2;
@@ -26,6 +26,9 @@ public class GolemAbilities : Abilities
 
         stats.cooldownMoveSeconds = 4;
         stats.cooldownAttackSeconds = 4;
+
+		stats.dodgeChance = 0;
+		stats.accuracy = 80;
     }
 
     private void Update()
