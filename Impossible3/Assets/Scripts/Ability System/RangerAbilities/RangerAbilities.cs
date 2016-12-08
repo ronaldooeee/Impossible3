@@ -8,12 +8,15 @@ public class RangerAbilities : Abilities {
     public int y;
 
     public int damage;
+	public float spellTimer;
+
+	//public GameObject ranger = this.GetComponentInParent<PlayerUnit>().gameObject;
 
     private void Start()
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-        stats.health = 10;
+		stats.health = 10;
         stats.damageAmount = 40;
 
         stats.straightMoveRange = 3;
@@ -24,18 +27,25 @@ public class RangerAbilities : Abilities {
         stats.diagAttackRange = 1;
         stats.circAttackRange = 2;
 
-        stats.cooldownMoveSeconds = 1;
-        stats.cooldownAttackSeconds = 1;
+        stats.cooldownMoveSeconds = 2;
+        stats.cooldownAttackSeconds = 2;
 
 		stats.dodgeChance = 10;
 		stats.accuracy = 90;
+
+		stats.spellTimer = 0;
     }
 
     private void Update()
     {
         damage = this.GetComponentInParent<PlayerUnit>().damageAmount;
+		spellTimer = this.GetComponentInParent<PlayerUnit>().spellTimer;
         x = BoardManager.Instance.selectionX;
         y = BoardManager.Instance.selectionY;
+		/*Debug.Log (this.GetComponentInParent<PlayerUnit> ().dodgeChance);
+		if(spellTimer == Time.time) {
+			ranger.SetDodgeChance (10);
+		}*/
     }
 
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
@@ -76,10 +86,14 @@ public class RangerAbilities : Abilities {
 		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
 	}
 
+	//Not Working - Needs to set back to original dodgeChance
 	public void ShadowStep(Unit selectedUnit, Unit selectedTarget) {
-		selectedUnit.SetAttackCooldown (2.0f);
-
-		BoardManager.Instance.AttackTarget (x, y, 0, selectedUnit.cooldownAttackSeconds);
+		selectedUnit.SetAttackCooldown (6.0f);
+		if (selectedUnit.timeStampAttack <= Time.time) {
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			selectedUnit.spellTimer = Time.time + 10;
+			selectedUnit.dodgeChance = 80;
+		}
 	}
 
     public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
@@ -109,7 +123,14 @@ public class RangerAbilities : Abilities {
 		}
 	}
 
-    public override void Ability4(Unit selectedUnit, Unit selectedTarget) { }
+    public override void Ability4(Unit selectedUnit, Unit selectedTarget) {
+		if (BoardManager.Instance.selectedAbility == 4)
+		{
+			ShadowStep(selectedUnit, selectedTarget);
+		}else{
+			OverlaySelect(selectedUnit, 0, 0, 0, 1);
+		}
+	}
 
     public override void Ability5(Unit selectedUnit, Unit selectedTarget) { }
 

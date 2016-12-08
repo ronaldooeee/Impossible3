@@ -177,13 +177,13 @@ public class BoardManager : MonoBehaviour {
                         {
                             selectedUnit.GetComponent<Abilities>().Ability6(selectedUnit, selectedTarget);
                         }
-                }
-                else
-                {
-                    BoardHighlights.Instance.Hidehighlights();
-                    selectedTarget = null;
-                    selectedUnit = null;
-                }
+	                }
+	                else
+	                {
+	                    BoardHighlights.Instance.Hidehighlights();
+	                    selectedTarget = null;
+	                    selectedUnit = null;
+	                }
                 }
             }
         }
@@ -236,7 +236,6 @@ public class BoardManager : MonoBehaviour {
                 Time.timeScale = 1;
                 pauseMenu.gameObject.SetActive(false);
             }
-
         }
     }
 
@@ -259,7 +258,7 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 
-	private void SelectUnit(int x, int y)
+	public void SelectUnit(int x, int y)
 	{
 		// If no unit is selected when clicked, return
 		if (Units [x, y] == null)
@@ -276,7 +275,7 @@ public class BoardManager : MonoBehaviour {
 		BoardHighlights.Instance.HighlightAllowedMoves (allowedMoves);
 	}
 
-	private void MoveUnit(int x, int y)
+	public void MoveUnit(int x, int y)
 	{
 		//If you movement to selected space is allowed, do this
 		if (allowedMoves [x, y] && selectedTarget == null && selectedUnit.timeStampMove <= Time.time) {

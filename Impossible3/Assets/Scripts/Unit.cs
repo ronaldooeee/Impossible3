@@ -16,6 +16,7 @@ public class Unit : MonoBehaviour {
 	public float cooldownAttackSeconds;
     public float timeStampMove;
     public float timeStampAttack;
+	public float spellTimer;
 
     public int straightMoveRange;
     public int diagMoveRange;
@@ -50,6 +51,10 @@ public class Unit : MonoBehaviour {
 
 	public void SetDamage(int damage) {
 		damageAmount = damage;
+	}
+
+	public void SetDodgeChance(int dodgeNew) {
+		dodgeChance = dodgeNew;
 	}
 
 	public virtual bool[,] PossibleMove(int CurrentX = -1, int CurrentY = -1)
