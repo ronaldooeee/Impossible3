@@ -82,13 +82,13 @@ public class BoardManager : MonoBehaviour {
     // Update world to show changes
     private void Update()
     {
-        while (enemyUnits.Count < quota)
+        /*while (enemyUnits.Count < quota)
         {
             Coordinate bound = findBound();
             SpawnUnit(random.Next(6, 10), bound.x + random.Next(6, 10), bound.y + random.Next(6, 10));
 
             //SpawnUnit(random.Next(6, 10),  random.Next(6, 10), random.Next(6, 10));
-        }
+        }*/
         if (playerUnits.Count < 1)
         {
             UnityEditor.EditorUtility.DisplayDialog("Failure!", "You have lost the game...", "Okay");
@@ -300,7 +300,7 @@ public class BoardManager : MonoBehaviour {
 	public void SelectTarget(int x, int y)
 	{
 		allowedAttacks = Units [x, y].PossibleAttack ();
-		selectedTarget = Units [x, y];
+		//selectedTarget = Units [x, y];
 		selectedUnit = Units [x, y];
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
 	}
@@ -308,7 +308,7 @@ public class BoardManager : MonoBehaviour {
 	public void AttackTarget(int x, int y, int damage, float cooldownAttackSeconds)
 	{
 		unitAccuracy = selectedUnit.accuracy;
-		Debug.Log (unitAccuracy);
+		//Debug.Log (unitAccuracy);
 		selectedTarget = Units[x,y];
 		targetDodgeChance = selectedTarget.dodgeChance + Random.Range(0, 100);
 		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer && unitAccuracy >= targetDodgeChance)
@@ -423,15 +423,15 @@ public class BoardManager : MonoBehaviour {
 
         
         //Spawn Enemy Units (PrefabList #, x value, y value)
-        SpawnUnit (7, 3, 3);
-        SpawnUnit (7, 3, 4);
-        SpawnUnit (7, 4, 4);
-		SpawnUnit (7, 4, 3);
-		SpawnUnit (7, 4, 2);
-		SpawnUnit (7, 3, 2);
-		SpawnUnit (7, 2, 2);
-		SpawnUnit (7, 2, 3);
-		SpawnUnit (7, 2, 4);
+        //SpawnUnit (7, 3, 3);
+        //SpawnUnit (7, 3, 4);
+        SpawnUnit (7, 8, 8);
+		//SpawnUnit (7, 4, 3);
+		//SpawnUnit (7, 4, 2);
+		//SpawnUnit (7, 3, 2);
+		//SpawnUnit (7, 2, 2);
+		//SpawnUnit (7, 2, 3);
+		//SpawnUnit (7, 2, 4);
         
     }
 

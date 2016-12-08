@@ -16,7 +16,7 @@ public class RangerAbilities : Abilities {
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-		stats.health = 10;
+		stats.health = 1000;
         stats.damageAmount = 40;
 
         stats.straightMoveRange = 3;
@@ -50,7 +50,7 @@ public class RangerAbilities : Abilities {
 
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
-        selectedUnit.SetAttackCooldown(1.0f);
+        selectedUnit.SetAttackCooldown(2.0f);
         BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
     }
 
@@ -96,6 +96,19 @@ public class RangerAbilities : Abilities {
 		}
 	}
 
+	//selectedUnit and selectedTarget both sending back the Ranger - Not Working
+	public void Snare(Unit selectedUnit, Unit selectedTarget) {
+		/*selectedUnit.SetAttackCooldown (7.0f);
+		selectedUnit.SetDamage (20);
+		if (selectedUnit.timeStampAttack <= Time.time) {
+			BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
+			Debug.Log (selectedTarget);
+			Debug.Log (selectedUnit);
+			selectedTarget.timeStampAttack += 10;
+			selectedTarget.timeStampMove += 10;
+		}*/
+	}
+
     public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
 		if (BoardManager.Instance.selectedAbility == 1)
 		{
@@ -132,7 +145,14 @@ public class RangerAbilities : Abilities {
 		}
 	}
 
-    public override void Ability5(Unit selectedUnit, Unit selectedTarget) { }
+    public override void Ability5(Unit selectedUnit, Unit selectedTarget) {
+		if (BoardManager.Instance.selectedAbility == 5)
+		{
+			Snare(selectedUnit, selectedTarget);
+		}else{
+			OverlaySelect(selectedUnit, 1, 10, 8, 9);
+		}
+	}
 
     public override void Ability6(Unit selectedUnit, Unit selectedTarget) { }
 }
