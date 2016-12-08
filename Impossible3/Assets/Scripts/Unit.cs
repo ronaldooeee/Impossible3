@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Unit : MonoBehaviour {
-
+public class Unit : MonoBehaviour
+{
     public int CurrentX;
     public int CurrentY;
 
@@ -13,10 +13,10 @@ public class Unit : MonoBehaviour {
     public int damageAmount;
 
     public float cooldownMoveSeconds;
-	public float cooldownAttackSeconds;
+    public float cooldownAttackSeconds;
     public float timeStampMove;
     public float timeStampAttack;
-	public float spellTimer;
+    public float spellTimer;
 
     public int straightMoveRange;
     public int diagMoveRange;
@@ -26,8 +26,8 @@ public class Unit : MonoBehaviour {
     public int diagAttackRange;
     public int circAttackRange;
 
-	public int dodgeChance;
-	public int accuracy;
+    public int dodgeChance;
+    public int accuracy;
 
     private void Awake()
     {
@@ -36,38 +36,42 @@ public class Unit : MonoBehaviour {
     }
 
     public void SetPosition(int x, int y)
-	{
-		CurrentX = x;
-		CurrentY = y;
-	}
-
-	public void SetMoveCooldown(float cdMove){
-		cooldownMoveSeconds = cdMove;
-	}
-
-	public void SetAttackCooldown(float cdAttack){
-		cooldownAttackSeconds = cdAttack;
-	}
-
-	public void SetDamage(int damage) {
-		damageAmount = damage;
-	}
-
-	public void SetDodgeChance(int dodgeNew) {
-		dodgeChance = dodgeNew;
-	}
-
-	public virtual bool[,] PossibleMove(int CurrentX = -1, int CurrentY = -1)
     {
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
-	}
+        CurrentX = x;
+        CurrentY = y;
+    }
 
-	public virtual bool[,] PossibleAttack(int CurrentX = -1, int CurrentY = -1)
+    public void SetMoveCooldown(float cdMove)
     {
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
-	}
-	public virtual bool[,] PossibleAbility(int CurrentX = -1, int CurrentY = -1)
-	{
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
-	}
+        cooldownMoveSeconds = cdMove;
+    }
+
+    public void SetAttackCooldown(float cdAttack)
+    {
+        cooldownAttackSeconds = cdAttack;
+    }
+
+    public void SetDamage(int damage)
+    {
+        damageAmount = damage;
+    }
+
+    public void SetDodgeChance(int dodgeNew)
+    {
+        dodgeChance = dodgeNew;
+    }
+
+    public virtual bool[,] PossibleMove(int CurrentX = -1, int CurrentY = -1)
+    {
+        return new bool[BoardManager.mapSize, BoardManager.mapSize];
+    }
+
+    public virtual bool[,] PossibleAttack(int CurrentX = -1, int CurrentY = -1)
+    {
+        return new bool[BoardManager.mapSize, BoardManager.mapSize];
+    }
+    public virtual bool[,] PossibleAbility(int CurrentX = -1, int CurrentY = -1)
+    {
+        return new bool[BoardManager.mapSize, BoardManager.mapSize];
+    }
 }
