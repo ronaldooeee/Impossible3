@@ -314,24 +314,11 @@ public class BoardManager : MonoBehaviour {
         {
             GameObject enemy = selectedTarget.gameObject;
 			HealthSystem health = (HealthSystem) enemy.GetComponent (typeof(HealthSystem));
-			if (health.takeDamageAndDie(damage))
-            {
-                // Remove enemy from list.
-                foreach (GameObject spawn in enemyUnits)
-                {
-                    if (Object.ReferenceEquals(spawn, selectedTarget.gameObject))
-                    {
-                        enemyUnits.Remove(spawn);
-                        Destroy(spawn);
-                        score += 1;
-                        break;
-                    }
-                }
-            }
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			health.takeDamageAndDie (damage);
+            selectedUnit.timeStampAttack = Time.time + cooldownAttackSeconds;
         } else  {
 			Debug.Log ("Player Missed!");
-			return;
+			//return;
 		}
 		BoardHighlights.Instance.Hidehighlights();
         selectedAbility = 0;

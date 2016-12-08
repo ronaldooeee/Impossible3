@@ -55,24 +55,13 @@ public class SkeletonUnit : Unit
 				targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range(0, 100);
 				if (accuracy >= targetDodgeChance) {
 					HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
-					if (health.takeDamageAndDie (damage)) {
-
-						// Remove player from list.
-						foreach (GameObject spawn in playerUnits) {
-							if (System.Object.ReferenceEquals (spawn, BoardManager.Units [closestPlayer.CurrentX, closestPlayer.CurrentY].gameObject)) {
-								playerUnits.Remove (spawn);
-								Destroy (spawn);
-								BoardHighlights.Instance.Hidehighlights ();
-							}
-						}
-					}
-					enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
-					return;
+					health.takeDamageAndDie (damage);
+					BoardHighlights.Instance.Hidehighlights ();
 				} else {
 					Debug.Log ("Sword Skeleton Missed!");
-					enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
-					return;
 				}
+				enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+				return;
             }                        
         }
 
