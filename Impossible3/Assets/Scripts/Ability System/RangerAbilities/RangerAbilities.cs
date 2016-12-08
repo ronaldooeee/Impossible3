@@ -52,34 +52,22 @@ public class RangerAbilities : Abilities {
 
 	public void BlackBombArrow(Unit selectedUnit, Unit selectedTarget){
 		selectedUnit.SetAttackCooldown (8.0f);
+		selectedUnit.accuracy = 130;
 		if (selectedUnit.timeStampAttack <= Time.time) {
 			BoardManager.Instance.AttackTarget (x, y, damage, 0);
-			Debug.Log ("First Hit");
+			//Debug.Log ("First Hit");
 			BoardManager.Instance.AttackTarget (x, y + 1, damage, 0);
-			Debug.Log ("Second Hit");
-			/*if (BoardManager.Units [x + 1, y + 1] != null) {
-				BoardManager.Instance.AttackTarget (x + 1, y + 1, damage, 0);
-			}
-			if (BoardManager.Units [x + 1, y] != null) {
-				BoardManager.Instance.AttackTarget (x + 1, y, damage, 0);
-			}
-			if (BoardManager.Units [x + 1, y - 1] != null) {
-				BoardManager.Instance.AttackTarget (x + 1, y - 1, damage, 0);
-			}
-			if (BoardManager.Units [x, y - 1] != null) {
-				BoardManager.Instance.AttackTarget (x, y - 1, damage, 0);
-			}
-			if (BoardManager.Units [x - 1, y - 1] != null) {
-				BoardManager.Instance.AttackTarget (x - 1, y - 1, damage, 0);
-			}
-			if (BoardManager.Units [x - 1, y] != null) {
-				BoardManager.Instance.AttackTarget (x - 1, y, damage, 0);
-			}
-			if (BoardManager.Units [x - 1, y + 1] != null) {
-				BoardManager.Instance.AttackTarget (x - 1, y + 1, damage, 0);
-			}*/
+			//Debug.Log ("Second Hit");
+			BoardManager.Instance.AttackTarget (x + 1, y + 1, damage, 0);
+			BoardManager.Instance.AttackTarget (x + 1, y, damage, 0);
+			BoardManager.Instance.AttackTarget (x + 1, y - 1, damage, 0);
+			BoardManager.Instance.AttackTarget (x, y - 1, damage, 0);
+			BoardManager.Instance.AttackTarget (x - 1, y - 1, damage, 0);
+			BoardManager.Instance.AttackTarget (x - 1, y, damage, 0);
+			BoardManager.Instance.AttackTarget (x - 1, y + 1, damage, 0);
 			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 		}
+		selectedUnit.accuracy = 90;
 	}
 
 	public void LongShot(Unit selectedUnit, Unit selectedTarget) {

@@ -302,12 +302,14 @@ public class BoardManager : MonoBehaviour {
 	{
 		allowedAttacks = Units [x, y].PossibleAttack ();
 		selectedTarget = Units [x, y];
-		unitAccuracy = Units [x, y].accuracy;
+		selectedUnit = Units [x, y];
 		BoardHighlights.Instance.HighlightAllowedAttacks (allowedAttacks);
 	}
 
 	public void AttackTarget(int x, int y, int damage, float cooldownAttackSeconds)
 	{
+		unitAccuracy = selectedUnit.accuracy;
+		Debug.Log (unitAccuracy);
 		selectedTarget = Units[x,y];
 		targetDodgeChance = selectedTarget.dodgeChance + Random.Range(0, 100);
 		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer && unitAccuracy >= targetDodgeChance)
@@ -322,8 +324,8 @@ public class BoardManager : MonoBehaviour {
 		}
 		BoardHighlights.Instance.Hidehighlights();
         selectedAbility = 0;
-        selectedTarget = null;
-        selectedUnit = null;
+        //selectedTarget = null;
+        //selectedUnit = null;
     }
 
     public void BuffTarget(int x, int y, int buff, float cooldownAttackSeconds)
