@@ -13,22 +13,22 @@ public class GoblinArcherAbilities : Abilities
 	{
 		PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-		stats.health = 120;
-		stats.damageAmount = 60;
+		stats.health = 60;
+		stats.damageAmount = 20;
 
-		stats.straightMoveRange = 0;
+		stats.straightMoveRange = 3;
 		stats.diagMoveRange = 1;
-		stats.circMoveRange = 1;
+		stats.circMoveRange = 2;
 
-		stats.straightAttackRange = 2;
-		stats.diagAttackRange = 1;
-		stats.circAttackRange = 0;
+		stats.straightAttackRange = 6;
+		stats.diagAttackRange = 4;
+		stats.circAttackRange = 5;
 
-		stats.cooldownMoveSeconds = 4;
+		stats.cooldownMoveSeconds = 3;
 		stats.cooldownAttackSeconds = 4;
 
-		stats.dodgeChance = 0;
-		stats.accuracy = 80;
+		stats.dodgeChance = 10;
+		stats.accuracy = 70;
 	}
 
 	private void Update()
@@ -40,7 +40,7 @@ public class GoblinArcherAbilities : Abilities
 
 	public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
 	{
-		selectedUnit.SetAttackCooldown(1.0f);
+		selectedUnit.SetAttackCooldown(4.0f);
 		BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
 	}
 

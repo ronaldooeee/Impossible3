@@ -57,7 +57,7 @@ public class GoblinArcherUnit : Unit
 					health.takeDamageAndDie (damage);
 					BoardHighlights.Instance.Hidehighlights ();
 				} else {
-					Debug.Log ("Golem Missed!");
+					Debug.Log ("Goblin Archer Missed!");
 				}
 				enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
 				return;
@@ -73,19 +73,35 @@ public class GoblinArcherUnit : Unit
 			Shuffle(allowedEnemyMoves);
 			//BoardHighlights.Instance.Hidehighlights();
 			//BoardHighlights.Instance.HighlightAllowedMoves(enemyUnit.PossibleMove());
-			foreach (int[] move in allowedEnemyMoves)
-			{
-				//Check if this will move enemy closer to a player
-				if (Math.Abs(enemyUnit.CurrentX - closestPlayer.CurrentX) > Math.Abs(move[0] - closestPlayer.CurrentX) || Math.Abs(enemyUnit.CurrentY - closestPlayer.CurrentY) > Math.Abs(move[1] - closestPlayer.CurrentY))
-				{
-					if (BoardManager.Units[move[0], move[1]] == null)
-					{
-						BoardManager.Units[enemyUnit.CurrentX, enemyUnit.CurrentY] = null;
-						enemyUnit.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
-						enemyUnit.SetPosition(move[0], move[1]);
-						BoardManager.Units[move[0], move[1]] = enemyUnit;
-						enemyUnit.timeStampMove = Time.time + enemyUnit.cooldownMoveSeconds;
-						return;
+			if (Math.Abs (closestPlayer.CurrentX - enemyUnit.CurrentX) + Math.Abs (closestPlayer.CurrentY - enemyUnit.CurrentY) <= enemyUnit.diagAttackRange - 2) {
+				foreach (int[] move in allowedEnemyMoves) {
+					//Checks if closestPlayer is within range buffer, then Checks what move is farther away from that player, then checks if it is open, then moves away
+					if (Math.Abs (enemyUnit.CurrentX - closestPlayer.CurrentX) < Math.Abs (move [0] - closestPlayer.CurrentX)
+					    || Math.Abs (enemyUnit.CurrentY - closestPlayer.CurrentY) < Math.Abs (move [1] - closestPlayer.CurrentY)) {
+						if (BoardManager.Units [move [0], move [1]] == null) {
+							BoardManager.Units [enemyUnit.CurrentX, enemyUnit.CurrentY] = null;
+							enemyUnit.transform.position = BoardManager.Instance.GetTileCenter (move [0], move [1], 0);
+							enemyUnit.SetPosition (move [0], move [1]);
+							BoardManager.Units [move [0], move [1]] = enemyUnit;
+							enemyUnit.timeStampMove = Time.time + enemyUnit.cooldownMoveSeconds;
+							return;
+						}
+					}
+				}
+			}
+			//Check if this will move enemy closer to a player
+			if (Math.Abs (closestPlayer.CurrentX - enemyUnit.CurrentX) + Math.Abs (closestPlayer.CurrentY - enemyUnit.CurrentY) >= enemyUnit.diagAttackRange + 2) {
+				foreach (int[] move in allowedEnemyMoves) {
+					if (Math.Abs (enemyUnit.CurrentX - closestPlayer.CurrentX) > Math.Abs (move [0] - closestPlayer.CurrentX)
+					   || Math.Abs (enemyUnit.CurrentY - closestPlayer.CurrentY) > Math.Abs (move [1] - closestPlayer.CurrentY)) {
+						if (BoardManager.Units [move [0], move [1]] == null) {
+							BoardManager.Units [enemyUnit.CurrentX, enemyUnit.CurrentY] = null;
+							enemyUnit.transform.position = BoardManager.Instance.GetTileCenter (move [0], move [1], 0);
+							enemyUnit.SetPosition (move [0], move [1]);
+							BoardManager.Units [move [0], move [1]] = enemyUnit;
+							enemyUnit.timeStampMove = Time.time + enemyUnit.cooldownMoveSeconds;
+							return;
+						}
 					}
 				}
 			}
