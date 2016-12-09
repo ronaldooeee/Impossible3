@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class PlayerUI : MonoBehaviour {
+public class PlayerUI : MonoBehaviour
+{
     public List<GameObject> unitPrefabs;
     private List<GameObject> UIs;
     public Canvas mainCanvas;
@@ -12,18 +13,19 @@ public class PlayerUI : MonoBehaviour {
     public GameObject mainUI;
     public GameObject[] units;
 
-    void Start () {
+    void Start()
+    {
         units = new GameObject[] { BoardManager.playerUnits[0], BoardManager.playerUnits[1], BoardManager.playerUnits[2] };
         float width = mainCanvas.transform.localScale.x;
         float height = mainCanvas.transform.localScale.y;
-        
+
         UIs = new List<GameObject>();
-        GameObject player1UI = Instantiate(mainUI, new Vector3(0,0,0), Camera.main.transform.rotation) as GameObject;
+        GameObject player1UI = Instantiate(mainUI, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
         player1UI.transform.parent = mainCanvas.transform;
-        player1UI.transform.localScale = new Vector3(.2f,.2f,.2f);
-        player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0,1);
-        player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0,1);
-        player1UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0-Screen.width/2+100,0+Screen.height/2-50,0);
+        player1UI.transform.localScale = new Vector3(.2f, .2f, .2f);
+        player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
+        player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
+        player1UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0 - Screen.width / 2 + 100, 0 + Screen.height / 2 - 50, 0);
 
         GameObject player2UI = Instantiate(mainUI, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
         player2UI.transform.parent = mainCanvas.transform;
@@ -50,12 +52,13 @@ public class PlayerUI : MonoBehaviour {
         killScore.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
         killScore.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
         killScore.transform.parent = mainCanvas.transform;
-        killScore.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0, 0 + Screen.height / 2- 50, 0);
+        killScore.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0, 0 + Screen.height / 2 - 50, 0);
     }
 
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         killScore.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0, 0 + Screen.height / 2 - 50, 0);
         killScore.GetComponent<Text>().text = BoardManager.score.ToString();
 
@@ -88,7 +91,7 @@ public class PlayerUI : MonoBehaviour {
             float maxMoveCooldown = units[i].GetComponent<PlayerUnit>().cooldownMoveSeconds;
             if (playerMoveCooldown >= 0)
             {
-                bars1[0].transform.localScale = new Vector3((float)7 * (1-(playerMoveCooldown/maxMoveCooldown)), bars1[0].transform.localScale.y, bars1[0].transform.localScale.z);
+                bars1[0].transform.localScale = new Vector3((float)7 * (1 - (playerMoveCooldown / maxMoveCooldown)), bars1[0].transform.localScale.y, bars1[0].transform.localScale.z);
             }
 
             //Attack Cooldown UI
@@ -99,7 +102,7 @@ public class PlayerUI : MonoBehaviour {
                 bars2[0].transform.localScale = new Vector3((float)7 * (1 - (playerAttackCooldown / maxAttackCooldown)), bars2[0].transform.localScale.y, bars2[0].transform.localScale.z);
             }
 
-            
+
         }
     }
 }

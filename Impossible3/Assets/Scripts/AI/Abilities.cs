@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Abilities : MonoBehaviour {
+public class Abilities : MonoBehaviour
+{
 
-    public bool[] unlockedAbilities;
+    public static bool[] unlockedAbilities = new bool[6] { false, false, false, false, false, false };
+    public static bool[] displayed = new bool[6] { false, false, false, false, false, false };
 
     public virtual void RegAttack(Unit selectedUnit, Unit selectedTarget) { }
 
@@ -27,11 +29,13 @@ public class Abilities : MonoBehaviour {
         selectedUnit.straightAttackRange = straightrange;
         selectedUnit.diagAttackRange = diagrange;
         selectedUnit.circAttackRange = circrange;
-        if (highlight == 0) {
+        if (highlight == 0)
+        {
             moves = selectedUnit.PossibleAbility();
             BoardHighlights.Instance.HighlightAllowedAbilities(moves);
         }
-        if (highlight == 1) {
+        if (highlight == 1)
+        {
             moves = selectedUnit.PossibleAttack();
             BoardHighlights.Instance.HighlightAllowedAttacks(moves);
         }

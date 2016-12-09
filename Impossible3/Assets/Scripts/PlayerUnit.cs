@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class PlayerUnit : Unit 
+public class PlayerUnit : Unit
 {
     //Make another pubilic override bool called PossibleAttack, with 2 sets of if statements
     //One to check if ranged attack, another to see if melee with checking surrounding spots
@@ -15,8 +15,8 @@ public class PlayerUnit : Unit
     //this variable isnt used but it's references elsewhere so i cant remove it
     public bool isRanged;
 
-    public override bool[,] PossibleMove (int currentXPos = -1, int currentYPos = -1 )
-	{
+    public override bool[,] PossibleMove(int currentXPos = -1, int currentYPos = -1)
+    {
         if (currentXPos == -1) { currentXPos = CurrentX; }
         if (currentYPos == -1) { currentYPos = CurrentY; }
         //I am become Flanders Destroyer of Code
@@ -37,25 +37,9 @@ public class PlayerUnit : Unit
 
         bool[,] isAcceptedMove = new bool[BoardManager.mapSize, BoardManager.mapSize];
 
-        for(int i =1; i <= straightMoveRange; i++)
+        for (int i = 1; i <= straightMoveRange; i++)
         {
-            foreach (List<int> pair in new List<List<int>>{ new List<int>{currentXPos,currentYPos+i },new List<int> { currentXPos+i,currentYPos },new List<int> {currentXPos,currentYPos-i },new List<int> {currentXPos-i,currentYPos } })
-            {
-                int x = pair[0];
-                int y = pair[1];
-                if(x< BoardManager.mapSize && y< BoardManager.mapSize && x>=0 && y>=0)
-                {
-                    if (BoardManager.Units[x, y] == null)
-                    {
-                            isAcceptedMove[x, y] = true;
-                    }
-                }
-            }
-        }
-
-        for (int i = 1; i <= diagMoveRange; i++)
-        {
-            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos+i, currentYPos + i }, new List<int> { currentXPos + i, currentYPos-i }, new List<int> { currentXPos-i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos+i } })
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos, currentYPos + i }, new List<int> { currentXPos + i, currentYPos }, new List<int> { currentXPos, currentYPos - i }, new List<int> { currentXPos - i, currentYPos } })
             {
                 int x = pair[0];
                 int y = pair[1];
@@ -63,7 +47,23 @@ public class PlayerUnit : Unit
                 {
                     if (BoardManager.Units[x, y] == null)
                     {
-                            isAcceptedMove[x, y] = true;
+                        isAcceptedMove[x, y] = true;
+                    }
+                }
+            }
+        }
+
+        for (int i = 1; i <= diagMoveRange; i++)
+        {
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos + i, currentYPos + i }, new List<int> { currentXPos + i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos + i } })
+            {
+                int x = pair[0];
+                int y = pair[1];
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
+                {
+                    if (BoardManager.Units[x, y] == null)
+                    {
+                        isAcceptedMove[x, y] = true;
                     }
                 }
             }
@@ -88,10 +88,10 @@ public class PlayerUnit : Unit
             }
         }
         return isAcceptedMove;
-        
-	}
 
-	public override bool[,] PossibleAttack(int currentXPos = -1, int currentYPos = -1)
+    }
+
+    public override bool[,] PossibleAttack(int currentXPos = -1, int currentYPos = -1)
     {
         if (currentXPos == -1) { currentXPos = CurrentX; }
         if (currentYPos == -1) { currentYPos = CurrentY; }
@@ -105,9 +105,9 @@ public class PlayerUnit : Unit
                 int y = pair[1];
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
                 {
-                    if (BoardManager.Units[x, y] == null || (this.isPlayer!= BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
                     {
-                            isAcceptedAttack[x, y] = true;
+                        isAcceptedAttack[x, y] = true;
                     }
                 }
             }
@@ -123,7 +123,7 @@ public class PlayerUnit : Unit
                 {
                     if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
                     {
-                            isAcceptedAttack[x, y] = true;
+                        isAcceptedAttack[x, y] = true;
                     }
                 }
             }

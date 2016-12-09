@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WarriorAbilities : Abilities {
+public class WarriorAbilities : Abilities
+{
 
     public int x;
     public int y;
 
-	public int selectedTargetX;
-	public int selectedTargetY;
+    public int selectedTargetX;
+    public int selectedTargetY;
 
-	public int selectedUnitX;
-	public int selectedUnitY;
+    public int selectedUnitX;
+    public int selectedUnitY;
 
     public int damage;
     public int selfDamage;
@@ -36,8 +37,8 @@ public class WarriorAbilities : Abilities {
         stats.cooldownMoveSeconds = 3;
         stats.cooldownAttackSeconds = 3;
 
-		stats.dodgeChance = 0;
-		stats.accuracy = 95;
+        stats.dodgeChance = 0;
+        stats.accuracy = 95;
     }
 
     private void Update()
@@ -97,11 +98,11 @@ public class WarriorAbilities : Abilities {
 		}
     }
     public void Frenzy(Unit selectedUnit, Unit selectedTarget)
-	{		
-		selectedUnit.SetAttackCooldown(2.0f);
+    {
+        selectedUnit.SetAttackCooldown(2.0f);
         HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
         selfDamage = damage / 7;
-		if (health.currentHealth <= selfDamage)
+        if (health.currentHealth <= selfDamage)
         {
             health.currentHealth = 1;
         }
@@ -115,8 +116,8 @@ public class WarriorAbilities : Abilities {
     public void Rally(Unit selectedUnit, Unit selectedTarget)
     {
         buff = 0;
-		selectedTarget.SetAttackCooldown (2.0f);
-		selectedTarget.SetMoveCooldown (3.0f);
+        selectedTarget.SetAttackCooldown(2.0f);
+        selectedTarget.SetMoveCooldown(3.0f);
         BoardManager.Instance.BuffTarget(x, y, buff, selectedUnit.cooldownAttackSeconds);
     }
     public void Warpath(Unit selectedUnit, Unit selectedTarget)
@@ -161,33 +162,41 @@ public class WarriorAbilities : Abilities {
     }
     public void ShieldBash(Unit selectedUnit, Unit selectedTarget)
     {
-		selectedUnit.SetAttackCooldown (6.0f);
-		selectedTargetX = selectedTarget.CurrentX;
-		selectedTargetY = selectedTarget.CurrentY;
+        selectedUnit.SetAttackCooldown(6.0f);
+        selectedTargetX = selectedTarget.CurrentX;
+        selectedTargetY = selectedTarget.CurrentY;
 
-		selectedUnitX = selectedUnit.CurrentX;
-		selectedUnitY = selectedUnit.CurrentY;
-		Debug.Log(selectedTarget.CurrentX + "Target's X");
-		Debug.Log (selectedTarget.CurrentY + "Target's Y");
-		if (selectedUnitX < selectedTargetX) {
-			selectedTarget.CurrentX = selectedTarget.CurrentX + 1;
-			Debug.Log("Right side");
-		} else if (selectedUnitX > selectedTargetX) {
-			selectedTarget.CurrentX = selectedTarget.CurrentX - 1;
-			Debug.Log("Left side");
-		} else if (selectedUnitY < selectedTargetY) {
-			selectedTarget.CurrentY = selectedTarget.CurrentY + 1;
-			Debug.Log("Front side");
-		} else {
-			selectedTarget.CurrentY = selectedTarget.CurrentY - 1;
-			Debug.Log("Back side");
-		}
-		selectedTarget.SetAttackCooldown (5.0f);
+        selectedUnitX = selectedUnit.CurrentX;
+        selectedUnitY = selectedUnit.CurrentY;
+        Debug.Log(selectedTarget.CurrentX + "Target's X");
+        Debug.Log(selectedTarget.CurrentY + "Target's Y");
+        if (selectedUnitX < selectedTargetX)
+        {
+            selectedTarget.CurrentX = selectedTarget.CurrentX + 1;
+            Debug.Log("Right side");
+        }
+        else if (selectedUnitX > selectedTargetX)
+        {
+            selectedTarget.CurrentX = selectedTarget.CurrentX - 1;
+            Debug.Log("Left side");
+        }
+        else if (selectedUnitY < selectedTargetY)
+        {
+            selectedTarget.CurrentY = selectedTarget.CurrentY + 1;
+            Debug.Log("Front side");
+        }
+        else
+        {
+            selectedTarget.CurrentY = selectedTarget.CurrentY - 1;
+            Debug.Log("Back side");
+        }
+        selectedTarget.SetAttackCooldown(5.0f);
         //Debug.Log(x + "mouse X");
         //Debug.Log(y + "mouse Y");
-		BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
+        BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
         //does somehting
     }
+
 
 	public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
 		if (BoardManager.Instance.selectedAbility == 1)
