@@ -142,49 +142,49 @@ public class BoardManager : MonoBehaviour
                         {
                             selectedUnit.GetComponent<Abilities>().RegAttack(selectedTarget, selectedTarget);
                         }
-                        else if (Abilities.unlockedAbilities[0])
+                        else if (selectedAbility == 1)
                         {
-                            if (score >= 2)
+                            if (Abilities.unlockedAbilities[0])
                             {
                                 selectedUnit.GetComponent<Abilities>().Ability1(selectedUnit, selectedTarget);
                             }
 
                         }
-                        else if (Abilities.unlockedAbilities[1])
+                        else if (selectedAbility == 2)
                         {
-                            if (score >= 4)
+                            if (Abilities.unlockedAbilities[1])
                             {
                                 selectedUnit.GetComponent<Abilities>().Ability2(selectedUnit, selectedTarget);
                             }
 
                         }
-                        else if (Abilities.unlockedAbilities[2])
+                        else if (selectedAbility == 3)
                         {
-                            if (score >= 8)
+                            if (Abilities.unlockedAbilities[2])
                             {
                                 selectedUnit.GetComponent<Abilities>().Ability3(selectedUnit, selectedTarget);
                             }
 
                         }
-                        else if (Abilities.unlockedAbilities[3])
+                        else if (selectedAbility == 4)
                         {
-                            if (score >= 16)
+                            if (Abilities.unlockedAbilities[3])
                             {
                                 selectedUnit.GetComponent<Abilities>().Ability4(selectedUnit, selectedTarget);
                             }
 
                         }
-                        else if (Abilities.unlockedAbilities[4])
+                        else if (selectedAbility == 5)
                         {
-                            if (score >= 20)
+                            if (Abilities.unlockedAbilities[4])
                             {
                                 selectedUnit.GetComponent<Abilities>().Ability5(selectedUnit, selectedTarget);
                             }
 
                         }
-                        else if (Abilities.unlockedAbilities[5])
+                        else if (selectedAbility == 6)
                         {
-                            if (score >= 24)
+                            if (Abilities.unlockedAbilities[5])
                             {
                                 selectedUnit.GetComponent<Abilities>().Ability6(selectedUnit, selectedTarget);
                             }
