@@ -32,7 +32,6 @@ public class KaboochaUnit : Unit
         int playerDistance = 100;
 
         Unit closestEnemy = null;
-        int enemyDistance = 100;
 
         //find closest player
         for (int i = 0; i < playerUnits.Count; i++)
@@ -58,7 +57,6 @@ public class KaboochaUnit : Unit
                 if (xDist + yDist < playerDistance)
                 {
                     closestEnemy = currentEnemy;
-                    enemyDistance = xDist + yDist;
                 }
             }
         }
@@ -68,10 +66,9 @@ public class KaboochaUnit : Unit
         {
             bool[,] allowedEnemyAttacks = enemyUnit.PossibleAttack();
             bool[,] allowedEnemyAbilities = enemyUnit.PossibleAbility();
-
             //BoardHighlights.Instance.Hidehighlights();
             //BoardHighlights.Instance.HighlightAllowedAbilities(allowedEnemyAbilities);
-            if (allowedEnemyAbilities[closestEnemy.CurrentX, closestEnemy.CurrentY]) {
+            if (closestEnemy!=null && allowedEnemyAbilities[closestEnemy.CurrentX, closestEnemy.CurrentY]) {
 
                     HealthSystem health = (HealthSystem)BoardManager.Units[closestEnemy.CurrentX, closestEnemy.CurrentY].GetComponent(typeof(HealthSystem));
                     int rand = UnityEngine.Random.Range(1, 4);
@@ -93,21 +90,36 @@ public class KaboochaUnit : Unit
                     return;
             }
             
+                    
 
+            //Determine if player is in Attack distance
+            if (allowedEnemyAttacks[closestPlayer.CurrentX, closestPlayer.CurrentY])
+            {
+                //If yes then attack
+				targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range(0, 100);
+				if (accuracy >= targetDodgeChance) {
+					HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
+					health.takeDamageAndDie (damage);
+					BoardHighlights.Instance.Hidehighlights ();
+				} else {
+					Debug.Log ("Sword Skeleton Missed!");
+				}
+				enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+				return;
+            }  
             
         }
 
 
 
         //If Movemvent cooldown over, then Move
-        if (enemyUnit.timeStampMove <= Time.time)
+        if (closestEnemy != null && enemyUnit.timeStampMove <= Time.time )
         {
             List<int[]> allowedEnemyMoves = getTrueMoves();
             Shuffle(allowedEnemyMoves);
             //BoardHighlights.Instance.Hidehighlights();
             //BoardHighlights.Instance.HighlightAllowedMoves(enemyUnit.PossibleMove());
 
-            Debug.Log(closestEnemy);    
             foreach (int[] move in allowedEnemyMoves)
             {
                 //Check if this will move enemy closer to a player
@@ -126,6 +138,30 @@ public class KaboochaUnit : Unit
             }
                 
 
+        }
+        else if (enemyUnit.timeStampMove <= Time.time)
+        {
+            List<int[]> allowedEnemyMoves = getTrueMoves();
+            Shuffle(allowedEnemyMoves);
+            //BoardHighlights.Instance.Hidehighlights();
+            //BoardHighlights.Instance.HighlightAllowedMoves(enemyUnit.PossibleMove());
+            foreach (int[] move in allowedEnemyMoves)
+            {
+                //Check if this will move enemy closer to a player
+                if (Math.Abs(enemyUnit.CurrentX - closestPlayer.CurrentX) > Math.Abs(move[0] - closestPlayer.CurrentX) || Math.Abs(enemyUnit.CurrentY - closestPlayer.CurrentY) > Math.Abs(move[1] - closestPlayer.CurrentY))
+                {
+                    if (BoardManager.Units[move[0], move[1]] == null)
+                    {
+                        BoardManager.Units[enemyUnit.CurrentX, enemyUnit.CurrentY] = null;
+                        enemyUnit.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
+                        enemyUnit.SetPosition(move[0], move[1]);
+                        BoardManager.Units[move[0], move[1]] = enemyUnit;
+                        enemyUnit.timeStampMove = Time.time + enemyUnit.cooldownMoveSeconds;
+                        //enemyUnit.timeStampAttack += 2;
+                        return;
+                    }
+                }
+            }
         }
     }
 
