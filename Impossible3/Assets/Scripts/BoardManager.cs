@@ -67,13 +67,13 @@ public class BoardManager : MonoBehaviour
     // Update world to show changes
     private void Update()
     {
-        /*while (enemyUnits.Count < quota)
+        while (enemyUnits.Count < quota)
         {
             Coordinate bound = findBound();
             SpawnUnit(random.Next(6, 10), bound.x + random.Next(6, 10), bound.y + random.Next(6, 10));
 
             //SpawnUnit(random.Next(6, 10),  random.Next(6, 10), random.Next(6, 10));
-        }*/
+        }
 
         //Let player know of new abilities
         tellScore(score);

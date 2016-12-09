@@ -6,7 +6,9 @@ using System.Collections.Generic;
 public class KaboochaUnit : Unit
 {
     List<GameObject> playerUnits;
+    List<GameObject> enemyUnits;
     PlayerUnit enemyUnit;
+
 
     public float timeStampDelay;
 
@@ -14,6 +16,7 @@ public class KaboochaUnit : Unit
     {
         timeStampDelay = Time.time;
         playerUnits = BoardManager.playerUnits;
+        enemyUnits = BoardManager.enemyUnits;
         enemyUnit = this.GetComponentInParent<PlayerUnit>();
 
         enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
@@ -23,10 +26,13 @@ public class KaboochaUnit : Unit
     private void Update()
     {
         int damage = this.GetComponent<PlayerUnit>().damageAmount;
-		int accuracy = this.GetComponent<PlayerUnit> ().accuracy;
-		int targetDodgeChance;
+        int accuracy = this.GetComponent<PlayerUnit>().accuracy;
+        int targetDodgeChance;
         Unit closestPlayer = null;
         int playerDistance = 100;
+
+        Unit closestEnemy = null;
+        int enemyDistance = 100;
 
         //find closest player
         for (int i = 0; i < playerUnits.Count; i++)
@@ -41,6 +47,19 @@ public class KaboochaUnit : Unit
             }
         }
 
+        //find closest enemy
+        for (int i = 0; i < enemyUnits.Count; i++)
+        {
+            PlayerUnit currentEnemy = enemyUnits[i].GetComponent<PlayerUnit>();
+            int xDist = Math.Abs(enemyUnit.CurrentX - currentEnemy.CurrentX);
+            int yDist = Math.Abs(enemyUnit.CurrentY - currentEnemy.CurrentY);
+            if (xDist + yDist < playerDistance)
+            {
+                closestEnemy = currentEnemy;
+                enemyDistance = xDist + yDist;
+            }
+        }
+
         //If Attack cooldown over, then attack
         if (enemyUnit.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
         {
@@ -52,16 +71,19 @@ public class KaboochaUnit : Unit
             if (allowedEnemyAttacks[closestPlayer.CurrentX, closestPlayer.CurrentY])
             {
                 //If yes then attack
-				targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range(0, 100);
-				if (accuracy >= targetDodgeChance) {
-					HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
-					health.takeDamageAndDie (damage);
-					BoardHighlights.Instance.Hidehighlights ();
-				} else {
-					Debug.Log ("Kaboocha Missed!");
-				}
-				enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
-				return;
+                targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range(0, 100);
+                if (accuracy >= targetDodgeChance)
+                {
+                    HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
+                    health.takeDamageAndDie(damage);
+                    BoardHighlights.Instance.Hidehighlights();
+                }
+                else
+                {
+                    Debug.Log("Kaboocha Missed!");
+                }
+                enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+                return;
             }
         }
 
@@ -74,9 +96,31 @@ public class KaboochaUnit : Unit
             Shuffle(allowedEnemyMoves);
             //BoardHighlights.Instance.Hidehighlights();
             //BoardHighlights.Instance.HighlightAllowedMoves(enemyUnit.PossibleMove());
+            if (closestEnemy.GetComponentInParent<KaboochaAbilities>() != null)
+            {
+                {
+                    foreach (int[] move in allowedEnemyMoves)
+                    {
+                        //Check if this will move enemy closer to a player
+                        if (Math.Abs(enemyUnit.CurrentX - closestEnemy.CurrentX) > Math.Abs(move[0] - closestEnemy.CurrentX) || Math.Abs(enemyUnit.CurrentY - closestEnemy.CurrentY) > Math.Abs(move[1] - closestEnemy.CurrentY))
+                        {
+                            if (BoardManager.Units[move[0], move[1]] == null)
+                            {
+                                BoardManager.Units[enemyUnit.CurrentX, enemyUnit.CurrentY] = null;
+                                enemyUnit.transform.position = BoardManager.Instance.GetTileCenter(move[0], move[1], 0);
+                                enemyUnit.SetPosition(move[0], move[1]);
+                                BoardManager.Units[move[0], move[1]] = enemyUnit;
+                                enemyUnit.timeStampMove = Time.time + enemyUnit.cooldownMoveSeconds;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+
             foreach (int[] move in allowedEnemyMoves)
             {
-                //Check if this will move enemy closer to a player
                 if (Math.Abs(enemyUnit.CurrentX - closestPlayer.CurrentX) > Math.Abs(move[0] - closestPlayer.CurrentX) || Math.Abs(enemyUnit.CurrentY - closestPlayer.CurrentY) > Math.Abs(move[1] - closestPlayer.CurrentY))
                 {
                     if (BoardManager.Units[move[0], move[1]] == null)
