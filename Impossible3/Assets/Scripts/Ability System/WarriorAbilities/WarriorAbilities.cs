@@ -60,14 +60,19 @@ public class WarriorAbilities : Abilities
     }
     public void Flail(Unit selectedUnit, Unit selectedTarget)
     {
-        for (int a = selectedUnit.straightMoveRange; selectedUnit.CurrentX < a; a = a - 1)
-        {
-            Debug.Log(a);
-            for (int b = selectedUnit.straightMoveRange; selectedUnit.CurrentY < b; b = b - 1)
-            {
-                Debug.Log(b);
-            }
-        }
+		selectedUnit.SetAttackCooldown (6.0f);
+		BoardManager.Instance.AttackTarget (x, y + 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x, y + 2, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x + 1, y + 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x + 1, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x + 2, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x + 1, y - 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x, y - 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x, y - 2, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x - 1, y - 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x - 1, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x - 2, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x - 1, y + 1, damage, selectedUnit.cooldownAttackSeconds);
     }
     public void Frenzy(Unit selectedUnit, Unit selectedTarget)
     {
@@ -94,29 +99,44 @@ public class WarriorAbilities : Abilities
     }
     public void Warpath(Unit selectedUnit, Unit selectedTarget)
     {
-        damage = 3 * damage;
-        HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
-        if (health.currentHealth < selectedUnit.health)
-        {
-            selectedUnit.damageAmount = 100;
-        }
-        BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
-        if (x > selectedUnit.CurrentX)
-        {
-            selectedUnit.CurrentX = x - 1;
-        }
-        else if (x < selectedUnit.CurrentX)
-        {
-            selectedUnit.CurrentX = x + 1;
-        }
-        else if (y > selectedUnit.CurrentY)
-        {
-            selectedUnit.CurrentY = y + 1;
-        }
-        else
-        {
-            selectedUnit.CurrentY = y - 1;
-        }
+		damage = 2 * damage;
+		HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
+		if (health.currentHealth < selectedUnit.health) {
+			selectedUnit.damageAmount = 100;
+		}
+
+		if (x > selectedUnit.CurrentX) {
+			Debug.Log ("Move left side");
+			BoardManager.Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			selectedUnit.transform.position = BoardManager.Instance.GetTileCenter(x - 1, y);
+			selectedUnit.SetPosition(x - 1, y);
+			BoardManager.Units [x - 1, y]= selectedUnit; 
+
+		} else if (x < selectedUnit.CurrentX) {
+			Debug.Log ("Move right side");
+			BoardManager.Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			selectedUnit.transform.position = BoardManager.Instance.GetTileCenter(x + 1, y);
+			selectedUnit.SetPosition(x + 1, y);
+			BoardManager.Units [x + 1, y]= selectedUnit; 
+
+		} else if (y > selectedUnit.CurrentY) {
+			Debug.Log ("Move up");
+			BoardManager.Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			selectedUnit.transform.position = BoardManager.Instance.GetTileCenter (x, y - 1);
+			selectedUnit.SetPosition (x, y - 1);
+			BoardManager.Units [x, y - 1] = selectedUnit; 
+
+		} else if (y < selectedUnit.CurrentY) {
+			Debug.Log ("Move down");
+			BoardManager.Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
+			selectedUnit.transform.position = BoardManager.Instance.GetTileCenter (x, y + 1);
+			selectedUnit.SetPosition (x, y + 1);
+			BoardManager.Units [x, y + 1] = selectedUnit; 
+		} else {
+			Debug.Log ("Bug");
+			return;
+		}
+		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
     }
     public void ShieldBash(Unit selectedUnit, Unit selectedTarget)
     {
@@ -155,76 +175,61 @@ public class WarriorAbilities : Abilities
         //does somehting
     }
 
-    public override void Ability1(Unit selectedUnit, Unit selectedTarget)
-    {
-        if (BoardManager.Instance.selectedAbility == 1)
-        {
-            Counter(selectedUnit, selectedTarget);
-        }
-        else
-        {
-            OverlaySelect(selectedUnit, 0, 0, 0, 0);//Unit selectedUnit, int attack, int straightrange, int diagrange, int circrange
-        }
+
+	public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
+		if (BoardManager.Instance.selectedAbility == 1)
+		{
+			Counter(selectedUnit, selectedTarget);
+		}else
+		{
+			OverlaySelect(selectedUnit, 0, 0, 0, 0);//Unit selectedUnit, int attack, int straightrange, int diagrange, int circrange
+		}
 
 
-    }
+	}
 
-    public override void Ability2(Unit selectedUnit, Unit selectedTarget)
-    {
-        if (BoardManager.Instance.selectedAbility == 2)
-        {
-            Flail(selectedUnit, selectedTarget);
-        }
-        else
-        {
-            OverlaySelect(selectedUnit, 1, 4, 2, 3);
-        }
-    }
-    public override void Ability3(Unit selectedUnit, Unit selectedTarget)
-    {
-        if (BoardManager.Instance.selectedAbility == 3)
-        {
-            Frenzy(selectedUnit, selectedTarget);
-        }
-        else
-        {
-            OverlaySelect(selectedUnit, 1, 2, 1, 0);
-        }
-    }
+    public override void Ability2(Unit selectedUnit, Unit selectedTarget) { 
+		if(BoardManager.Instance.selectedAbility ==2){
+			Flail(selectedUnit, selectedTarget); 
+		}
+		else{
+			OverlaySelect (selectedUnit, 1, 3, 1, 2);
+		}
+	}
+    public override void Ability3(Unit selectedUnit, Unit selectedTarget) { 
+		if (BoardManager.Instance.selectedAbility == 3) {
+			Frenzy (selectedUnit, selectedTarget); 
+		}
+		else 
+		{
+			OverlaySelect (selectedUnit, 1, 2, 1, 0);
+		}
+	}
 
-    public override void Ability4(Unit selectedUnit, Unit selectedTarget)
-    {
-        if (BoardManager.Instance.selectedAbility == 4)
-        {
-            Rally(selectedUnit, selectedTarget);
-        }
-        else
-        {
-            OverlaySelect(selectedUnit, 0, 3, 1, 2);
-        }
-    }
+    public override void Ability4(Unit selectedUnit, Unit selectedTarget) { 
+		if (BoardManager.Instance.selectedAbility == 4) {
+			Rally (selectedUnit, selectedTarget); 
+		} else {
+			OverlaySelect (selectedUnit, 0, 3, 1, 2);
+		}
+	}
 
-    public override void Ability5(Unit selectedUnit, Unit selectedTarget)
-    {
-        if (BoardManager.Instance.selectedAbility == 5)
-        {
-            Warpath(selectedUnit, selectedTarget);
-        }
-        else
-        {
-            OverlaySelect(selectedUnit, 1, 10, 0, 0);
-        }
-    }
+    public override void Ability5(Unit selectedUnit, Unit selectedTarget) { 
+		if(BoardManager.Instance.selectedAbility == 5){
+			Warpath(selectedUnit, selectedTarget); 
+		}
+		else{
+			OverlaySelect (selectedUnit, 1, 10, 0, 0);
+		}
+	}
 
-    public override void Ability6(Unit selectedUnit, Unit selectedTarget)
-    {
-        if (BoardManager.Instance.selectedAbility == 6)
-        {
-            ShieldBash(selectedUnit, selectedTarget);
-        }
-        else
-        {
-            OverlaySelect(selectedUnit, 1, 1, 0, 0);
-        }
-    }
+    public override void Ability6(Unit selectedUnit, Unit selectedTarget) { 
+		if (BoardManager.Instance.selectedAbility == 6) 
+		{
+			ShieldBash (selectedUnit, selectedTarget);
+		} else 
+		{
+			OverlaySelect (selectedUnit, 1, 1, 0, 0);
+		}
+	}
 }

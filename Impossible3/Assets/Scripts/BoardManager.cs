@@ -49,7 +49,7 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
-        score = 2;
+        score = 40;
         playerUnits = new List<GameObject>();
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
@@ -611,37 +611,37 @@ public class BoardManager : MonoBehaviour
 
     private void tellScore(int score)
     {
-        if (score == 24 && !Abilities.displayed[5])
+        if (score >= 24 && !Abilities.displayed[5])
         {
             Abilities.unlockedAbilities[5] = true;
             StartCoroutine(ShowMessage("Unlocked ability 6!", 2));
             Abilities.displayed[5] = true;
         }
-        else if (score == 20 && !Abilities.displayed[4])
+        else if (score >= 20 && !Abilities.displayed[4])
         {
             Abilities.unlockedAbilities[4] = true;
             StartCoroutine(ShowMessage("Unlocked ability 5!", 2));
             Abilities.displayed[4] = true;
         }
-        else if (score == 16 && !Abilities.displayed[3])
+        else if (score >= 16 && !Abilities.displayed[3])
         {
             Abilities.unlockedAbilities[3] = true;
             StartCoroutine(ShowMessage("Unlocked ability 4!", 2));
             Abilities.displayed[3] = true;
         }
-        else if (score == 8 && !Abilities.displayed[2])
+        else if (score >= 8 && !Abilities.displayed[2])
         {
             Abilities.unlockedAbilities[2] = true;
             StartCoroutine(ShowMessage("Unlocked ability 3!", 2));
             Abilities.displayed[2] = true;
         }
-        else if (score == 4 && !Abilities.displayed[1])
+        else if (score >= 4 && !Abilities.displayed[1])
         {
             Abilities.unlockedAbilities[1] = true;
             StartCoroutine(ShowMessage("Unlocked ability 2!", 2));
             Abilities.displayed[1] = true;
         }
-        else if (score == 2 && !Abilities.displayed[0])
+        else if (score >= 2 && !Abilities.displayed[0])
         {
             Abilities.unlockedAbilities[0] = true;
             StartCoroutine(ShowMessage("Unlocked ability 1!", 2));
