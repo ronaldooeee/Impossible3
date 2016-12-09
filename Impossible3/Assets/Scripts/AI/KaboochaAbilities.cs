@@ -8,10 +8,11 @@ public class KaboochaAbilities : Abilities
     public int y;
 
     public int damage;
+    PlayerUnit stats;
 
     private void Start()
     {
-        PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
+        stats = this.GetComponentInParent<PlayerUnit>();
 
         stats.health = 60;
         stats.damageAmount = 10;
@@ -24,7 +25,7 @@ public class KaboochaAbilities : Abilities
         stats.diagAttackRange = 2;
         stats.circAttackRange = 3;
 
-        stats.cooldownMoveSeconds = 2;
+        stats.cooldownMoveSeconds = 1;
         stats.cooldownAttackSeconds = 3;
 
 		stats.dodgeChance = 5;
@@ -40,11 +41,16 @@ public class KaboochaAbilities : Abilities
 
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
+        stats.straightAttackRange = 4;
+        stats.diagAttackRange = 2;
+        stats.circAttackRange = 3;
         selectedUnit.SetAttackCooldown(1.0f);
         BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
     }
 
-    public override void Ability1(Unit selectedUnit, Unit selectedTarget) { }
+    public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
+
+    }
 
     public override void Ability2(Unit selectedUnit, Unit selectedTarget) { }
 
@@ -55,4 +61,5 @@ public class KaboochaAbilities : Abilities
     public override void Ability5(Unit selectedUnit, Unit selectedTarget) { }
 
     public override void Ability6(Unit selectedUnit, Unit selectedTarget) { }
+
 }

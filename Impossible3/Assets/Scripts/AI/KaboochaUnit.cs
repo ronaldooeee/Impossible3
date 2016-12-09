@@ -50,13 +50,16 @@ public class KaboochaUnit : Unit
         //find closest enemy
         for (int i = 0; i < enemyUnits.Count; i++)
         {
-            PlayerUnit currentEnemy = enemyUnits[i].GetComponent<PlayerUnit>();
-            int xDist = Math.Abs(enemyUnit.CurrentX - currentEnemy.CurrentX);
-            int yDist = Math.Abs(enemyUnit.CurrentY - currentEnemy.CurrentY);
-            if (xDist + yDist < playerDistance)
+            if (enemyUnits[i] != this)
             {
-                closestEnemy = currentEnemy;
-                enemyDistance = xDist + yDist;
+                PlayerUnit currentEnemy = enemyUnits[i].GetComponent<PlayerUnit>();
+                int xDist = Math.Abs(enemyUnit.CurrentX - currentEnemy.CurrentX);
+                int yDist = Math.Abs(enemyUnit.CurrentY - currentEnemy.CurrentY);
+                if (xDist + yDist < playerDistance)
+                {
+                    closestEnemy = currentEnemy;
+                    enemyDistance = xDist + yDist;
+                }
             }
         }
 
@@ -64,11 +67,36 @@ public class KaboochaUnit : Unit
         if (enemyUnit.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
         {
             bool[,] allowedEnemyAttacks = enemyUnit.PossibleAttack();
-            //BoardHighlights.Instance.Hidehighlights();
-            //BoardHighlights.Instance.HighlightAllowedAttacks(allowedEnemyAttacks);
+            bool[,] allowedEnemyAbilities = enemyUnit.PossibleAbility();
 
+            BoardHighlights.Instance.Hidehighlights();
+            BoardHighlights.Instance.HighlightAllowedAbilities(allowedEnemyAbilities);
+            if (allowedEnemyAbilities[closestEnemy.CurrentX, closestEnemy.CurrentY]) {
+                Debug.Log("Yes");
+                if (closestEnemy.GetComponentInParent<KaboochaAbilities>() != null)
+                {
+                    Debug.Log("No");
+                    HealthSystem health = (HealthSystem)BoardManager.Units[closestEnemy.CurrentX, closestEnemy.CurrentY].GetComponent(typeof(HealthSystem));
+                    int rand = UnityEngine.Random.Range(1, 4);
+                    Debug.Log(closestEnemy);
+                    if (rand == 1)
+                    {
+                        BoardManager.Units[closestEnemy.CurrentX, closestEnemy.CurrentY].GetComponent<Unit>().timeStampAttack = Time.time;
+                    }
+                    else if (rand == 2)
+                    {
+                        BoardManager.Units[closestEnemy.CurrentX, closestEnemy.CurrentY].GetComponent<HealthSystem>().takeDamageAndDie(-20);
+                    }
+                    else if (rand == 3)
+                    {
+                        BoardManager.Units[closestEnemy.CurrentX, closestEnemy.CurrentY].GetComponent<Unit>().timeStampMove = Time.time;
+                    }
+                    enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+                    return;
+                }
+            }
             //Determine if player is in Attack distance
-            if (allowedEnemyAttacks[closestPlayer.CurrentX, closestPlayer.CurrentY])
+            else if (allowedEnemyAttacks[closestPlayer.CurrentX, closestPlayer.CurrentY])
             {
                 //If yes then attack
                 targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range(0, 100);
@@ -80,10 +108,12 @@ public class KaboochaUnit : Unit
                 }
                 else
                 {
+
                     Debug.Log("Kaboocha Missed!");
                 }
-                enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
-                return;
+                    enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+                    return;
+                
             }
         }
 
@@ -96,8 +126,7 @@ public class KaboochaUnit : Unit
             Shuffle(allowedEnemyMoves);
             //BoardHighlights.Instance.Hidehighlights();
             //BoardHighlights.Instance.HighlightAllowedMoves(enemyUnit.PossibleMove());
-            if (closestEnemy.GetComponentInParent<KaboochaAbilities>() != null)
-            {
+
                 {
                     foreach (int[] move in allowedEnemyMoves)
                     {
@@ -116,8 +145,8 @@ public class KaboochaUnit : Unit
                         }
                     }
                 }
-            }
-
+            
+            /*
 
             foreach (int[] move in allowedEnemyMoves)
             {
@@ -134,6 +163,8 @@ public class KaboochaUnit : Unit
                     }
                 }
             }
+        
+        */
         }
     }
 

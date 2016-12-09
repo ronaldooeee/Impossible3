@@ -8,10 +8,11 @@ public class GolemAbilities : Abilities
     public int y;
 
     public int damage;
+    PlayerUnit stats;
 
     private void Start()
     {
-        PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
+        stats = this.GetComponentInParent<PlayerUnit>();
 
         stats.health = 120;
         stats.damageAmount = 60;
@@ -40,6 +41,9 @@ public class GolemAbilities : Abilities
 
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
+        stats.straightAttackRange = 0;
+        stats.diagAttackRange = 0;
+        stats.circAttackRange = 1;
         selectedUnit.SetAttackCooldown(1.0f);
         BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
     }

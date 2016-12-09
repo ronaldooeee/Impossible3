@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Abilities : MonoBehaviour
 {
-
     public static bool[] unlockedAbilities = new bool[6] { false, false, false, false, false, false };
     public static bool[] displayed = new bool[6] { false, false, false, false, false, false };
 
@@ -39,9 +38,6 @@ public class Abilities : MonoBehaviour
             moves = selectedUnit.PossibleAttack();
             BoardHighlights.Instance.HighlightAllowedAttacks(moves);
         }
-        selectedUnit.straightAttackRange = tempRanges[0];
-        selectedUnit.diagAttackRange = tempRanges[1];
-        selectedUnit.circAttackRange = tempRanges[2];
     }
 
 }

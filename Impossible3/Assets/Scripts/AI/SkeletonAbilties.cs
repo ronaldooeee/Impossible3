@@ -7,9 +7,10 @@ public class SkeletonAbilties : Abilities {
 	public int y;
 
 	public int damage;
+    PlayerUnit stats;
 
-	private void Start(){
-        PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
+    private void Start(){
+        stats = this.GetComponentInParent<PlayerUnit>();
 
         stats.health = 80;
         stats.damageAmount = 30;
@@ -30,7 +31,10 @@ public class SkeletonAbilties : Abilities {
     }
 
 	private void Update() {
-		damage = this.GetComponentInParent<PlayerUnit>().damageAmount;
+        stats.straightAttackRange = 1;
+        stats.diagAttackRange = 1;
+        stats.circAttackRange = 0;
+        damage = this.GetComponentInParent<PlayerUnit>().damageAmount;
 		x = BoardManager.Instance.selectionX;
 		y = BoardManager.Instance.selectionY;
 	}
