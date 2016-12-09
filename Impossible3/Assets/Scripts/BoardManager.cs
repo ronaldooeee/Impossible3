@@ -362,7 +362,7 @@ public class BoardManager : MonoBehaviour
     public void SelectTarget(int x, int y)
     {
         allowedAttacks = Units[x, y].PossibleAttack();
-        //selectedTarget = Units [x, y];
+        selectedTarget = Units [x, y];
         selectedUnit = Units[x, y];
         BoardHighlights.Instance.HighlightAllowedAttacks(allowedAttacks);
     }

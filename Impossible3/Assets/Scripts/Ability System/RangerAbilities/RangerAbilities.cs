@@ -17,7 +17,7 @@ public class RangerAbilities : Abilities
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-        stats.health = 1000;
+        stats.health = 80;
         stats.damageAmount = 40;
 
         stats.straightMoveRange = 3;
