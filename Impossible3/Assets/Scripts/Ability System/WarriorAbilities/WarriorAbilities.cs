@@ -60,42 +60,19 @@ public class WarriorAbilities : Abilities
     }
     public void Flail(Unit selectedUnit, Unit selectedTarget)
     {
-		if (BoardManager.Units [x, y + 1] != null) {
-			BoardManager.Instance.AttackTarget (x, y + 1, damage, selectedUnit.cooldownAttackSeconds);
-		}
-		if (BoardManager.Units [x, y + 2] != null) {
-			BoardManager.Instance.AttackTarget (x, y + 2, damage, 0);
-		}
-		if (BoardManager.Units [x + 1, y + 1] != null) {
-			BoardManager.Instance.AttackTarget (x + 1, y + 1, damage, 0);
-		}
-		if (BoardManager.Units [x + 1, y] != null) {
-			BoardManager.Instance.AttackTarget (x + 1, y, damage, 0);
-		}
-		if (BoardManager.Units [x + 2, y] != null) {
-			BoardManager.Instance.AttackTarget (x + 2, y, damage, 0);
-		}
-		if (BoardManager.Units [x + 1, y - 1] != null) {
-			BoardManager.Instance.AttackTarget (x + 1, y - 1, damage, 0);
-		}
-		if (BoardManager.Units [x, y - 1] != null) {
-			BoardManager.Instance.AttackTarget (x, y - 1, damage, 0);
-		}
-		if (BoardManager.Units [x, y - 2] != null) {
-			BoardManager.Instance.AttackTarget (x, y - 2, damage, 0);
-		}
-		if (BoardManager.Units [x - 1, y - 1] != null) {
-			BoardManager.Instance.AttackTarget (x - 1, y - 1, damage, 0);
-		}
-		if (BoardManager.Units [x - 1, y] != null) {
-			BoardManager.Instance.AttackTarget (x - 1, y, damage, 0);
-		}
-		if (BoardManager.Units [x - 2, y] != null) {
-			BoardManager.Instance.AttackTarget (x - 2, y, damage, 0);
-		}
-		if (BoardManager.Units [x - 1, y + 1] != null) {
-			BoardManager.Instance.AttackTarget (x - 1, y + 1, damage, 0);
-		}
+		selectedUnit.SetAttackCooldown (6.0f);
+		BoardManager.Instance.AttackTarget (x, y + 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x, y + 2, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x + 1, y + 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x + 1, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x + 2, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x + 1, y - 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x, y - 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x, y - 2, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x - 1, y - 1, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x - 1, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x - 2, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (x - 1, y + 1, damage, selectedUnit.cooldownAttackSeconds);
     }
     public void Frenzy(Unit selectedUnit, Unit selectedTarget)
     {
@@ -127,7 +104,7 @@ public class WarriorAbilities : Abilities
 		if (health.currentHealth < selectedUnit.health) {
 			selectedUnit.damageAmount = 100;
 		}
-		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
+
 		if (x > selectedUnit.CurrentX) {
 			Debug.Log ("Move left side");
 			BoardManager.Units [selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
@@ -159,6 +136,7 @@ public class WarriorAbilities : Abilities
 			Debug.Log ("Bug");
 			return;
 		}
+		BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
     }
     public void ShieldBash(Unit selectedUnit, Unit selectedTarget)
     {
