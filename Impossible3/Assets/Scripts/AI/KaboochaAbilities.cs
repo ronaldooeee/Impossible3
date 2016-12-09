@@ -25,7 +25,7 @@ public class KaboochaAbilities : Abilities
         stats.diagAttackRange = 2;
         stats.circAttackRange = 3;
 
-        stats.cooldownMoveSeconds = 1;
+        stats.cooldownMoveSeconds = 2;
         stats.cooldownAttackSeconds = 3;
 
 		stats.dodgeChance = 5;
