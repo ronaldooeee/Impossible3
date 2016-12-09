@@ -418,8 +418,8 @@ public class BoardManager : MonoBehaviour
         GameObject go = Instantiate(unitPrefabs[unit], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
         Sprite[] spriteArray = new Sprite[] {
             Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("mage1"), Resources.Load<Sprite>("archer1"),
-			Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("skeleton_knight"), Resources.Load<Sprite>("Skeleton_Spear"),Resources.Load<Sprite>("kaboocha"),Resources.Load<Sprite>("archer(old)") };
-        RuntimeAnimatorController[] animationArray = { null, null, null, null, Resources.Load<RuntimeAnimatorController>("skeleton_knight"), Resources.Load<RuntimeAnimatorController>("Skeleton_Spear"), null, null };
+			Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("Skeleton_Knight"), Resources.Load<Sprite>("Skeleton_Spear"),Resources.Load<Sprite>("Kaboocha"),Resources.Load<Sprite>("Skeleton_Archer") };
+        RuntimeAnimatorController[] animationArray = { null, null, null, null, Resources.Load<RuntimeAnimatorController>("Skeleton_Knight"), Resources.Load<RuntimeAnimatorController>("Skeleton_Spear"), null, null };
         go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
         if (animationArray[index] != null) { go.GetComponent<Animator>().runtimeAnimatorController = animationArray[index]; }
         go.transform.rotation = Camera.main.transform.rotation;
