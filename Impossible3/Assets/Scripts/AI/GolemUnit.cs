@@ -54,7 +54,7 @@ public class GolemUnit : Unit
 				targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range (0, 100);
 				if (accuracy >= targetDodgeChance) {
 					HealthSystem health = (HealthSystem)BoardManager.Units [closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent (typeof(HealthSystem));
-					health.takeDamageAndDie (damage);
+					health.takeDamageAndDie(damage);
 				} else {
 					Debug.Log ("Golem Missed!");
 				}

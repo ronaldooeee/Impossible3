@@ -354,6 +354,8 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
+            HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
+            health.ConfirmHit(null);
             Debug.Log("Player Missed!");
             //return;
         }

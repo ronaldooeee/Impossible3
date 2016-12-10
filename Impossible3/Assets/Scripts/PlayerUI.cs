@@ -3,12 +3,12 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+
 public class PlayerUI : MonoBehaviour
 {
     public List<GameObject> unitPrefabs;
     private List<GameObject> UIs;
     public Canvas mainCanvas;
-    public GameObject KillScore;
     public GameObject killScore;
     public GameObject mainUI;
     public GameObject[] units;
@@ -23,23 +23,23 @@ public class PlayerUI : MonoBehaviour
         GameObject player1UI = Instantiate(mainUI, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
         player1UI.transform.parent = mainCanvas.transform;
         player1UI.transform.localScale = new Vector3(.2f, .2f, .2f);
-        player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
-        player1UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
-        player1UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0 - Screen.width / 2 + 100, 0 + Screen.height / 2 - 50, 0);
+        player1UI.GetComponentInChildren<RectTransform>().anchorMin = new Vector2(0, 1);
+        player1UI.GetComponentInChildren<RectTransform>().anchorMax = new Vector2(0, 1);
+        player1UI.GetComponentInChildren<RectTransform>().localPosition = new Vector3(0 - Screen.width / 2 + 100, 0 + Screen.height / 2 - 50, 0);
 
         GameObject player2UI = Instantiate(mainUI, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
         player2UI.transform.parent = mainCanvas.transform;
         player2UI.transform.localScale = new Vector3(.2f, .2f, .2f);
-        player2UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
-        player2UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
-        player2UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0 - Screen.width / 2 + 100, 0 + Screen.height / 2 - 150, 0);
+        player2UI.GetComponentInChildren<RectTransform>().anchorMin = new Vector2(0, 1);
+        player2UI.GetComponentInChildren<RectTransform>().anchorMax = new Vector2(0, 1);
+        player2UI.GetComponentInChildren<RectTransform>().localPosition = new Vector3(0 - Screen.width / 2 + 100, 0 + Screen.height / 2 - 150, 0);
 
         GameObject player3UI = Instantiate(mainUI, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
         player3UI.transform.parent = mainCanvas.transform;
         player3UI.transform.localScale = new Vector3(.2f, .2f, .2f);
-        player3UI.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
-        player3UI.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
-        player3UI.GetComponentsInChildren<RectTransform>()[0].localPosition = new Vector3(0 - Screen.width / 2 + 100, 0 + Screen.height / 2 - 250, 0);
+        player3UI.GetComponentInChildren<RectTransform>().anchorMin = new Vector2(0, 1);
+        player3UI.GetComponentInChildren<RectTransform>().anchorMax = new Vector2(0, 1);
+        player3UI.GetComponentInChildren<RectTransform>().localPosition = new Vector3(0 - Screen.width / 2 + 100, 0 + Screen.height / 2 - 250, 0);
 
         UIs.Add(player1UI);
         UIs.Add(player2UI);
@@ -47,7 +47,7 @@ public class PlayerUI : MonoBehaviour
 
         //Kill Score
 
-        killScore = Instantiate(KillScore, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
+        killScore = Instantiate(killScore, new Vector3(0, 0, 0), Camera.main.transform.rotation) as GameObject;
         killScore.transform.localScale = new Vector3(.02f, .02f, .02f);
         killScore.GetComponentsInChildren<RectTransform>()[0].anchorMin = new Vector2(0, 1);
         killScore.GetComponentsInChildren<RectTransform>()[0].anchorMax = new Vector2(0, 1);
@@ -105,4 +105,6 @@ public class PlayerUI : MonoBehaviour
 
         }
     }
+
+
 }

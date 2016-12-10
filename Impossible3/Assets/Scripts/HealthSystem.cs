@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
 public class HealthSystem : MonoBehaviour
 {
@@ -9,10 +11,14 @@ public class HealthSystem : MonoBehaviour
     public int currentHealth;
     public GameObject spawn;
 
+    public GameObject missHit;
+
     public Slider healthSlider;
     public Image fillImage;
     public Color fullHealth = Color.green;
     public Color noHealth = Color.red;
+
+    public List<GameObject> damages = new List<GameObject>();
 
 
     private void Start()
@@ -26,13 +32,28 @@ public class HealthSystem : MonoBehaviour
         SetHealthUI();
     }
 
+    private void Update()
+    {
+        foreach (GameObject hitText in damages)
+        {
+            Vector3 position = hitText.GetComponentInChildren<RectTransform>().localPosition;
+            Vector3 newPositon = new Vector3(position.x, position.y + 0.05f, position.z);
+            hitText.GetComponentInChildren<RectTransform>().localPosition = newPositon;
+            if (position.y > this.GetComponentInParent<PlayerUnit>().transform.GetChild(0).transform.position.y +1)
+            {
+                Destroy(hitText);
+                damages.Remove(hitText);
+                break;
+            }
+        }
+    }
+
     public void takeDamageAndDie(int amount)
     {
         currentHealth -= amount;
         this.GetComponentInParent<PlayerUnit>().health = currentHealth;
-
         SetHealthUI();
-
+        ConfirmHit(amount);
         if (currentHealth <= 0)
         {
             if (BoardManager.enemyUnits.Contains(spawn))
@@ -55,4 +76,32 @@ public class HealthSystem : MonoBehaviour
 
         fillImage.color = Color.Lerp(noHealth, fullHealth, currentHealth / startingHealth);
     }
+
+    public void ConfirmHit(int? damage)
+    {
+        PlayerUnit character = this.GetComponentInParent<PlayerUnit>();
+        GameObject hitText = Instantiate(this.missHit, character.transform.GetChild(0).transform.position, Camera.main.transform.rotation) as GameObject;
+        //hitText.GetComponentInChildren<RectTransform>().localPosition = character.transform.position;
+        hitText.GetComponentInChildren<RectTransform>().localScale = new Vector3(0.017f, 0.017f, 0.017f);
+        hitText.transform.SetParent(character.transform.GetChild(0).transform);
+        hitText.GetComponentInChildren<RectTransform>().anchorMin = new Vector2(0, 1);
+        hitText.GetComponentInChildren<RectTransform>().anchorMax = new Vector2(0, 1);
+        if(damage == null)
+        {
+            hitText.GetComponent<TextMesh>().text = "Miss!";
+        }
+        
+        else if (Convert.ToInt32(damage) > 0)
+        {
+            hitText.GetComponent<TextMesh>().text = "-" + damage;
+        }
+        else
+        {
+            hitText.GetComponent<TextMesh>().text = "+" + Math.Abs(Convert.ToInt32(damage));
+            hitText.GetComponent<TextMesh>().color = Color.green;
+        }
+        damages.Add(hitText);
+        
+    }
+
 }
