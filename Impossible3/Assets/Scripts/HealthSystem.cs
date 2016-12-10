@@ -43,6 +43,7 @@ public class HealthSystem : MonoBehaviour
             if (BoardManager.playerUnits.Contains(spawn))
             {
                 BoardManager.playerUnits.Remove(spawn);
+                BoardHighlights.Instance.Hidehighlights();
             }
             Destroy(spawn);
         }

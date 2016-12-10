@@ -55,7 +55,6 @@ public class GolemUnit : Unit
 				if (accuracy >= targetDodgeChance) {
 					HealthSystem health = (HealthSystem)BoardManager.Units [closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent (typeof(HealthSystem));
 					health.takeDamageAndDie (damage);
-					BoardHighlights.Instance.Hidehighlights ();
 				} else {
 					Debug.Log ("Golem Missed!");
 				}
