@@ -35,6 +35,8 @@ public class RangerAbilities : Abilities
         stats.accuracy = 90;
 
         stats.spellTimer = 0;
+
+        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange};
     }
 
     private void Update()

@@ -29,6 +29,8 @@ public class MageAbilities : Abilities
 
         stats.dodgeChance = 5;
         stats.accuracy = 90;
+
+        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange };
     }
 
     private void Update()
@@ -61,7 +63,7 @@ public class MageAbilities : Abilities
         }
         else
         {
-            OverlaySelect(selectedUnit, 0, 3, 2, 1);
+            OverlaySelect(selectedUnit, 1, 3, 2, 1);
         }
 
 

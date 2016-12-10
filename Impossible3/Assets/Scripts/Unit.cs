@@ -29,6 +29,8 @@ public class Unit : MonoBehaviour
     public int dodgeChance;
     public int accuracy;
 
+    public int[] defaultAttackRanges;
+
     private void Awake()
     {
         timeStampMove = Time.time;
@@ -39,6 +41,13 @@ public class Unit : MonoBehaviour
     {
         CurrentX = x;
         CurrentY = y;
+    }
+
+    public void ResetAttackRanges()
+    {
+        this.straightAttackRange = defaultAttackRanges[0];
+        this.diagAttackRange = defaultAttackRanges[1];
+        this.circAttackRange = defaultAttackRanges[2];
     }
 
     public void SetMoveCooldown(float cdMove)

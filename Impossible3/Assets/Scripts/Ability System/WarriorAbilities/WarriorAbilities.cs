@@ -39,6 +39,8 @@ public class WarriorAbilities : Abilities
 
         stats.dodgeChance = 0;
         stats.accuracy = 95;
+
+        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange };
     }
 
     private void Update()
