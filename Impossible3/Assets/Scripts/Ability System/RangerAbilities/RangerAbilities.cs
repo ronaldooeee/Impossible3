@@ -4,12 +4,12 @@ using System.Collections;
 public class RangerAbilities : Abilities
 {
 
-
     public int x;
     public int y;
 
     public int damage;
     public float spellTimer;
+	public int spellCounter;
 
     //public GameObject ranger = this.GetComponentInParent<PlayerUnit>().gameObject;
 
@@ -35,6 +35,7 @@ public class RangerAbilities : Abilities
         stats.accuracy = 90;
 
         stats.spellTimer = 0;
+		stats.spellCounter = 0;
 
         stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange};
     }
@@ -43,12 +44,14 @@ public class RangerAbilities : Abilities
     {
         damage = this.GetComponentInParent<PlayerUnit>().damageAmount;
         spellTimer = this.GetComponentInParent<PlayerUnit>().spellTimer;
+		spellCounter = this.GetComponentInParent<PlayerUnit> ().spellCounter;
         x = BoardManager.Instance.selectionX;
         y = BoardManager.Instance.selectionY;
-        /*Debug.Log (this.GetComponentInParent<PlayerUnit> ().dodgeChance);
-		if(spellTimer == Time.time) {
-			ranger.SetDodgeChance (10);
-		}*/
+		Debug.Log (this.GetComponentInParent<PlayerUnit>().dodgeChance);
+		if(spellTimer <= Time.time && spellCounter == 1) {
+			this.GetComponentInParent<PlayerUnit>().dodgeChance = 10;
+			spellCounter--;
+		}
     }
 
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
@@ -94,8 +97,7 @@ public class RangerAbilities : Abilities
         damage = damage + (damage / 2);
         BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
     }
-
-    //Not Working - Needs to set back to original dodgeChance
+		
     public void ShadowStep(Unit selectedUnit, Unit selectedTarget)
     {
         selectedUnit.SetAttackCooldown(6.0f);
@@ -104,6 +106,7 @@ public class RangerAbilities : Abilities
             selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
             selectedUnit.spellTimer = Time.time + 10;
             selectedUnit.dodgeChance = 80;
+			selectedUnit.spellCounter += 1;
         }
     }
 

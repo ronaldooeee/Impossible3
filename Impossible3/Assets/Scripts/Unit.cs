@@ -16,7 +16,9 @@ public class Unit : MonoBehaviour
     public float cooldownAttackSeconds;
     public float timeStampMove;
     public float timeStampAttack;
+
     public float spellTimer;
+	public int spellCounter;
 
     public int straightMoveRange;
     public int diagMoveRange;
