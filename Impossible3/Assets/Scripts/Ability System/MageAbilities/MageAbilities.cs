@@ -44,7 +44,7 @@ public class MageAbilities : Abilities
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
         selectedUnit.SetAttackCooldown(1.0f);
-        BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
     }
 
     public void Fireball(Unit selectedUnit, Unit selectedTarget)
@@ -52,7 +52,7 @@ public class MageAbilities : Abilities
         //BoardManager.SelectTarget (BoardManager.selectionX, BoardManager.selectionY);
         selectedUnit.SetAttackCooldown(8.0f);
         damage = 2 * damage;
-        BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
     }
 
     public override void Ability1(Unit selectedUnit, Unit selectedTarget)
