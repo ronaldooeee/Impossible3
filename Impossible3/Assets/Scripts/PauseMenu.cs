@@ -10,6 +10,11 @@ public class PauseMenu : MonoBehaviour
     {
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
+    public void returnToGame(bool clicked)
+    {
+        Time.timeScale = 1;
+        pauseMenu.gameObject.SetActive(false);
+    }
         // Update is called once per frame
     void Update()
     {
