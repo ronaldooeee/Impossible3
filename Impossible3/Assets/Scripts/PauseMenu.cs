@@ -8,6 +8,7 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadScene()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
     public void returnToGame(bool clicked)
