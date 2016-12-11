@@ -57,7 +57,7 @@ public class GoblinArcherUnit : Unit
 					health.takeDamageAndDie (damage);
 					BoardHighlights.Instance.Hidehighlights ();
 				} else {
-					Debug.Log ("Goblin Archer Missed!");
+					Debug.Log ("Skeleton Archer Missed!");
 				}
 				enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
 				return;

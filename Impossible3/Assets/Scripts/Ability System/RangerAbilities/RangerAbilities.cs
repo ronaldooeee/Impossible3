@@ -47,7 +47,7 @@ public class RangerAbilities : Abilities
 		spellCounter = this.GetComponentInParent<PlayerUnit> ().spellCounter;
         x = BoardManager.Instance.selectionX;
         y = BoardManager.Instance.selectionY;
-		Debug.Log (this.GetComponentInParent<PlayerUnit>().dodgeChance);
+		//Debug.Log (this.GetComponentInParent<PlayerUnit>().dodgeChance);
 		if(spellTimer <= Time.time && spellCounter == 1) {
 			this.GetComponentInParent<PlayerUnit>().dodgeChance = 10;
 			spellCounter--;
@@ -113,15 +113,13 @@ public class RangerAbilities : Abilities
     //selectedUnit and selectedTarget both sending back the Ranger - Not Working
     public void Snare(Unit selectedUnit, Unit selectedTarget)
     {
-        /*selectedUnit.SetAttackCooldown (7.0f);
+        selectedUnit.SetAttackCooldown (7.0f);
 		selectedUnit.SetDamage (20);
 		if (selectedUnit.timeStampAttack <= Time.time) {
-			BoardManager.Instance.AttackTarget (x, y, damage, selectedUnit.cooldownAttackSeconds);
-			Debug.Log (selectedTarget);
-			Debug.Log (selectedUnit);
+			BoardManager.Instance.AttackTarget (selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
 			selectedTarget.timeStampAttack += 10;
 			selectedTarget.timeStampMove += 10;
-		}*/
+		}
     }
 
     public override void Ability1(Unit selectedUnit, Unit selectedTarget)
@@ -180,7 +178,7 @@ public class RangerAbilities : Abilities
         }
         else
         {
-            OverlaySelect(selectedUnit, 1, 10, 8, 9);
+            OverlaySelect(selectedUnit, 1, 8, 6, 7);
         }
     }
 
