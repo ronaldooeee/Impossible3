@@ -72,8 +72,8 @@ public class KaboochaUnit : Unit
 
                     HealthSystem health = (HealthSystem)BoardManager.Units[closestEnemy.CurrentX, closestEnemy.CurrentY].GetComponent(typeof(HealthSystem));
                     int rand = UnityEngine.Random.Range(1, 4);
-                    Debug.Log(closestEnemy);
-                    Debug.Log("Buffing");
+                    //Debug.Log(closestEnemy);
+                    //Debug.Log("Buffing");
                     if (rand == 1)
                     {
                         BoardManager.Units[closestEnemy.CurrentX, closestEnemy.CurrentY].GetComponent<Unit>().timeStampAttack = Time.time;
@@ -101,7 +101,7 @@ public class KaboochaUnit : Unit
 					HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
 					health.takeDamageAndDie (damage);
 				} else {
-					Debug.Log ("Sword Skeleton Missed!");
+					Debug.Log ("Kaboocha Missed!");
 				}
 				enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
 				return;

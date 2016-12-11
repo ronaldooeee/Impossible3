@@ -97,7 +97,7 @@ public class BoardManager : MonoBehaviour
                 // If you click on a unit, select that unit
                 if (selectedUnit == null)
                 {
-                    SelectUnit(selectionX, selectionY);
+                    SelectUnitForMove(selectionX, selectionY);
 
                     //Or if theres is a unit selected, move it to that space
                 }
@@ -110,8 +110,8 @@ public class BoardManager : MonoBehaviour
                     else
                     {
                         BoardHighlights.Instance.Hidehighlights();
-                        selectedTarget = null;
-                        selectedUnit = null;
+                        //selectedTarget = null;
+                        //selectedUnit = null;
                     }
                 }
             }
@@ -124,24 +124,25 @@ public class BoardManager : MonoBehaviour
             {
                 //Clear existing movement higlights
 
-                SelectUnit(selectionX, selectionY);
+                //SelectTarget(selectionX, selectionY);
                 BoardHighlights.Instance.Hidehighlights();
                 //If you click on a player bring up the attack UI
-                if (selectedTarget == null && Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
+                if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
-                    selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges();
-                    SelectTarget(selectionX, selectionY);
+                    SelectUnitForAttack(selectionX, selectionY);
+					selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges();
                     selectedAbility = 0;
                 }
-                else if (selectedTarget != null)
+                else if (selectedUnit != null)
                 {
                     //int damage = Units[selectionX, selectionY].damageAmount;
 
                     if (allowedAttacks[selectionX, selectionY])
                     {
+						SelectTarget (selectionX, selectionY);
                         if (selectedAbility == 0)
                         {
-                            selectedUnit.GetComponent<Abilities>().RegAttack(selectedTarget, selectedTarget);
+                            selectedUnit.GetComponent<Abilities>().RegAttack(selectedUnit, selectedTarget);
                         }
                         else if (selectedAbility == 1)
                         {
@@ -203,7 +204,7 @@ public class BoardManager : MonoBehaviour
         }
 
         //Abilties
-        if (selectedTarget != null)
+        if (selectedUnit != null)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
@@ -290,13 +291,13 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void SelectUnit(int x, int y)
+    public void SelectUnitForMove(int x, int y)
     {
         // If no unit is selected when clicked, return
         if (Units[x, y] == null)
             return;
 
-        // If unit that is clicked still has cooldown, or unit clicked is an enemy, return
+        // If unit clicked is an enemy or obstacle, return
         if (!Units[x, y].isPlayer)
             return;
 
@@ -310,7 +311,7 @@ public class BoardManager : MonoBehaviour
     public void MoveUnit(int x, int y)
     {
         //If you movement to selected space is allowed, do this
-        if (allowedMoves[x, y] && selectedTarget == null && selectedUnit.timeStampMove <= Time.time)
+		if (allowedMoves[x, y] && Units[x,y] == null && selectedUnit.timeStampMove <= Time.time)
         {
             //Deselect any other unit that might be selected by accident
             Units[selectedUnit.CurrentX, selectedUnit.CurrentY] = null;
@@ -329,31 +330,33 @@ public class BoardManager : MonoBehaviour
         //Deselect unit and get rid of highlight
         BoardHighlights.Instance.Hidehighlights();
         selectedUnit = null;
-        selectedTarget = null;
+        //selectedTarget = null;
     }
 
-    public void SelectTarget(int x, int y)
+    public void SelectUnitForAttack(int x, int y)
     {
+		selectedUnit = Units[x, y];
         allowedAttacks = Units[x, y].PossibleAttack();
-        selectedTarget = Units [x, y];
-        selectedUnit = Units[x, y];
+        //selectedTarget = Units [x, y];
         BoardHighlights.Instance.HighlightAllowedAttacks(allowedAttacks);
     }
 
-    public void AttackTarget(int x, int y, int damage, float cooldownAttackSeconds)
+	public void SelectTarget(int x, int y)
+	{
+		selectedTarget = Units [x, y];
+	}
+
+	public void AttackTarget(Unit selectedTarget, int damage, float cooldownAttackSeconds)
     {
         unitAccuracy = selectedUnit.accuracy;
         //Debug.Log (unitAccuracy);
-        selectedTarget = Units[x, y];
-        if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer && unitAccuracy >= selectedTarget.dodgeChance + Random.Range(0, 100))
-        {
-            GameObject enemy = selectedTarget.gameObject;
-            HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
-            health.takeDamageAndDie(damage);
-            selectedUnit.timeStampAttack = Time.time + cooldownAttackSeconds;
-        }
-        else
-        {
+        //selectedTarget = Units[x, y];
+		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer && unitAccuracy >= selectedTarget.dodgeChance + Random.Range (0, 100)) {
+			GameObject enemy = selectedTarget.gameObject;
+			HealthSystem health = (HealthSystem)enemy.GetComponent (typeof(HealthSystem));
+			health.takeDamageAndDie (damage);
+			selectedUnit.timeStampAttack = Time.time + cooldownAttackSeconds;
+		} else {
             HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
             health.ConfirmHit(null);
             Debug.Log("Player Missed!");
@@ -365,9 +368,9 @@ public class BoardManager : MonoBehaviour
         //selectedUnit = null;
     }
 
-    public void BuffTarget(int x, int y, int buff, float cooldownAttackSeconds)
+	public void BuffTarget(Unit selectedTarget, int buff, float cooldownAttackSeconds)
     {
-        selectedTarget = Units[x, y];
+        //selectedTarget = Units[x, y];
         if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer == selectedUnit.isPlayer)
         {
             GameObject ally = selectedTarget.gameObject;

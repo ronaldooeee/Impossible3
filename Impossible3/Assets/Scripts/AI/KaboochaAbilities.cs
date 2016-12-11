@@ -45,7 +45,7 @@ public class KaboochaAbilities : Abilities
         stats.diagAttackRange = 2;
         stats.circAttackRange = 3;
         selectedUnit.SetAttackCooldown(1.0f);
-        BoardManager.Instance.AttackTarget(x, y, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
     }
 
     public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
