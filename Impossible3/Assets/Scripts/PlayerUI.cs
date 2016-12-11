@@ -69,7 +69,7 @@ public class PlayerUI : MonoBehaviour
             Image[] bars0 = bars[1].GetComponents<Image>();
             Image[] bars1 = bars[2].GetComponents<Image>();
             Image[] bars2 = bars[3].GetComponents<Image>();
-            if (units[i] == null)
+            if (units[i] == null || units[i].GetComponent<PlayerUnit>() == null)
             {
                 bars0[0].transform.localScale = Vector3.zero;
                 bars1[0].transform.localScale = Vector3.zero;

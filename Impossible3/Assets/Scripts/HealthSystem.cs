@@ -9,9 +9,10 @@ public class HealthSystem : MonoBehaviour
 
     public int startingHealth;
     public int currentHealth;
-    public GameObject spawn;
+    public GameObject unit;
 
     public GameObject missHit;
+    public bool isDead = false;
 
     public Slider healthSlider;
     public Image fillImage;
@@ -27,7 +28,7 @@ public class HealthSystem : MonoBehaviour
 
         currentHealth = (int)startingHealth;
 
-        spawn = this.gameObject;
+        unit = this.gameObject;
 
         SetHealthUI();
     }
@@ -36,14 +37,22 @@ public class HealthSystem : MonoBehaviour
     {
         foreach (GameObject hitText in damages)
         {
-            Vector3 position = hitText.GetComponentInChildren<RectTransform>().localPosition;
-            Vector3 newPositon = new Vector3(position.x, position.y + 0.05f, position.z);
-            hitText.GetComponentInChildren<RectTransform>().localPosition = newPositon;
-            if (position.y > this.GetComponentInParent<PlayerUnit>().transform.GetChild(0).transform.position.y +1)
             {
-                Destroy(hitText);
-                damages.Remove(hitText);
-                break;
+                Vector3 position = hitText.GetComponentInChildren<RectTransform>().localPosition;
+                Vector3 newPositon = new Vector3(position.x, position.y + 0.05f, position.z);
+                hitText.GetComponentInChildren<RectTransform>().localPosition = newPositon;
+                if (position.y > 1.75)
+                {
+                    if (isDead)
+                    {
+                        Destroy(unit);
+                    }else
+                    {
+                        Destroy(hitText);
+                        damages.Remove(hitText);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -56,18 +65,27 @@ public class HealthSystem : MonoBehaviour
         ConfirmHit(amount);
         if (currentHealth <= 0)
         {
-            if (BoardManager.enemyUnits.Contains(spawn))
+            if (BoardManager.enemyUnits.Contains(unit))
             {
-                BoardManager.enemyUnits.Remove(spawn);
+                BoardManager.enemyUnits.Remove(unit);
                 BoardManager.score += 1; // Only update the score if an enemy is killed, not a player
             }
-            if (BoardManager.playerUnits.Contains(spawn))
+            if (BoardManager.playerUnits.Contains(unit))
             {
-                BoardManager.playerUnits.Remove(spawn);
+                BoardManager.playerUnits.Remove(unit);
                 BoardHighlights.Instance.Hidehighlights();
             }
-            Destroy(spawn);
+            BoardManager.Units[unit.GetComponent<PlayerUnit>().CurrentX, unit.GetComponent<PlayerUnit>().CurrentY] = null;
+            isDead = true;
+            foreach (Component child in unit.GetComponents<Component>())
+            {
+                if(child.GetType() != this.GetType() && child.GetType() != typeof(UnityEngine.Transform))
+                {
+                    try { Destroy(child); } catch { }
+                }
+            }
         }
+
     }
 
     private void SetHealthUI()
