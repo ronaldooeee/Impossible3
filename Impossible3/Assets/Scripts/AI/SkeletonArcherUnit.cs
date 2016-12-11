@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GoblinArcherUnit : Unit
+public class SkeletonArcherUnit : Unit
 {
 	List<GameObject> playerUnits;
 	PlayerUnit enemyUnit;

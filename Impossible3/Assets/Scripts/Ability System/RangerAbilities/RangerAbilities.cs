@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class RangerAbilities : Abilities
 {
@@ -122,6 +124,25 @@ public class RangerAbilities : Abilities
 		}
     }
 
+	public void TripleShot(Unit selectedUnit, Unit selectedTarget)
+	{
+		selectedUnit.SetAttackCooldown (7.0f);
+		selectedUnit.SetDamage (25);
+		List<GameObject> enemyGOs = BoardManager.enemyUnits;
+		Shuffle (enemyGOs);
+
+		if (selectedUnit.timeStampAttack <= Time.time) {
+			foreach (GameObject enemy in enemyGOs) {
+				Unit enemyUnit = (Unit)enemy.GetComponent (typeof(Unit));
+				if (spellCounter < 3) {
+					BoardManager.Instance.AttackTarget (enemyUnit, damage, selectedUnit.cooldownAttackSeconds);
+					Debug.Log (enemyUnit);
+					spellCounter++;
+				}
+			}
+		}
+	}
+
     public override void Ability1(Unit selectedUnit, Unit selectedTarget)
     {
         if (BoardManager.Instance.selectedAbility == 1)
@@ -182,5 +203,25 @@ public class RangerAbilities : Abilities
         }
     }
 
-    public override void Ability6(Unit selectedUnit, Unit selectedTarget) { }
+    public override void Ability6(Unit selectedUnit, Unit selectedTarget) {
+		if (BoardManager.Instance.selectedAbility == 6) {
+			TripleShot (selectedUnit, selectedTarget);
+		} else {
+			OverlaySelect (selectedUnit, 1, 6, 4, 5);
+		}
+	}
+
+	public void Shuffle(List<GameObject> list)
+	{
+		//UnityEngine.Random rng = new UnityEngine.Random();
+		int n = list.Count;
+		while (n > 1)
+		{
+			n--;
+			int k = (int)UnityEngine.Random.Range(0, n + 1);
+			GameObject old = list[k];
+			list[k] = list[n];
+			list[n] = old;
+		}
+	}
 }

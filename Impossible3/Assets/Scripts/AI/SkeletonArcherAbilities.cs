@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GoblinArcherAbilities : Abilities
+public class SkeletonArcherAbilities : Abilities
 {
 
 	public int x;
