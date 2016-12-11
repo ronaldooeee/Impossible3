@@ -6,11 +6,11 @@ public class PauseMenu : MonoBehaviour
 {
     public Transform pauseMenu, pSettingsMenu, pExitMenu, pAudioMenu, pGraphicMenu;
 
-    public void QuitGame()
+    public void LoadScene()
     {
-        Application.Quit();
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
-    // Update is called once per frame
+        // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
