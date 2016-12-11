@@ -17,15 +17,14 @@ public class PauseMenu : MonoBehaviour
         {
             if (Time.timeScale == 1)
             {
-                Time.timeScale = 0;
                 pauseMenu.gameObject.SetActive(true);
+                Time.timeScale = 0;
             }
-            if (Time.timeScale == 0)
+            else
             {
                 Time.timeScale = 1;
                 pauseMenu.gameObject.SetActive(false);
             }
-
         }
 
     }
