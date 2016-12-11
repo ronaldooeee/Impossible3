@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
-public class PlayerUnit : Unit 
+public class PlayerUnit : Unit
 {
     //Make another pubilic override bool called PossibleAttack, with 2 sets of if statements
     //One to check if ranged attack, another to see if melee with checking surrounding spots
@@ -11,19 +12,11 @@ public class PlayerUnit : Unit
     //In BoardManager do a deal damage function, which gets attack power of 1st GameObject and subtracts that from health of 2nd/target GameObject
     //If health <= 0 then destroy GameObject
 
-    public int straightMoveRange;
-    public int diagMoveRange;
-    public int circMoveRange;
-
-    public int straightAttackRange;
-    public int diagAttackRange;
-    public int circAttackRange;
-
     //this variable isnt used but it's references elsewhere so i cant remove it
     public bool isRanged;
 
-    public override bool[,] PossibleMove (int currentXPos = -1, int currentYPos = -1 )
-	{
+    public override bool[,] PossibleMove(int currentXPos = -1, int currentYPos = -1)
+    {
         if (currentXPos == -1) { currentXPos = CurrentX; }
         if (currentYPos == -1) { currentYPos = CurrentY; }
         //I am become Flanders Destroyer of Code
@@ -39,18 +32,18 @@ public class PlayerUnit : Unit
         //BoardManager.Instance.Units[currentXPos,currentYPos]
 
         //Current selection
-        //currentXPos
-        //currentYPos
+        //Debug.Log(currentXPos + " " + currentYPos);
+        //Debug.Log(CurrentX + " " + CurrentY);
 
         bool[,] isAcceptedMove = new bool[BoardManager.mapSize, BoardManager.mapSize];
 
-        for(int i =1; i <= straightMoveRange; i++)
+        for (int i = 1; i <= straightMoveRange; i++)
         {
-            foreach (List<int> pair in new List<List<int>>{ new List<int>{currentXPos,currentYPos+i },new List<int> { currentXPos+i,currentYPos },new List<int> {currentXPos,currentYPos-i },new List<int> {currentXPos-i,currentYPos } })
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos, currentYPos + i }, new List<int> { currentXPos + i, currentYPos }, new List<int> { currentXPos, currentYPos - i }, new List<int> { currentXPos - i, currentYPos } })
             {
                 int x = pair[0];
                 int y = pair[1];
-                if(x< BoardManager.mapSize && y< BoardManager.mapSize && x>=0 && y>=0)
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
                 {
                     if (BoardManager.Units[x, y] == null)
                     {
@@ -62,7 +55,7 @@ public class PlayerUnit : Unit
 
         for (int i = 1; i <= diagMoveRange; i++)
         {
-            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos+i, currentYPos + i }, new List<int> { currentXPos + i, currentYPos-i }, new List<int> { currentXPos-i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos+i } })
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos + i, currentYPos + i }, new List<int> { currentXPos + i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos + i } })
             {
                 int x = pair[0];
                 int y = pair[1];
@@ -86,16 +79,19 @@ public class PlayerUnit : Unit
                 {
                     if (BoardManager.Units[x, y] == null)
                     {
-                        isAcceptedMove[x, y] = true;
+                        if ((x != currentXPos + circMoveRange && x != currentXPos - circMoveRange) || (y != currentYPos + circMoveRange && y != currentYPos - circMoveRange))
+                        {
+                            isAcceptedMove[x, y] = true;
+                        }
                     }
                 }
             }
         }
         return isAcceptedMove;
-        
-	}
 
-	public override bool[,] PossibleAttack(int currentXPos = -1, int currentYPos = -1)
+    }
+
+    public override bool[,] PossibleAttack(int currentXPos = -1, int currentYPos = -1)
     {
         if (currentXPos == -1) { currentXPos = CurrentX; }
         if (currentYPos == -1) { currentYPos = CurrentY; }
@@ -109,7 +105,7 @@ public class PlayerUnit : Unit
                 int y = pair[1];
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
                 {
-                    if (BoardManager.Units[x, y] == null || this.isPlayer!= BoardManager.Units[x, y].isPlayer)
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
                     {
                         isAcceptedAttack[x, y] = true;
                     }
@@ -125,7 +121,7 @@ public class PlayerUnit : Unit
                 int y = pair[1];
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
                 {
-                    if (BoardManager.Units[x, y] == null || this.isPlayer != BoardManager.Units[x, y].isPlayer)
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
                     {
                         isAcceptedAttack[x, y] = true;
                     }
@@ -141,9 +137,12 @@ public class PlayerUnit : Unit
                 int y = currentYPos + j;
                 if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedAttack[x, y] != true)
                 {
-                    if (BoardManager.Units[x, y] == null || this.isPlayer != BoardManager.Units[x, y].isPlayer)
+                    if ((x != currentXPos + circAttackRange && x != currentXPos - circAttackRange) || (y != currentYPos + circAttackRange && y != currentYPos - circAttackRange))
                     {
-                        isAcceptedAttack[x, y] = true;
+                        if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                        {
+                            isAcceptedAttack[x, y] = true;
+                        }
                     }
                 }
             }
@@ -152,5 +151,68 @@ public class PlayerUnit : Unit
         return isAcceptedAttack;
     }
 
+
+    public override bool[,] PossibleAbility(int currentXPos = -1, int currentYPos = -1)
+    {
+        if (currentXPos == -1) { currentXPos = CurrentX; }
+        if (currentYPos == -1) { currentYPos = CurrentY; }
+        bool[,] isAcceptedAbility = new bool[BoardManager.mapSize, BoardManager.mapSize];
+
+        for (int i = 1; i <= straightAttackRange; i++)
+        {
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos, currentYPos + i }, new List<int> { currentXPos + i, currentYPos }, new List<int> { currentXPos, currentYPos - i }, new List<int> { currentXPos - i, currentYPos } })
+            {
+                int x = pair[0];
+                int y = pair[1];
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
+                {
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer == BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                    {
+                        isAcceptedAbility[x, y] = true;
+                    }
+                }
+            }
+        }
+
+        for (int i = 1; i <= diagAttackRange; i++)
+        {
+            foreach (List<int> pair in new List<List<int>> { new List<int> { currentXPos + i, currentYPos + i }, new List<int> { currentXPos + i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos - i }, new List<int> { currentXPos - i, currentYPos + i } })
+            {
+                int x = pair[0];
+                int y = pair[1];
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0)
+                {
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer == BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                    {
+                        isAcceptedAbility[x, y] = true;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0 - circAttackRange; i <= circAttackRange; i++)
+        {
+            int x = currentXPos + i;
+            for (int j = 0 - circAttackRange; j <= circAttackRange; j++)
+            {
+                int y = currentYPos + j;
+                if (x < BoardManager.mapSize && y < BoardManager.mapSize && x >= 0 && y >= 0 && isAcceptedAbility[x, y] != true)
+                {
+                    if (BoardManager.Units[x, y] == null || (this.isPlayer == BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                    {
+                        if ((x != currentXPos + circAttackRange && x != currentXPos - circAttackRange) || (y != currentYPos + circAttackRange && y != currentYPos - circAttackRange))
+                        {
+                            if (BoardManager.Units[x, y] == null || (this.isPlayer != BoardManager.Units[x, y].isPlayer && !BoardManager.Units[x, y].isObstacle))
+                            {
+                                isAcceptedAbility[x, y] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return isAcceptedAbility;
+    }
 
 }

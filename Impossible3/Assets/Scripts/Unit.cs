@@ -1,49 +1,86 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class Unit : MonoBehaviour {
-
+public class Unit : MonoBehaviour
+{
     public int CurrentX;
     public int CurrentY;
 
     public bool isPlayer = false;
+    public bool isObstacle = false;
 
-	public float cooldownMoveSeconds;
-	public float cooldownAttackSeconds;
-	public float timeStampMove = Time.time;
-	public float timeStampAttack = Time.time;
-
+    public int health = -1;
     public int damageAmount;
 
+    public float cooldownMoveSeconds;
+    public float cooldownAttackSeconds;
+    public float timeStampMove;
+    public float timeStampAttack;
+    public float spellTimer;
+
+    public int straightMoveRange;
+    public int diagMoveRange;
+    public int circMoveRange;
+
+    public int straightAttackRange;
+    public int diagAttackRange;
+    public int circAttackRange;
+
+    public int dodgeChance;
+    public int accuracy;
+
+    public int[] defaultAttackRanges;
+
+    private void Awake()
+    {
+        timeStampMove = Time.time;
+        timeStampAttack = Time.time;
+    }
+
     public void SetPosition(int x, int y)
-	{
-		CurrentX = x;
-		CurrentY = y;
-	}
-
-	public void SetMoveCooldown(float cdMove){
-		cooldownMoveSeconds = cdMove;
-	}
-
-	public void SetAttackCooldown(float cdAttack){
-		cooldownAttackSeconds = cdAttack;
-	}
-
-	public void SetDamage(int damage) {
-		damageAmount = damage;
-	}
-
-	public virtual bool[,] PossibleMove(int CurrentX = -1, int CurrentY = -1)
     {
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
-	}
+        CurrentX = x;
+        CurrentY = y;
+    }
 
-	public virtual bool[,] PossibleAttack(int CurrentX = -1, int CurrentY = -1)
+    public void ResetAttackRanges()
     {
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
-	}
-	public virtual bool[,] PossibleAbility(int CurrentX = -1, int CurrentY = -1)
-	{
-		return new bool[BoardManager.mapSize, BoardManager.mapSize];
-	}
+        this.straightAttackRange = defaultAttackRanges[0];
+        this.diagAttackRange = defaultAttackRanges[1];
+        this.circAttackRange = defaultAttackRanges[2];
+    }
+
+    public void SetMoveCooldown(float cdMove)
+    {
+        cooldownMoveSeconds = cdMove;
+    }
+
+    public void SetAttackCooldown(float cdAttack)
+    {
+        cooldownAttackSeconds = cdAttack;
+    }
+
+    public void SetDamage(int damage)
+    {
+        damageAmount = damage;
+    }
+
+    public void SetDodgeChance(int dodgeNew)
+    {
+        dodgeChance = dodgeNew;
+    }
+
+    public virtual bool[,] PossibleMove(int CurrentX = -1, int CurrentY = -1)
+    {
+        return new bool[BoardManager.mapSize, BoardManager.mapSize];
+    }
+
+    public virtual bool[,] PossibleAttack(int CurrentX = -1, int CurrentY = -1)
+    {
+        return new bool[BoardManager.mapSize, BoardManager.mapSize];
+    }
+    public virtual bool[,] PossibleAbility(int CurrentX = -1, int CurrentY = -1)
+    {
+        return new bool[BoardManager.mapSize, BoardManager.mapSize];
+    }
 }
