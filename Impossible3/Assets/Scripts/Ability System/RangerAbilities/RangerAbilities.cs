@@ -58,8 +58,6 @@ public class RangerAbilities : Abilities
 
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
-		Debug.Log (selectedUnit);
-		Debug.Log (selectedTarget);
         selectedUnit.SetAttackCooldown(2.0f);
 		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
     }

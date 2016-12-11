@@ -56,7 +56,7 @@ public class BoardManager : MonoBehaviour
         SpawnMapTiles();
         ColorMapTiles();
         SpawnWalls();
-        SpawnObstacles();
+        SpawnAllObstacles(20);
 
         this.useGUILayout = true;
     }
@@ -64,13 +64,16 @@ public class BoardManager : MonoBehaviour
     // Update world to show changes
     private void Update()
     {
-        /*while (enemyUnits.Count < quota)
+        while (enemyUnits.Count < quota)
         {
-            Coordinate bound = findBound();
-            SpawnUnit(random.Next(6, 10), bound.x + random.Next(6, 10), bound.y + random.Next(6, 10));
-
-            //SpawnUnit(random.Next(6, 10),  random.Next(6, 10), random.Next(6, 10));
-        }*/
+            int Spawndistance = 6;
+            Coordinate[] bound = findBound();
+            bound[0].x = bound[0].x - Spawndistance >= 0 ? bound[0].x - Spawndistance : bound[0].x;
+            bound[0].y = bound[0].y - Spawndistance >= 0 ? bound[0].y - Spawndistance : bound[0].y;
+            bound[1].x = bound[1].x + Spawndistance < mapSize ? bound[1].x + Spawndistance : bound[1].x;
+            bound[1].y = bound[1].y + Spawndistance < mapSize ? bound[1].y + Spawndistance : bound[1].y;
+            SpawnUnit(random.Next(6, 10), random.Next((bound[0].x), bound[1].x),  random.Next(bound[0].y, bound[1].y));
+        }
 
         //Let player know of new abilities
         tellScore(score);
@@ -107,8 +110,8 @@ public class BoardManager : MonoBehaviour
                     else
                     {
                         BoardHighlights.Instance.Hidehighlights();
-                        //selectedTarget = null;
-                        //selectedUnit = null;
+                        selectedTarget = null;
+                        selectedUnit = null;
                     }
                 }
             }
@@ -373,26 +376,28 @@ public class BoardManager : MonoBehaviour
     //Spawns whatever unit is in the index of prefabs on BoardManager.cs
     private void SpawnUnit(int unit, int x, int y)
     {
-        int index = unit - 3 >= 0 ? unit - 3 : 0;
-        GameObject go = Instantiate(unitPrefabs[unit], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
-        Sprite[] spriteArray = new Sprite[] {
+        if (Units[x, y] == null) {
+            int index = unit - 3 >= 0 ? unit - 3 : 0;
+            GameObject go = Instantiate(unitPrefabs[unit], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
+            Sprite[] spriteArray = new Sprite[] {
             Resources.Load<Sprite>("knight"), Resources.Load<Sprite>("mage1"), Resources.Load<Sprite>("archer1"),
-			Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("Skeleton_Knight"), Resources.Load<Sprite>("Skeleton_Spear"),Resources.Load<Sprite>("Kaboocha"),Resources.Load<Sprite>("Skeleton_Archer") };
-        RuntimeAnimatorController[] animationArray = { null, null, null, null, Resources.Load<RuntimeAnimatorController>("Skeleton_Knight"), Resources.Load<RuntimeAnimatorController>("Skeleton_Spear"), null, null };
-        go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
-        if (animationArray[index] != null) { go.GetComponent<Animator>().runtimeAnimatorController = animationArray[index]; }
-        go.transform.rotation = Camera.main.transform.rotation;
-        go.transform.localScale = new Vector3(2, 2, 1);
-        Units[x, y] = go.GetComponent<Unit>();
-        Units[x, y].SetPosition(x, y);
-        //Debug.Log(x + " " + y);
-        if (unit == 0 || unit == 4 || unit == 5)
-        {
-            playerUnits.Add(go);
-        }
-        else
-        {
-            enemyUnits.Add(go);
+            Resources.Load<Sprite>("golem"), Resources.Load<Sprite>("Skeleton_Knight"), Resources.Load<Sprite>("Skeleton_Spear"),Resources.Load<Sprite>("Kaboocha"),Resources.Load<Sprite>("Skeleton_Archer") };
+            RuntimeAnimatorController[] animationArray = { null, null, null, null, Resources.Load<RuntimeAnimatorController>("Skeleton_Knight"), Resources.Load<RuntimeAnimatorController>("Skeleton_Spear"), null, null };
+            go.GetComponent<SpriteRenderer>().sprite = spriteArray[index];
+            if (animationArray[index] != null) { go.GetComponent<Animator>().runtimeAnimatorController = animationArray[index]; }
+            go.transform.rotation = Camera.main.transform.rotation;
+            go.transform.localScale = new Vector3(2, 2, 1);
+            Units[x, y] = go.GetComponent<Unit>();
+            Units[x, y].SetPosition(x, y);
+            //Debug.Log(x + " " + y);
+            if (unit == 0 || unit == 4 || unit == 5)
+            {
+                playerUnits.Add(go);
+            }
+            else
+            {
+                enemyUnits.Add(go);
+            }
         }
     }
 
@@ -421,15 +426,21 @@ public class BoardManager : MonoBehaviour
         wall2.GetComponent<Renderer>().material.mainTexture = walltex;
     }
 
-    private void SpawnObstacles()
+    private void SpawnAllObstacles(int count)
     {
-        int x = 6;
-        int y = 6;
+        for (int i = 0; i < count; i++)
+        {
+            SpawnObstacle(random.Next(0, mapSize), random.Next(0, mapSize), "boulder");
+        }
+    }
+
+    private void SpawnObstacle(int x, int y, string sprite)
+    {
         GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
         Vector3 temp = new Vector3(0, 0.5f, 0);
         cube.transform.position += temp;
         cube.transform.rotation = Camera.main.transform.rotation;
-        cube.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("boulder");
+        cube.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
         cube.transform.localScale = new Vector3(2, 2, 1);
         Units[x, y] = cube.GetComponent<Unit>();
         Units[x, y].SetPosition(x, y);
@@ -448,6 +459,7 @@ public class BoardManager : MonoBehaviour
         SpawnUnit(5, 6, 0);
 
         //Spawn Enemy Units (PrefabList #, x value, y value)
+        /*
         SpawnUnit (7, 3, 3);
         SpawnUnit (7, 3, 4);
         SpawnUnit (7, 4, 4);
@@ -457,6 +469,7 @@ public class BoardManager : MonoBehaviour
         SpawnUnit (7, 2, 2);
         SpawnUnit (7, 2, 3);
         SpawnUnit (7, 2, 4);
+        */
 
     }
 
@@ -549,10 +562,12 @@ public class BoardManager : MonoBehaviour
         return origin;
     }
 
-    private Coordinate findBound()
+    private Coordinate[] findBound()
     {
         int xMax = -1;
         int yMax = -1;
+        int xMin = 100;
+        int yMin = 100;
         foreach (GameObject player in playerUnits)
         {
             if (player.transform.position.x > xMax)
@@ -564,8 +579,17 @@ public class BoardManager : MonoBehaviour
             {
                 yMax = (int)player.transform.position.y;
             }
+            if (player.transform.position.x <xMin)
+            {
+                xMin = (int)player.transform.position.x;
+            }
+
+            if (player.transform.position.y < yMin)
+            {
+                yMin = (int)player.transform.position.y;
+            }
         }
-        return new Coordinate(xMax, yMax);
+        return new Coordinate[] {new Coordinate(xMin, yMin), new Coordinate(xMax, yMax) };
     }
 
     private void tellScore(int score)
