@@ -56,7 +56,7 @@ public class BoardManager : MonoBehaviour
         SpawnMapTiles();
         ColorMapTiles();
         SpawnWalls();
-        SpawnAllObstacles(20);
+        SpawnAllObstacles(1);
 
         this.useGUILayout = true;
     }
@@ -66,12 +66,12 @@ public class BoardManager : MonoBehaviour
     {
         while (enemyUnits.Count < quota)
         {
-            int Spawndistance = 6;
+            int Spawndistance = 3;
             Coordinate[] bound = findBound();
-            bound[0].x = bound[0].x - Spawndistance >= 0 ? bound[0].x - Spawndistance : bound[0].x;
-            bound[0].y = bound[0].y - Spawndistance >= 0 ? bound[0].y - Spawndistance : bound[0].y;
-            bound[1].x = bound[1].x + Spawndistance < mapSize ? bound[1].x + Spawndistance : bound[1].x;
-            bound[1].y = bound[1].y + Spawndistance < mapSize ? bound[1].y + Spawndistance : bound[1].y;
+            //bound[0].x = bound[0].x - Spawndistance >= 0 ? bound[0].x - Spawndistance : bound[0].x;
+            //bound[0].y = bound[0].y - Spawndistance >= 0 ? bound[0].y - Spawndistance : bound[0].y;
+            //bound[1].x = bound[1].x + Spawndistance < mapSize ? bound[1].x + Spawndistance : bound[1].x;
+            //bound[1].y = bound[1].y + Spawndistance < mapSize ? bound[1].y + Spawndistance : bound[1].y;
             SpawnUnit(random.Next(6, 10), random.Next((bound[0].x), bound[1].x),  random.Next(bound[0].y, bound[1].y));
         }
 
@@ -89,13 +89,15 @@ public class BoardManager : MonoBehaviour
         //Measure when right mouse button is clicked for Movement
         if (Input.GetMouseButtonDown(1))
         {
+            Debug.Log(selectionX + " " + selectionY);
             //Make sure x and y value is on the board
             if (selectionX >= 0 && selectionY >= 0)
             {
-
+                Debug.Log("8");
                 // If you click on a unit, select that unit
                 if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
+                    Debug.Log("4");
                     BoardHighlights.Instance.Hidehighlights();
                     selectedTarget = null;
                     selectedUnit = null;
@@ -103,12 +105,15 @@ public class BoardManager : MonoBehaviour
                 }
                 else if (selectedUnit != null)
                 {
-                    if (allowedMoves[selectionX, selectionY])
+                    if (allowedMoves != null && allowedMoves[selectionX, selectionY])
                     {
+                        Debug.Log("5");
                         MoveUnit(selectionX, selectionY);
                     }
+
                     else
                     {
+                        Debug.Log("6");
                         BoardHighlights.Instance.Hidehighlights();
                         selectedTarget = null;
                         selectedUnit = null;
@@ -126,20 +131,26 @@ public class BoardManager : MonoBehaviour
                 //If you click on a player bring up the attack UI
                 if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
+                    Debug.Log("1");             
                     BoardHighlights.Instance.Hidehighlights();
                     selectedTarget = null;
                     selectedUnit = null;
                     SelectUnitForAttack(selectionX, selectionY);
-					selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges();
+                    selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges();
                     selectedAbility = 0;
                 }else if (Units[selectionX, selectionY] == null)
                 {
+                    Debug.Log("2");
+                    try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
+                    
+                    selectedAbility = 0;
                     BoardHighlights.Instance.Hidehighlights();
                     selectedTarget = null;
                     selectedUnit = null;
                 }
                 else if (selectedUnit != null)
                 {
+                    Debug.Log("3");
                     //int damage = Units[selectionX, selectionY].damageAmount;
 
                     if (allowedAttacks[selectionX, selectionY])
@@ -263,7 +274,7 @@ public class BoardManager : MonoBehaviour
         // Measures where mouse is hitting from Camera Perspective, puts it in the out parameter to use later, only extends 50 units,
         // and will only hit things on the "BoardPlane" Layer
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50.0f, LayerMask.GetMask("BoardPlane")))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100.0f, LayerMask.GetMask("BoardPlane")))
         {
             selectionX = (int)hit.point.x;
             selectionY = (int)hit.point.z;
@@ -445,15 +456,17 @@ public class BoardManager : MonoBehaviour
 
     public void SpawnObstacle(int x, int y, string sprite)
     {
-        GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
-        Vector3 temp = new Vector3(0, 0.5f, 0);
-        cube.transform.position += temp;
-        cube.transform.rotation = Camera.main.transform.rotation;
-        cube.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
-        cube.transform.localScale = new Vector3(2, 2, 1);
-        Units[x, y] = cube.GetComponent<Unit>();
-        Units[x, y].SetPosition(x, y);
-
+        if (Units[x, y] != null)
+        {
+            GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
+            Vector3 temp = new Vector3(0, 0.5f, 0);
+            cube.transform.position += temp;
+            cube.transform.rotation = Camera.main.transform.rotation;
+            cube.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
+            cube.transform.localScale = new Vector3(2, 2, 1);
+            Units[x, y] = cube.GetComponent<Unit>();
+            Units[x, y].SetPosition(x, y);
+        }
     }
 
     private void SpawnAllUnits()
@@ -500,7 +513,6 @@ public class BoardManager : MonoBehaviour
             {
                 SpawnEnvironment(2, i, j);
             }
-
         }
     }
 

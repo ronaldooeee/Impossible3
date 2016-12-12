@@ -19,8 +19,6 @@ public class PlayerUnit : Unit
     {
         if (currentXPos == -1) { currentXPos = CurrentX; }
         if (currentYPos == -1) { currentYPos = CurrentY; }
-        //I am become Flanders Destroyer of Code
-        //I am become Code Destroyer of Flanders
 
         //Tile boundries are (0,0),(0,mapsize),(mapsize,0)&(mapsize,mapsize)
         //BoardManager.mapSize

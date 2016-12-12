@@ -75,8 +75,8 @@ public class HealthSystem : MonoBehaviour
                 BoardManager.playerUnits.Remove(unit);
                 BoardHighlights.Instance.Hidehighlights();
                 //Drop a Grave
-                Transform pos = unit.GetComponent<Transform>();
-                BoardManager.Instance.SpawnObstacle(Convert.ToInt32(pos.transform.position.x - 0.5), Convert.ToInt32(pos.transform.position.z - 0.5), "grave");
+                PlayerUnit pos = unit.GetComponent<PlayerUnit>();
+                BoardManager.Instance.SpawnObstacle(pos.CurrentX, pos.CurrentY, "grave");
             }
             BoardManager.Units[unit.GetComponent<PlayerUnit>().CurrentX, unit.GetComponent<PlayerUnit>().CurrentY] = null;
             isDead = true;
@@ -84,7 +84,7 @@ public class HealthSystem : MonoBehaviour
             {
                 if(child.GetType() != this.GetType() && child.GetType() != typeof(UnityEngine.Transform))
                 {
-                    try { Destroy(child); } catch { }
+                    Destroy(child);
                 }
             }
         }
