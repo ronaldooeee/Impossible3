@@ -107,6 +107,12 @@ public class BoardManager : MonoBehaviour
                     {
                         MoveUnit(selectionX, selectionY);
                     }
+                    else
+                    {
+                        BoardHighlights.Instance.Hidehighlights();
+                        selectedTarget = null;
+                        selectedUnit = null;
+                    }
                 }
             }
         }
@@ -126,6 +132,11 @@ public class BoardManager : MonoBehaviour
                     SelectUnitForAttack(selectionX, selectionY);
 					selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges();
                     selectedAbility = 0;
+                }else if (Units[selectionX, selectionY] == null)
+                {
+                    BoardHighlights.Instance.Hidehighlights();
+                    selectedTarget = null;
+                    selectedUnit = null;
                 }
                 else if (selectedUnit != null)
                 {
