@@ -11,6 +11,8 @@ public class BoardHighlights : MonoBehaviour
 	public GameObject attackHighlightPrefab;
     public GameObject abilityHighlightPrefab;
     private List<GameObject> highlights;
+    
+    public static bool castOnSelfAndParty = false;
 
 	//Instantiate highlights
 	private void Start()
@@ -71,7 +73,9 @@ public class BoardHighlights : MonoBehaviour
 				}
 			}
 		}
-	}
+        castOnSelfAndParty = false;
+
+    }
 
 	private GameObject GetAttackHighlightObject() 
 	{
@@ -94,7 +98,9 @@ public class BoardHighlights : MonoBehaviour
 				}
 			}
 		}
-	}
+        castOnSelfAndParty = false;
+
+    }
 
     private GameObject GetAbilityHighlightObject()
     {
@@ -117,6 +123,7 @@ public class BoardHighlights : MonoBehaviour
                 }
             }
         }
+        castOnSelfAndParty = true;
     }
 
     public void Hidehighlights()

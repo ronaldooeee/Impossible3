@@ -5,9 +5,9 @@ using System.Collections.Generic;
 public class BoardManager : MonoBehaviour
 {
     public static BoardManager Instance { set; get; }
-    private bool[,] allowedMoves { set; get; }
-    private bool[,] allowedAttacks { set; get; }
-    private bool[,] allowedAbilities { set; get; }
+    public bool[,] allowedMoves { set; get; }
+    public bool[,] allowedAttacks { set; get; }
+    public bool[,] allowedAbilities { set; get; }
 
     public static Unit[,] Units { set; get; }
     public Unit selectedUnit;
@@ -51,6 +51,10 @@ public class BoardManager : MonoBehaviour
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
         Instance = this;
+
+        allowedMoves = new bool[mapSize, mapSize];
+        allowedAttacks = new bool[mapSize, mapSize];
+        allowedAbilities = new bool[mapSize, mapSize];
 
         SpawnAllUnits();
         SpawnMapTiles();
@@ -127,8 +131,8 @@ public class BoardManager : MonoBehaviour
             {
                 //Clear existing movement higlights
                 //If you click on a player bring up the attack UI
-                if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
-                {            
+                if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer && (!BoardHighlights.castOnSelfAndParty || selectedUnit == null))
+                {
                     BoardHighlights.Instance.Hidehighlights();
                     selectedTarget = null;
                     selectedUnit = null;
@@ -145,9 +149,8 @@ public class BoardManager : MonoBehaviour
                 }
                 else if (selectedUnit != null)
                 {
-                    //int damage = Units[selectionX, selectionY].damageAmount;
-
-                    if (allowedAttacks[selectionX, selectionY])
+                    //Debug.Log(selectedAbility);
+                    if (allowedAttacks[selectionX, selectionY] ||( BoardHighlights.castOnSelfAndParty && allowedAbilities[selectionX,selectionY]))
                     {
 						SelectTarget (selectionX, selectionY);
                         if (selectedAbility == 0)
@@ -336,7 +339,7 @@ public class BoardManager : MonoBehaviour
 		selectedTarget = Units [x, y];
 	}
 
-	public void AttackTarget(Unit selectedTarget, int damage, float cooldownAttackSeconds)
+	public void AttackTarget(Unit selectedTarget, int damage)
     {
         unitAccuracy = selectedUnit.accuracy;
         //Debug.Log (unitAccuracy);
@@ -348,14 +351,14 @@ public class BoardManager : MonoBehaviour
                 GameObject enemy = selectedTarget.gameObject;
                 HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
                 health.takeDamageAndDie(damage);
-                selectedUnit.timeStampAttack = Time.time + cooldownAttackSeconds;
+                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
             }
             else
             {
                 HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
                 health.ConfirmHit(null);
                 Debug.Log("Player Missed!");
-                selectedUnit.timeStampAttack = Time.time + cooldownAttackSeconds;
+                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
             }
         }
         else if (selectedUnit.timeStampAttack > Time.time)
@@ -369,14 +372,15 @@ public class BoardManager : MonoBehaviour
         selectedUnit = null;
     }
 
-	public void BuffTarget(Unit selectedTarget, int buff, float cooldownAttackSeconds)
+
+	public void BuffTarget(Unit selectedTarget, int buff)
     {
         //selectedTarget = Units[x, y];
         if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer == selectedUnit.isPlayer)
         {
             GameObject ally = selectedTarget.gameObject;
-            int health = ally.GetComponent<PlayerUnit>().health;
-            health = health + buff;
+            HealthSystem health = (HealthSystem)ally.GetComponent(typeof(HealthSystem));
+            health.takeDamageAndDie(0-buff);
             selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         else

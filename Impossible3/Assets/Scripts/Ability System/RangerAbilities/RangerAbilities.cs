@@ -59,14 +59,14 @@ public class RangerAbilities : Abilities
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
         selectedUnit.SetAttackCooldown(2.0f);
-		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget(selectedTarget, damage);
     }
 
     public void BackStab(Unit selectedUnit, Unit selectedTarget)
     {
         selectedUnit.SetAttackCooldown(4.0f);
         damage = 3 * damage;
-		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget(selectedTarget, damage);
     }
 
     public void BlackBombArrow(Unit selectedUnit, Unit selectedTarget)
@@ -75,17 +75,17 @@ public class RangerAbilities : Abilities
         selectedUnit.accuracy = 130;
         if (selectedUnit.timeStampAttack <= Time.time)
         {
-            BoardManager.Instance.AttackTarget(selectedTarget, damage, 0);
+            BoardManager.Instance.AttackTarget(selectedTarget, damage);
             //Debug.Log ("First Hit");
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x, y + 1], damage, 0);
+			BoardManager.Instance.AttackTarget(BoardManager.Units[x, y + 1], damage);
             //Debug.Log ("Second Hit");
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y + 1], damage, 0);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y], damage, 0);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y - 1], damage, 0);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x, y - 1], damage, 0);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y - 1], damage, 0);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y], damage, 0);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y + 1], damage, 0);
+			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y + 1], damage);
+			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y], damage);
+			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y - 1], damage);
+			BoardManager.Instance.AttackTarget(BoardManager.Units[x, y - 1], damage);
+			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y - 1], damage);
+			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y], damage);
+			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y + 1], damage);
             selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         selectedUnit.accuracy = 90;
@@ -95,7 +95,7 @@ public class RangerAbilities : Abilities
     {
         selectedUnit.SetAttackCooldown(6.0f);
         damage = damage + (damage / 2);
-        BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
+        BoardManager.Instance.AttackTarget(selectedTarget, damage);
     }
 		
     public void ShadowStep(Unit selectedUnit, Unit selectedTarget)
@@ -116,7 +116,7 @@ public class RangerAbilities : Abilities
         selectedUnit.SetAttackCooldown (7.0f);
 		selectedUnit.SetDamage (20);
 		if (selectedUnit.timeStampAttack <= Time.time) {
-			BoardManager.Instance.AttackTarget (selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
+			BoardManager.Instance.AttackTarget (selectedTarget, damage);
 			selectedTarget.timeStampAttack += 10;
 			selectedTarget.timeStampMove += 10;
 		}
@@ -133,7 +133,7 @@ public class RangerAbilities : Abilities
 			foreach (GameObject enemy in enemyGOs) {
 				Unit enemyUnit = (Unit)enemy.GetComponent (typeof(Unit));
 				if (spellCounter < 3) {
-					BoardManager.Instance.AttackTarget (enemyUnit, damage, selectedUnit.cooldownAttackSeconds);
+					BoardManager.Instance.AttackTarget (enemyUnit, damage);
 					Debug.Log (enemyUnit);
 					spellCounter++;
 				}

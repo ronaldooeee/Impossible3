@@ -39,9 +39,7 @@ public class SkeletonArcherAbilities : Abilities
 	}
 
 	public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
-	{
-		selectedUnit.SetAttackCooldown(4.0f);
-		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
+    {
 	}
 
 	public override void Ability1(Unit selectedUnit, Unit selectedTarget) { }
