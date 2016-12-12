@@ -450,17 +450,17 @@ public class BoardManager : MonoBehaviour
         Units = new Unit[mapSize, mapSize];
         //Spawn Player Units (PrefabList #,  x location, y location)
         //Knight Stats
-        SpawnUnit(0, 2, 0);
+        SpawnUnit(0, 5, 22);
         //Mage Stats
-        SpawnUnit(4, 4, 0);
+        SpawnUnit(4, 7, 20);
         //Archer Stats
-        SpawnUnit(5, 6, 0);
+        SpawnUnit(5, 8, 22);
 
         //Spawn Enemy Units (PrefabList #, x value, y value)
-        /*
-        SpawnUnit (7, 3, 3);
-        SpawnUnit (7, 3, 4);
-        SpawnUnit (7, 4, 4);
+        
+        SpawnUnit (7, 10, 25);
+        SpawnUnit (7, 11, 26);
+        /*SpawnUnit (7, 4, 4);
         SpawnUnit (7, 4, 3);
         SpawnUnit (7, 4, 2);
         SpawnUnit (7, 3, 2);
