@@ -68,10 +68,10 @@ public class BoardManager : MonoBehaviour
         {
             int Spawndistance = 3;
             Coordinate[] bound = findBound();
-            //bound[0].x = bound[0].x - Spawndistance >= 0 ? bound[0].x - Spawndistance : bound[0].x;
-            //bound[0].y = bound[0].y - Spawndistance >= 0 ? bound[0].y - Spawndistance : bound[0].y;
-            //bound[1].x = bound[1].x + Spawndistance < mapSize ? bound[1].x + Spawndistance : bound[1].x;
-            //bound[1].y = bound[1].y + Spawndistance < mapSize ? bound[1].y + Spawndistance : bound[1].y;
+            bound[0].x = bound[0].x - Spawndistance >= 0 ? bound[0].x - Spawndistance : bound[0].x;
+            bound[0].y = bound[0].y - Spawndistance >= 0 ? bound[0].y - Spawndistance : bound[0].y;
+            bound[1].x = bound[1].x + Spawndistance < mapSize ? bound[1].x + Spawndistance : bound[1].x;
+            bound[1].y = bound[1].y + Spawndistance < mapSize ? bound[1].y + Spawndistance : bound[1].y;
             SpawnUnit(random.Next(6, 10), random.Next((bound[0].x), bound[1].x),  random.Next(bound[0].y, bound[1].y));
         }
 
@@ -89,15 +89,14 @@ public class BoardManager : MonoBehaviour
         //Measure when right mouse button is clicked for Movement
         if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log(selectionX + " " + selectionY);
             //Make sure x and y value is on the board
             if (selectionX >= 0 && selectionY >= 0)
             {
-                Debug.Log("8");
                 // If you click on a unit, select that unit
                 if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
-                    Debug.Log("4");
+                    try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
+                    selectedAbility = 0;
                     BoardHighlights.Instance.Hidehighlights();
                     selectedTarget = null;
                     selectedUnit = null;
@@ -107,13 +106,12 @@ public class BoardManager : MonoBehaviour
                 {
                     if (allowedMoves != null && allowedMoves[selectionX, selectionY])
                     {
-                        Debug.Log("5");
                         MoveUnit(selectionX, selectionY);
                     }
-
                     else
                     {
-                        Debug.Log("6");
+                        try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
+                        selectedAbility = 0;
                         BoardHighlights.Instance.Hidehighlights();
                         selectedTarget = null;
                         selectedUnit = null;
@@ -130,8 +128,7 @@ public class BoardManager : MonoBehaviour
                 //Clear existing movement higlights
                 //If you click on a player bring up the attack UI
                 if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
-                {
-                    Debug.Log("1");             
+                {            
                     BoardHighlights.Instance.Hidehighlights();
                     selectedTarget = null;
                     selectedUnit = null;
@@ -140,9 +137,7 @@ public class BoardManager : MonoBehaviour
                     selectedAbility = 0;
                 }else if (Units[selectionX, selectionY] == null)
                 {
-                    Debug.Log("2");
-                    try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
-                    
+                    try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }                    
                     selectedAbility = 0;
                     BoardHighlights.Instance.Hidehighlights();
                     selectedTarget = null;
@@ -150,7 +145,6 @@ public class BoardManager : MonoBehaviour
                 }
                 else if (selectedUnit != null)
                 {
-                    Debug.Log("3");
                     //int damage = Units[selectionX, selectionY].damageAmount;
 
                     if (allowedAttacks[selectionX, selectionY])
@@ -361,14 +355,16 @@ public class BoardManager : MonoBehaviour
                 HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
                 health.ConfirmHit(null);
                 Debug.Log("Player Missed!");
+                selectedUnit.timeStampAttack = Time.time + cooldownAttackSeconds;
             }
         }
         else if (selectedUnit.timeStampAttack > Time.time)
         {
             return;
         }
-        BoardHighlights.Instance.Hidehighlights();
+        try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
         selectedAbility = 0;
+        BoardHighlights.Instance.Hidehighlights();
         selectedTarget = null;
         selectedUnit = null;
     }
@@ -591,23 +587,24 @@ public class BoardManager : MonoBehaviour
         int yMin = 100;
         foreach (GameObject player in playerUnits)
         {
-            if (player.transform.position.x > xMax)
+            PlayerUnit unit = player.GetComponent<PlayerUnit>();
+            if (unit.CurrentX > xMax)
             {
-                xMax = (int)player.transform.position.x;
+                xMax = unit.CurrentX;
             }
 
-            if (player.transform.position.y > yMax)
+            if (unit.CurrentY > yMax)
             {
-                yMax = (int)player.transform.position.y;
+                yMax = unit.CurrentY;
             }
-            if (player.transform.position.x <xMin)
+            if (unit.CurrentX < xMin)
             {
-                xMin = (int)player.transform.position.x;
+                xMin = unit.CurrentX;
             }
 
-            if (player.transform.position.y < yMin)
+            if (unit.CurrentY < yMin)
             {
-                yMin = (int)player.transform.position.y;
+                yMin = unit.CurrentY;
             }
         }
         return new Coordinate[] {new Coordinate(xMin, yMin), new Coordinate(xMax, yMax) };

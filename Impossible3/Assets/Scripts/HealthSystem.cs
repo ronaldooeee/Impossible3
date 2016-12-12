@@ -77,6 +77,7 @@ public class HealthSystem : MonoBehaviour
                 //Drop a Grave
                 PlayerUnit pos = unit.GetComponent<PlayerUnit>();
                 BoardManager.Instance.SpawnObstacle(pos.CurrentX, pos.CurrentY, "grave");
+                BoardManager.Units[pos.CurrentX, pos.CurrentY].isObstacle = true;
             }
             BoardManager.Units[unit.GetComponent<PlayerUnit>().CurrentX, unit.GetComponent<PlayerUnit>().CurrentY] = null;
             isDead = true;
@@ -110,8 +111,7 @@ public class HealthSystem : MonoBehaviour
         if(damage == null)
         {
             hitText.GetComponent<TextMesh>().text = "Miss!";
-        }
-        
+        }        
         else if (Convert.ToInt32(damage) > 0)
         {
             hitText.GetComponent<TextMesh>().text = "-" + damage;

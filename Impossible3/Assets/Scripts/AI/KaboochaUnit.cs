@@ -96,13 +96,14 @@ public class KaboochaUnit : Unit
             if (allowedEnemyAttacks[closestPlayer.CurrentX, closestPlayer.CurrentY])
             {
                 //If yes then attack
-				targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range(0, 100);
+                HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
+                targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range(0, 100);
 				if (accuracy >= targetDodgeChance) {
-					HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
 					health.takeDamageAndDie (damage);
 				} else {
 					Debug.Log ("Kaboocha Missed!");
-				}
+                    health.ConfirmHit(null);
+                }
 				enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
 				return;
             }  

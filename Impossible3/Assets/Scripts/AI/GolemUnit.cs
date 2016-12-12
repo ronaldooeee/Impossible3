@@ -50,14 +50,15 @@ public class GolemUnit : Unit
 
             //Determine if player is in Attack distance
 			if (allowedEnemyAttacks [closestPlayer.CurrentX, closestPlayer.CurrentY]) {
-				//If yes then attack
-				targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range (0, 100);
+                //If yes then attack
+                HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
+                targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range (0, 100);
 				if (accuracy >= targetDodgeChance) {
-					HealthSystem health = (HealthSystem)BoardManager.Units [closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent (typeof(HealthSystem));
 					health.takeDamageAndDie(damage);
 				} else {
 					Debug.Log ("Golem Missed!");
-				}
+                    health.ConfirmHit(null);
+                }
 				enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
 				return;
 			}
