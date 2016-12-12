@@ -94,25 +94,18 @@ public class BoardManager : MonoBehaviour
             {
 
                 // If you click on a unit, select that unit
-                if (selectedUnit == null)
+                if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
+                    BoardHighlights.Instance.Hidehighlights();
+                    selectedTarget = null;
+                    selectedUnit = null;
                     SelectUnitForMove(selectionX, selectionY);
-
-                    //Or if theres is a unit selected, move it to that space
                 }
                 else if (selectedUnit != null)
                 {
                     if (allowedMoves[selectionX, selectionY])
                     {
                         MoveUnit(selectionX, selectionY);
-                    }
-                    else
-                    {
-                        BoardHighlights.Instance.Hidehighlights();
-                        selectedTarget = null;
-                        selectedUnit = null;
-                        SelectUnitForMove(selectionX, selectionY);
-
                     }
                 }
             }
@@ -127,6 +120,9 @@ public class BoardManager : MonoBehaviour
                 //If you click on a player bring up the attack UI
                 if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
+                    BoardHighlights.Instance.Hidehighlights();
+                    selectedTarget = null;
+                    selectedUnit = null;
                     SelectUnitForAttack(selectionX, selectionY);
 					selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges();
                     selectedAbility = 0;
@@ -190,13 +186,6 @@ public class BoardManager : MonoBehaviour
                             }
 
                         }
-                    }
-                    else
-                    {
-                        BoardHighlights.Instance.Hidehighlights();
-                        selectedTarget = null;
-                        selectedUnit = null;
-                        SelectUnitForAttack(selectionX, selectionY);
                     }
                 }
             }
@@ -289,6 +278,7 @@ public class BoardManager : MonoBehaviour
         allowedMoves = Units[x, y].PossibleMove();
         //Make Sure unit is selected
         selectedUnit = Units[x, y];
+        BoardHighlights.Instance.Hidehighlights();
         BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves);
     }
 
@@ -321,6 +311,7 @@ public class BoardManager : MonoBehaviour
     {
 		selectedUnit = Units[x, y];
         allowedAttacks = Units[x, y].PossibleAttack();
+        BoardHighlights.Instance.Hidehighlights();
         BoardHighlights.Instance.HighlightAllowedAttacks(allowedAttacks);
     }
 
