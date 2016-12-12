@@ -45,7 +45,6 @@ public class HealthSystem : MonoBehaviour
                 {
                     if (isDead)
                     {
-                        //BoardManager.Instance.SpawnObstacle();
                         Destroy(unit);                        
                     }else
                     {
@@ -75,6 +74,9 @@ public class HealthSystem : MonoBehaviour
             {
                 BoardManager.playerUnits.Remove(unit);
                 BoardHighlights.Instance.Hidehighlights();
+                //Drop a Grave
+                Transform pos = unit.GetComponent<Transform>();
+                BoardManager.Instance.SpawnObstacle(Convert.ToInt32(pos.transform.position.x - 0.5), Convert.ToInt32(pos.transform.position.z - 0.5), "grave");
             }
             BoardManager.Units[unit.GetComponent<PlayerUnit>().CurrentX, unit.GetComponent<PlayerUnit>().CurrentY] = null;
             isDead = true;

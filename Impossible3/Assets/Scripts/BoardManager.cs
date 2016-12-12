@@ -111,6 +111,8 @@ public class BoardManager : MonoBehaviour
                         BoardHighlights.Instance.Hidehighlights();
                         selectedTarget = null;
                         selectedUnit = null;
+                        SelectUnitForMove(selectionX, selectionY);
+
                     }
                 }
             }
@@ -122,9 +124,6 @@ public class BoardManager : MonoBehaviour
             if (selectionX >= 0 && selectionY >= 0)
             {
                 //Clear existing movement higlights
-
-                //SelectTarget(selectionX, selectionY);
-                BoardHighlights.Instance.Hidehighlights();
                 //If you click on a player bring up the attack UI
                 if (Units[selectionX, selectionY] && Units[selectionX, selectionY].isPlayer)
                 {
@@ -197,6 +196,7 @@ public class BoardManager : MonoBehaviour
                         BoardHighlights.Instance.Hidehighlights();
                         selectedTarget = null;
                         selectedUnit = null;
+                        SelectUnitForAttack(selectionX, selectionY);
                     }
                 }
             }
@@ -314,14 +314,13 @@ public class BoardManager : MonoBehaviour
         //Deselect unit and get rid of highlight
         BoardHighlights.Instance.Hidehighlights();
         selectedUnit = null;
-        //selectedTarget = null;
+        selectedTarget = null;
     }
 
     public void SelectUnitForAttack(int x, int y)
     {
 		selectedUnit = Units[x, y];
         allowedAttacks = Units[x, y].PossibleAttack();
-        //selectedTarget = Units [x, y];
         BoardHighlights.Instance.HighlightAllowedAttacks(allowedAttacks);
     }
 
@@ -335,21 +334,30 @@ public class BoardManager : MonoBehaviour
         unitAccuracy = selectedUnit.accuracy;
         //Debug.Log (unitAccuracy);
         //selectedTarget = Units[x, y];
-		if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer && unitAccuracy >= selectedTarget.dodgeChance + Random.Range (0, 100)) {
-			GameObject enemy = selectedTarget.gameObject;
-			HealthSystem health = (HealthSystem)enemy.GetComponent (typeof(HealthSystem));
-			health.takeDamageAndDie (damage);
-			selectedUnit.timeStampAttack = Time.time + cooldownAttackSeconds;
-		} else {
-            HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
-            health.ConfirmHit(null);
-            Debug.Log("Player Missed!");
-            //return;
+        if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer)
+        {
+            if (unitAccuracy >= selectedTarget.dodgeChance + Random.Range(0, 100))
+            {
+                GameObject enemy = selectedTarget.gameObject;
+                HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
+                health.takeDamageAndDie(damage);
+                selectedUnit.timeStampAttack = Time.time + cooldownAttackSeconds;
+            }
+            else
+            {
+                HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
+                health.ConfirmHit(null);
+                Debug.Log("Player Missed!");
+            }
+        }
+        else if (selectedUnit.timeStampAttack > Time.time)
+        {
+            return;
         }
         BoardHighlights.Instance.Hidehighlights();
         selectedAbility = 0;
-        //selectedTarget = null;
-        //selectedUnit = null;
+        selectedTarget = null;
+        selectedUnit = null;
     }
 
 	public void BuffTarget(Unit selectedTarget, int buff, float cooldownAttackSeconds)
