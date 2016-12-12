@@ -56,7 +56,7 @@ public class BoardManager : MonoBehaviour
         SpawnMapTiles();
         ColorMapTiles();
         SpawnWalls();
-        SpawnAllObstacles(1);
+        SpawnAllObstacles(20);
 
         this.useGUILayout = true;
     }
@@ -452,7 +452,7 @@ public class BoardManager : MonoBehaviour
 
     public void SpawnObstacle(int x, int y, string sprite)
     {
-        if (Units[x, y] != null)
+        if (Units[x, y] == null)
         {
             GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
             Vector3 temp = new Vector3(0, 0.5f, 0);

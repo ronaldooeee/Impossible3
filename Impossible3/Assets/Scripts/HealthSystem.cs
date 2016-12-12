@@ -69,17 +69,17 @@ public class HealthSystem : MonoBehaviour
             {
                 BoardManager.enemyUnits.Remove(unit);
                 BoardManager.score += 1; // Only update the score if an enemy is killed, not a player
+                BoardManager.Units[unit.GetComponent<PlayerUnit>().CurrentX, unit.GetComponent<PlayerUnit>().CurrentY] = null;
             }
             if (BoardManager.playerUnits.Contains(unit))
             {
                 BoardManager.playerUnits.Remove(unit);
                 BoardHighlights.Instance.Hidehighlights();
-                //Drop a Grave
                 PlayerUnit pos = unit.GetComponent<PlayerUnit>();
+                BoardManager.Units[pos.CurrentX, pos.CurrentY] = null;
+                //Drop a Grave
                 BoardManager.Instance.SpawnObstacle(pos.CurrentX, pos.CurrentY, "grave");
-                BoardManager.Units[pos.CurrentX, pos.CurrentY].isObstacle = true;
             }
-            BoardManager.Units[unit.GetComponent<PlayerUnit>().CurrentX, unit.GetComponent<PlayerUnit>().CurrentY] = null;
             isDead = true;
             foreach (Component child in unit.GetComponents<Component>())
             {
