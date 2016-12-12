@@ -31,11 +31,13 @@ public class Abilities : MonoBehaviour
         if (highlight == 0)
         {
             moves = selectedUnit.PossibleAbility();
+            BoardManager.Instance.allowedAbilities = moves;
             BoardHighlights.Instance.HighlightAllowedAbilities(moves);
         }
         if (highlight == 1)
         {
             moves = selectedUnit.PossibleAttack();
+            BoardManager.Instance.allowedAttacks = moves;
             BoardHighlights.Instance.HighlightAllowedAttacks(moves);
         }
     }

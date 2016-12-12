@@ -40,7 +40,7 @@ public class WarriorAbilities : Abilities
         stats.dodgeChance = 0;
         stats.accuracy = 95;
 
-        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange };
+        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange , stats.accuracy};
     }
 
     private void Update()
@@ -53,7 +53,7 @@ public class WarriorAbilities : Abilities
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
         selectedUnit.SetAttackCooldown(1.0f);
-		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget(selectedTarget, damage);
     }
 
     public void Counter(Unit selectedUnit, Unit selectedTarget)
@@ -63,18 +63,18 @@ public class WarriorAbilities : Abilities
     public void Flail(Unit selectedUnit, Unit selectedTarget)
     {
 		selectedUnit.SetAttackCooldown (6.0f);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y + 1], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y + 2], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y + 1], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 2, y], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y - 1], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 1], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 2], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y - 1], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 2, y], damage, selectedUnit.cooldownAttackSeconds);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y + 1], damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y + 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y + 2], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y + 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 2, y], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y - 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 2], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y - 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 2, y], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y + 1], damage );
     }
     public void Frenzy(Unit selectedUnit, Unit selectedTarget)
     {
@@ -89,15 +89,14 @@ public class WarriorAbilities : Abilities
         {
             health.currentHealth = health.currentHealth - selfDamage;
         }
-		BoardManager.Instance.AttackTarget(selectedTarget, damage * 2, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget(selectedTarget, damage * 2 );
 
     }
     public void Rally(Unit selectedUnit, Unit selectedTarget)
     {
-        buff = 0;
         selectedTarget.SetAttackCooldown(2.0f);
         selectedTarget.SetMoveCooldown(3.0f);
-		BoardManager.Instance.BuffTarget(selectedTarget, buff, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.BuffTarget(selectedTarget, 20);
     }
     public void Warpath(Unit selectedUnit, Unit selectedTarget)
     {
@@ -138,7 +137,7 @@ public class WarriorAbilities : Abilities
 			Debug.Log ("Bug");
 			return;
 		}
-		BoardManager.Instance.AttackTarget (selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
+		BoardManager.Instance.AttackTarget (selectedTarget, damage );
     }
     public void ShieldBash(Unit selectedUnit, Unit selectedTarget)
     {
@@ -173,7 +172,7 @@ public class WarriorAbilities : Abilities
         selectedTarget.SetAttackCooldown(5.0f);
         //Debug.Log(x + "mouse X");
         //Debug.Log(y + "mouse Y");
-        BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
+        BoardManager.Instance.AttackTarget(selectedTarget, damage );
         //does somehting
     }
 

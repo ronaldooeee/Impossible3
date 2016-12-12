@@ -50,6 +50,7 @@ public class Unit : MonoBehaviour
         this.straightAttackRange = defaultAttackRanges[0];
         this.diagAttackRange = defaultAttackRanges[1];
         this.circAttackRange = defaultAttackRanges[2];
+        this.accuracy = defaultAttackRanges[3];
     }
 
     public void SetMoveCooldown(float cdMove)
