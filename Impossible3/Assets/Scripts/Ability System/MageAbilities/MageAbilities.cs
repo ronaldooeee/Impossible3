@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Threading;
 
 public class MageAbilities : Abilities
 {
@@ -30,7 +31,7 @@ public class MageAbilities : Abilities
         stats.dodgeChance = 5;
         stats.accuracy = 90;
 
-        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange };
+        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange, stats.accuracy };
     }
 
     private void Update()
@@ -61,6 +62,53 @@ public class MageAbilities : Abilities
         BoardManager.Instance.BuffTarget(selectedTarget, 50);
     }
 
+
+    private bool Firestorm(Unit selectedUnit, Unit selectedTarget)
+    {
+        selectedUnit.SetAttackCooldown(5.0f);
+        damage = damage * 2;
+        selectedUnit.accuracy = 20;
+        return BoardManager.Instance.AttackTarget(selectedTarget, damage);
+    }
+
+    private void FireTheStorm(object o)
+    {
+        ArrayList parameters = (ArrayList)o;
+        int count = 0;
+        while (count < 3)
+        {
+            if (Firestorm((Unit)parameters[0], (Unit)parameters[1]))
+            {
+                count++;
+            }
+        }
+    }
+
+    private void BlindingLight(Unit selectedUnit, Unit selectedTarget)
+    {
+        selectedTarget.accuracy -= 20;
+    }
+
+    private void Decay(Unit selectedUnit, Unit selectedTarget)
+    {
+        selectedTarget.health -= 2;
+    }
+
+    private void Slowness(Unit selectedUnit, Unit selectedTarget)
+    {
+        selectedTarget.cooldownMoveSeconds += 1;
+    }
+
+    private void DivineShield(Unit selectedUnit, Unit selectedTarget)
+    {
+        foreach (GameObject go in BoardManager.playerUnits)
+        {
+            Unit player = go.GetComponent<Unit>();
+            player.health += 5;
+            player.dodgeChance += 1;
+        }
+    }
+
     public override void Ability1(Unit selectedUnit, Unit selectedTarget)
     {
         if (BoardManager.Instance.selectedAbility == 1)
@@ -73,7 +121,28 @@ public class MageAbilities : Abilities
         }
     }
 
-    public override void Ability2(Unit selectedUnit, Unit selectedTarget) { }
+    public override void Ability2(Unit selectedUnit, Unit selectedTarget)
+    {
+        if (BoardManager.Instance.selectedAbility == 2)
+        {
+            Debug.Log("GO!");
+            Thread rain = new Thread(FireTheStorm);
+            ArrayList parameters = new ArrayList();
+            parameters.Add(selectedUnit);
+            parameters.Add(selectedTarget);
+            rain.Start((object)parameters);
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+
+            /*for (int i = 0; i < 3; i++)
+            {
+                Firestorm(selectedUnit, selectedTarget);
+            }*/
+        }
+        else
+        {
+            OverlaySelect(selectedUnit, 1, 2, 2, 2);
+        }
+    }
 
     public override void Ability3(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 3)

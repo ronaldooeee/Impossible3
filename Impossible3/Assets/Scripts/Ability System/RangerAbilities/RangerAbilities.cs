@@ -39,7 +39,7 @@ public class RangerAbilities : Abilities
         stats.spellTimer = 0;
 		stats.spellCounter = 0;
 
-        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange};
+        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange, stats.accuracy };
     }
 
     private void Update()

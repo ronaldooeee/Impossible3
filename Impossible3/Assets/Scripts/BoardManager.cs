@@ -339,9 +339,10 @@ public class BoardManager : MonoBehaviour
 		selectedTarget = Units [x, y];
 	}
 
-	public void AttackTarget(Unit selectedTarget, int damage)
+	public bool AttackTarget(Unit selectedTarget, int damage, int hitChance = 100)
     {
         unitAccuracy = selectedUnit.accuracy;
+        bool didHit = false;
         //Debug.Log (unitAccuracy);
         //selectedTarget = Units[x, y];
         if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer != selectedUnit.isPlayer)
@@ -352,6 +353,7 @@ public class BoardManager : MonoBehaviour
                 HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
                 health.takeDamageAndDie(damage);
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+                didHit = true;
             }
             else
             {
@@ -363,13 +365,14 @@ public class BoardManager : MonoBehaviour
         }
         else if (selectedUnit.timeStampAttack > Time.time)
         {
-            return;
+            return didHit;
         }
         try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
         selectedAbility = 0;
         BoardHighlights.Instance.Hidehighlights();
         selectedTarget = null;
         selectedUnit = null;
+        return didHit;
     }
 
 
