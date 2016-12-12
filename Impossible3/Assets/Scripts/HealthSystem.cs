@@ -45,7 +45,8 @@ public class HealthSystem : MonoBehaviour
                 {
                     if (isDead)
                     {
-                        Destroy(unit);
+                        //BoardManager.Instance.SpawnObstacle();
+                        Destroy(unit);                        
                     }else
                     {
                         Destroy(hitText);

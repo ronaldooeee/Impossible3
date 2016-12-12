@@ -82,7 +82,6 @@ public class BoardManager : MonoBehaviour
         {
             //UnityEditor.EditorUtility.DisplayDialog("Failure!", "You have lost the game...", "Okay");
             //UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Play");
-
         }
         UpdateSelection();
         DrawBoard();
@@ -434,7 +433,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private void SpawnObstacle(int x, int y, string sprite)
+    public void SpawnObstacle(int x, int y, string sprite)
     {
         GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
         Vector3 temp = new Vector3(0, 0.5f, 0);
