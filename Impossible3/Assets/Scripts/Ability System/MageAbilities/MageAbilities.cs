@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Threading;
 
 public class MageAbilities : Abilities
 {
@@ -8,6 +9,8 @@ public class MageAbilities : Abilities
     public int y;
 
     public int damage;
+
+    private System.Random random = new System.Random();
 
     private void Start()
     {
@@ -47,12 +50,57 @@ public class MageAbilities : Abilities
 		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
     }
 
-    public void Fireball(Unit selectedUnit, Unit selectedTarget)
+    private void Fireball(Unit selectedUnit, Unit selectedTarget)
     {
         //BoardManager.SelectTarget (BoardManager.selectionX, BoardManager.selectionY);
         selectedUnit.SetAttackCooldown(8.0f);
         damage = 2 * damage;
 		BoardManager.Instance.AttackTarget(selectedTarget, damage, selectedUnit.cooldownAttackSeconds);
+    }
+
+    private bool Firestorm(Unit selectedUnit, Unit selectedTarget, System.Random random)
+    {
+        selectedUnit.SetAttackCooldown(5.0f);
+        damage = damage * 2;
+        return BoardManager.Instance.AttackTarget(selectedTarget, damage, random.Next(0, 100));
+    }
+
+    private void FireTheStorm(object o)
+    {
+        ArrayList parameters = (ArrayList)o;
+        int count = 0;
+        while (count < 3)
+        {
+            if (Firestorm((Unit)parameters[0], (Unit)parameters[1], (System.Random)parameters[2]))
+            {
+                count++;
+            }
+        }
+    }
+
+    private void BlindingLight(Unit selectedUnit, Unit selectedTarget)
+    {
+        selectedTarget.accuracy -= 20;
+    }
+
+    private void Decay(Unit selectedUnit, Unit selectedTarget)
+    {
+        selectedTarget.health -= 2;
+    }
+
+    private void Slowness(Unit selectedUnit, Unit selectedTarget)
+    {
+        selectedTarget.cooldownMoveSeconds += 1;
+    }
+
+    private void DivineShield(Unit selectedUnit, Unit selectedTarget)
+    {
+        foreach (GameObject go in BoardManager.playerUnits)
+        {
+            Unit player = go.GetComponent<Unit>();
+            player.health += 5;
+            player.dodgeChance += 1;
+        }
     }
 
     public override void Ability1(Unit selectedUnit, Unit selectedTarget)
@@ -65,11 +113,30 @@ public class MageAbilities : Abilities
         {
             OverlaySelect(selectedUnit, 1, 3, 2, 1);
         }
-
-
     }
 
-    public override void Ability2(Unit selectedUnit, Unit selectedTarget) { }
+    public override void Ability2(Unit selectedUnit, Unit selectedTarget)
+    {
+        if (BoardManager.Instance.selectedAbility == 2)
+        {
+            Debug.Log("GO!");
+            Thread rain = new Thread(FireTheStorm);
+            ArrayList parameters = new ArrayList();
+            parameters.Add(selectedUnit);
+            parameters.Add(selectedTarget);
+            rain.Start((object)parameters);
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+
+            /*for (int i = 0; i < 3; i++)
+            {
+                Firestorm(selectedUnit, selectedTarget);
+            }*/
+        }
+        else
+        {
+            OverlaySelect(selectedUnit, 1, 2, 2, 2);
+        }
+    }
 
     public override void Ability3(Unit selectedUnit, Unit selectedTarget) { }
 
