@@ -339,60 +339,13 @@ public class BoardManager : MonoBehaviour
 		selectedTarget = Units [x, y];
 	}
 
-	public bool AttackTarget(Unit selectedTarget, int damage, int hitChance = 100)
+
+	public bool AttackTarget(Unit selectedTarget, int damage)
     {
         unitAccuracy = selectedUnit.accuracy;
+        //Debug.Log (unitAccuracy);
+        //selectedTarget = Units[x, y];
         bool didHit = false;
-        //Debug.Log (unitAccuracy);
-        //selectedTarget = Units[x, y];
-        if (selectedTarget != null && !selectedTarget.isPlayer)
-        {
-            if (unitAccuracy >= selectedTarget.dodgeChance + Random.Range(0, 100))
-            {
-                GameObject enemy = selectedTarget.gameObject;
-                HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
-                health.takeDamageAndDie(damage);
-
-                try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
-                selectedAbility = 0;
-                BoardHighlights.Instance.Hidehighlights();
-                selectedTarget = null;
-                selectedUnit = null;
-
-                return true;
-            }
-            else
-            {
-                HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
-                health.ConfirmHit(null);
-                Debug.Log("Player Missed!");
-
-                try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
-                selectedAbility = 0;
-                BoardHighlights.Instance.Hidehighlights();
-                selectedTarget = null;
-                selectedUnit = null;
-
-                return true;
-            }
-        }
-        else
-        {
-            try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
-            selectedAbility = 0;
-            BoardHighlights.Instance.Hidehighlights();
-            selectedTarget = null;
-            selectedUnit = null;
-
-            return false;
-        }
-    }
-
-	public bool AttackTarget(Unit selectedTarget, int damage, float cooldownAttackSeconds)
-    {
-        unitAccuracy = selectedUnit.accuracy;
-        //Debug.Log (unitAccuracy);
-        //selectedTarget = Units[x, y];
         if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && !selectedTarget.isPlayer)
         {
             if (unitAccuracy >= selectedTarget.dodgeChance + Random.Range(0, 100))
@@ -410,15 +363,13 @@ public class BoardManager : MonoBehaviour
                 HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
                 health.ConfirmHit(null);
                 Debug.Log("Player Missed!");
-
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-
             }
         }
         else
         {
 
-            return didHit;
+            return false;
         }
         try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
         selectedAbility = 0;

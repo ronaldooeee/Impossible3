@@ -111,51 +111,7 @@ public class MageAbilities : Abilities
         }
     }
 
-    private bool Firestorm(Unit selectedUnit, Unit selectedTarget, System.Random random)
-    {
-        selectedUnit.SetAttackCooldown(5.0f);
-        damage = damage * 2;
-        return BoardManager.Instance.AttackTarget(selectedTarget, damage, random.Next(0, 100));
-    }
-
-    private void FireTheStorm(object o)
-    {
-        ArrayList parameters = (ArrayList)o;
-        int count = 0;
-        while (count < 3)
-        {
-            if (Firestorm((Unit)parameters[0], (Unit)parameters[1], (System.Random)parameters[2]))
-            {
-                count++;
-            }
-        }
-    }
-
-    private void BlindingLight(Unit selectedUnit, Unit selectedTarget)
-    {
-        selectedTarget.accuracy -= 20;
-    }
-
-    private void Decay(Unit selectedUnit, Unit selectedTarget)
-    {
-        selectedTarget.health -= 2;
-    }
-
-    private void Slowness(Unit selectedUnit, Unit selectedTarget)
-    {
-        selectedTarget.cooldownMoveSeconds += 1;
-    }
-
-    private void DivineShield(Unit selectedUnit, Unit selectedTarget)
-    {
-        foreach (GameObject go in BoardManager.playerUnits)
-        {
-            Unit player = go.GetComponent<Unit>();
-            player.health += 5;
-            player.dodgeChance += 1;
-        }
-    }
-
+  
     public override void Ability1(Unit selectedUnit, Unit selectedTarget)
     {
         if (BoardManager.Instance.selectedAbility == 1)
