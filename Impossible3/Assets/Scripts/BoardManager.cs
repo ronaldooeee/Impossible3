@@ -149,7 +149,6 @@ public class BoardManager : MonoBehaviour
                 }
                 else if (selectedUnit != null)
                 {
-                    //Debug.Log(selectedAbility);
                     if (allowedAttacks[selectionX, selectionY] ||( BoardHighlights.castOnSelfAndParty && allowedAbilities[selectionX,selectionY]))
                     {
 						SelectTarget (selectionX, selectionY);
@@ -339,13 +338,43 @@ public class BoardManager : MonoBehaviour
 		selectedTarget = Units [x, y];
 	}
 
+    // If AttackTarget needs to be called from another thread (besides main), use this method.
+    // You need to pass in a randomly generated dodge int (from 0 to 100).
+	public bool AttackTarget(Unit selectedTarget, int damage, int dodge)
+    {
+        unitAccuracy = selectedUnit.accuracy;
 
+        if (selectedTarget != null && !selectedTarget.isPlayer)
+        {
+            if (unitAccuracy >= selectedTarget.dodgeChance + dodge)
+            {
+                GameObject enemy = selectedTarget.gameObject;
+                HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
+                health.takeDamageAndDie(damage);
+
+                return true;
+            }
+            else
+            {
+                HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
+                health.ConfirmHit(null);
+                Debug.Log("Player Missed!");
+
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // Primary AttackTarget method, return true if the method executes successfully, return false if something goes wrong.
+    // An attack executing successfully but missing its target does not constitute something going wrong.
 	public bool AttackTarget(Unit selectedTarget, int damage)
     {
         unitAccuracy = selectedUnit.accuracy;
-        //Debug.Log (unitAccuracy);
-        //selectedTarget = Units[x, y];
-        bool didHit = false;
+
         if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && !selectedTarget.isPlayer)
         {
             if (unitAccuracy >= selectedTarget.dodgeChance + Random.Range(0, 100))
@@ -355,8 +384,7 @@ public class BoardManager : MonoBehaviour
                 health.takeDamageAndDie(damage);
 
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-                didHit = true;
-
+                return true;
             }
             else
             {
@@ -364,19 +392,13 @@ public class BoardManager : MonoBehaviour
                 health.ConfirmHit(null);
                 Debug.Log("Player Missed!");
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+                return true;
             }
         }
         else
         {
-
             return false;
         }
-        try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
-        selectedAbility = 0;
-        BoardHighlights.Instance.Hidehighlights();
-        selectedTarget = null;
-        selectedUnit = null;
-        return didHit;
     }
 
 
