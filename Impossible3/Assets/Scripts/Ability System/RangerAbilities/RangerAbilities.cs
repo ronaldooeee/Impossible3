@@ -13,6 +13,11 @@ public class RangerAbilities : Abilities
     public float spellTimer;
 	public int spellCounter;
 
+	public AudioSource source;
+	public AudioClip bowPull;
+	public AudioClip arrowFire;
+	public AudioClip arrowHit;
+
     //public GameObject ranger = this.GetComponentInParent<PlayerUnit>().gameObject;
 
     private void Start()
@@ -58,6 +63,11 @@ public class RangerAbilities : Abilities
 
     public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
+		if (selectedUnit.timeStampAttack <= Time.time) {
+			source.PlayOneShot (bowPull, 1f);
+			source.PlayOneShot (arrowFire, 1f);
+			source.PlayOneShot (arrowHit, 1f);
+		}
         selectedUnit.SetAttackCooldown(2.0f);
 		BoardManager.Instance.AttackTarget(selectedTarget, damage);
     }
