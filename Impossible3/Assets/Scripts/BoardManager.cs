@@ -6,7 +6,7 @@ using System;
 public class BoardManager : MonoBehaviour
 {
     public Transform WarriorAbilityUI, MageAbilityUI, ArcherAbilityUI, Counter, Flail, Frenzy, Rally, Warpath, Shieldbash, Fireball, Firestorm, Heal, Blindinglight,
-    Decay, Divineshield, Backstab, Bombarrow, Longshot, Shadowstep, Snare, Tripleshot;
+    Decay, Divineshield, Backstab, Bombarrow, Longshot, Shadowstep, Snare, Tripleshot, Highlight;
 
     public static BoardManager Instance { set; get; }
     public bool[,] allowedMoves { set; get; }
@@ -75,6 +75,7 @@ public class BoardManager : MonoBehaviour
         SpawnAllObstacles(60);
 
         this.useGUILayout = true;
+        Highlight.gameObject.SetActive(false);
     }
 
     // Update world to show changes
@@ -267,7 +268,7 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        //Abilties
+        //Abilities
         if (selectedUnit != null)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -276,6 +277,9 @@ public class BoardManager : MonoBehaviour
                 {
                     selectedUnit.GetComponent<Abilities>().Ability1(selectedUnit, selectedTarget);
                     selectedAbility = 1;
+
+                    Highlight.gameObject.SetActive(true);
+                    Highlight.gameObject.transform.localPosition = new Vector3(-250, 0, 0);
                 }
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2) && selectedAbility != 2)
@@ -284,6 +288,8 @@ public class BoardManager : MonoBehaviour
                 {
                     selectedUnit.GetComponent<Abilities>().Ability2(selectedUnit, selectedTarget);
                     selectedAbility = 2;
+                    Highlight.gameObject.SetActive(true);
+                    Highlight.gameObject.transform.localPosition = new Vector3(-150, 0, 0);
                 }
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3) && selectedAbility != 3)
@@ -292,6 +298,8 @@ public class BoardManager : MonoBehaviour
                 {
                     selectedUnit.GetComponent<Abilities>().Ability3(selectedUnit, selectedTarget);
                     selectedAbility = 3;
+                    Highlight.gameObject.SetActive(true);
+                    Highlight.gameObject.transform.localPosition = new Vector3(-50, 0, 0);
                 }
             }
             else if (Input.GetKeyDown(KeyCode.Alpha4) && selectedAbility != 4)
@@ -300,6 +308,8 @@ public class BoardManager : MonoBehaviour
                 {
                     selectedUnit.GetComponent<Abilities>().Ability4(selectedUnit, selectedTarget);
                     selectedAbility = 4;
+                    Highlight.gameObject.SetActive(true);
+                    Highlight.gameObject.transform.localPosition = new Vector3(50, 0, 0);
                 }
             }
             else if (Input.GetKeyDown(KeyCode.Alpha5) && selectedAbility != 5)
@@ -308,6 +318,9 @@ public class BoardManager : MonoBehaviour
                 {
                     selectedUnit.GetComponent<Abilities>().Ability5(selectedUnit, selectedTarget);
                     selectedAbility = 5;
+                    Highlight.gameObject.SetActive(true);
+                    Highlight.gameObject.transform.localPosition = new Vector3(150, 0, 0);
+
                 }
             }
             else if (Input.GetKeyDown(KeyCode.Alpha6) && selectedAbility != 6)
@@ -316,6 +329,9 @@ public class BoardManager : MonoBehaviour
                 {
                     selectedUnit.GetComponent<Abilities>().Ability6(selectedUnit, selectedTarget);
                     selectedAbility = 6;
+                    Highlight.gameObject.SetActive(true);
+                    Highlight.gameObject.transform.localPosition = new Vector3(250, 0, 0);
+
                 }
             }
         }   
@@ -585,7 +601,7 @@ public class BoardManager : MonoBehaviour
 
         //Spawn Enemy Units (PrefabList #, x value, y value)
         
-        
+        /*
         SpawnUnit (7, 10, 22);
         SpawnUnit (7, 10, 23);
         SpawnUnit (7, 10, 24);
@@ -595,7 +611,7 @@ public class BoardManager : MonoBehaviour
         SpawnUnit (7, 12, 22);
         SpawnUnit (7, 12, 23);
         SpawnUnit (7, 12, 24);
-        
+        */
 
     }
 
