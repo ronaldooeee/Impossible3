@@ -214,26 +214,15 @@ public class MageAbilities : Abilities
         }
     }
 
-    public override void Ability6(Unit selectedUnit, Unit selectedTarget) {
+    public override IEnumerator Ability6(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 6)
         {
-            int three = 0;
-            float go = 0.0f;
             int[] initialDodgeChances = DivineShieldPrep();
-            while (three < 3)
-            {
-                Debug.Log(Time.time);
-                if (Time.time > go)
-                {
-                    DivineShield();
-                    go = Time.time + 3.0f;
-                    three++;
-                }
 
-            }
-            while (go > Time.time)
+            for (int i = 0; i < 3; i++)
             {
-                //Pass.
+                DivineShield();
+                yield return new WaitForSeconds(3.0f);
             }
             int iterate = 0;
             foreach (GameObject playerOnBoard in BoardManager.playerUnits)
@@ -241,7 +230,7 @@ public class MageAbilities : Abilities
                 Unit player = playerOnBoard.GetComponent<Unit>();
                 player.dodgeChance = initialDodgeChances[iterate];
                 iterate++;
-            } //Unfortunately this assumes that all the players are still alive. Thankfully, throughout the course of the game, we never spawn more players. We'll always have enough dodgeChances to go around, but they may be misattributed.
+            }
         }
         else
         {
