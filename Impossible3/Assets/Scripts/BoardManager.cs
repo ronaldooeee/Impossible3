@@ -5,7 +5,8 @@ using System;
 
 public class BoardManager : MonoBehaviour
 {
-    public Transform WarriorAbilityUI, MageAbilityUI, ArcherAbilityUI;
+    public Transform WarriorAbilityUI, MageAbilityUI, ArcherAbilityUI, Counter, Flail, Frenzy, Rally, Warpath, Shieldbash, Fireball, Firestorm, Heal, Blindinglight,
+    Decay, Divineshield, Backstab, Bombarrow, Longshot, Shadowstep, Snare, Tripleshot;
 
     public static BoardManager Instance { set; get; }
     public bool[,] allowedMoves { set; get; }
@@ -53,7 +54,7 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
-        score = 40;
+        score = 12;
         playerUnits = new List<GameObject>();
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
@@ -737,41 +738,59 @@ public class BoardManager : MonoBehaviour
 
     private void tellScore(int score)
     {
-        if (score >= 24 && !Abilities.displayed[5])
+        if (score >= 12 && !Abilities.displayed[5])
         {
             Abilities.unlockedAbilities[5] = true;
             StartCoroutine(ShowMessage("Unlocked ability 6!", 2));
             Abilities.displayed[5] = true;
+            Divineshield.gameObject.SetActive(true);
+            Shieldbash.gameObject.SetActive(true);
+            Tripleshot.gameObject.SetActive(true);
         }
-        else if (score >= 20 && !Abilities.displayed[4])
+        else if (score >= 10 && !Abilities.displayed[4])
         {
             Abilities.unlockedAbilities[4] = true;
             StartCoroutine(ShowMessage("Unlocked ability 5!", 2));
             Abilities.displayed[4] = true;
+            Decay.gameObject.SetActive(true);
+            Warpath.gameObject.SetActive(true);
+            Snare.gameObject.SetActive(true);
         }
-        else if (score >= 16 && !Abilities.displayed[3])
+        else if (score >= 8 && !Abilities.displayed[3])
         {
             Abilities.unlockedAbilities[3] = true;
             StartCoroutine(ShowMessage("Unlocked ability 4!", 2));
             Abilities.displayed[3] = true;
+            Blindinglight.gameObject.SetActive(true);
+            Rally.gameObject.SetActive(true);
+            Shadowstep.gameObject.SetActive(true);
         }
-        else if (score >= 8 && !Abilities.displayed[2])
+        else if (score >= 6 && !Abilities.displayed[2])
         {
             Abilities.unlockedAbilities[2] = true;
             StartCoroutine(ShowMessage("Unlocked ability 3!", 2));
             Abilities.displayed[2] = true;
+            Frenzy.gameObject.SetActive(true);
+            Heal.gameObject.SetActive(true);
+            Longshot.gameObject.SetActive(true);
         }
         else if (score >= 4 && !Abilities.displayed[1])
         {
             Abilities.unlockedAbilities[1] = true;
             StartCoroutine(ShowMessage("Unlocked ability 2!", 2));
             Abilities.displayed[1] = true;
+            Flail.gameObject.SetActive(true);
+            Firestorm.gameObject.SetActive(true);
+            Bombarrow.gameObject.SetActive(true);
         }
         else if (score >= 2 && !Abilities.displayed[0])
         {
             Abilities.unlockedAbilities[0] = true;
             StartCoroutine(ShowMessage("Unlocked ability 1!", 2));
             Abilities.displayed[0] = true;
+            Counter.gameObject.SetActive(true);
+            Fireball.gameObject.SetActive(true);
+            Backstab.gameObject.SetActive(true);
         }
         else
         {
