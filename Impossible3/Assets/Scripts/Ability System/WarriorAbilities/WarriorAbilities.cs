@@ -23,7 +23,7 @@ public class WarriorAbilities : Abilities
 	{
 		PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
 
-		stats.health = 800;
+		stats.health = 120;
 		stats.damageAmount = 70;
 
 		stats.straightMoveRange = 2;
@@ -53,7 +53,10 @@ public class WarriorAbilities : Abilities
 	public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
 	{
 		selectedUnit.SetAttackCooldown(1.0f);
-		BoardManager.Instance.AttackTarget(selectedTarget, damage);
+		if (selectedUnit.timeStampAttack <= Time.time) { 
+			BoardManager.Instance.AttackTarget (selectedTarget, damage);
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		}
 	}
 
 	public void Counter(Unit selectedUnit, Unit selectedTarget)
@@ -118,15 +121,18 @@ public class WarriorAbilities : Abilities
 	public void Frenzy(Unit selectedUnit, Unit selectedTarget)
 	{
 		selectedUnit.SetAttackCooldown(4.0f);
-		HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
-		if (selectedTarget != selectedTarget.isPlayer) {
-			selfDamage = damage / 10;
-			if (health.currentHealth <= selfDamage) {
-				health.currentHealth = 1;
-			} else {
-				health.currentHealth = health.currentHealth - selfDamage;
+		if (selectedUnit.timeStampAttack <= Time.time) {
+			HealthSystem health = (HealthSystem)selectedUnit.GetComponent (typeof(HealthSystem));
+			if (selectedTarget != selectedTarget.isPlayer) {
+				selfDamage = damage / 10;
+				if (health.currentHealth <= selfDamage) {
+					health.currentHealth = 1;
+				} else {
+					health.currentHealth = health.currentHealth - selfDamage;
+				}
+				BoardManager.Instance.AttackTarget (selectedTarget, damage * 2);
 			}
-			BoardManager.Instance.AttackTarget (selectedTarget, damage * 2);
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 		}
 
 	}
@@ -197,38 +203,41 @@ public class WarriorAbilities : Abilities
 	public void ShieldBash(Unit selectedUnit, Unit selectedTarget)
 	{
 		selectedUnit.SetAttackCooldown(6.0f);
-		selectedTargetX = selectedTarget.CurrentX;
-		selectedTargetY = selectedTarget.CurrentY;
+		if (selectedUnit.timeStampAttack <= Time.time){
+			if (selectedUnit.CurrentX < selectedTarget.CurrentX && BoardManager.Units [x + 1, y] == null) {
+				selectedTarget.transform.position = BoardManager.Instance.GetTileCenter (x + 1, y);
+				selectedTarget.SetPosition (x + 1, y);
+				BoardManager.Units [x + 1, y] = selectedTarget; 
+				BoardManager.Units [x, y] = null; 
+				Debug.Log ("Right side");
+				BoardManager.Instance.AttackTarget(selectedTarget, damage/2 );
+			} else if (selectedUnit.CurrentX > selectedTarget.CurrentX && BoardManager.Units [x - 1, y] == null) {
+				selectedTarget.transform.position = BoardManager.Instance.GetTileCenter (x - 1, y);
+				selectedTarget.SetPosition (x - 1, y);
+				BoardManager.Units [x - 1, y] = selectedTarget; 
+				BoardManager.Units [x, y] = null; 
+				Debug.Log ("Left side");
+				BoardManager.Instance.AttackTarget(selectedTarget, damage/2 );
+			} else if (selectedUnit.CurrentY < selectedTarget.CurrentY && BoardManager.Units [x, y + 1] == null) {
+				selectedTarget.transform.position = BoardManager.Instance.GetTileCenter (x, y + 1);
+				selectedTarget.SetPosition (x, y + 1);
+				BoardManager.Units [x, y + 1] = selectedTarget; 
+				BoardManager.Units [x, y] = null; 
+				//selectedTarget.CurrentY = selectedTarget.CurrentY + 1;
+				Debug.Log ("Front side");
+				BoardManager.Instance.AttackTarget(selectedTarget, damage/2 );
+			} else if (selectedUnit.CurrentY < selectedTarget.CurrentY && BoardManager.Units [x, y - 1] == null) {
+				selectedTarget.transform.position = BoardManager.Instance.GetTileCenter (x, y - 1);
+				selectedTarget.SetPosition (x, y - 1);
+				BoardManager.Units [x, y - 1] = selectedTarget; 
+				BoardManager.Units [x, y] = null; 
+				BoardManager.Instance.AttackTarget(selectedTarget, damage/2 );
+			} else {
+				BoardManager.Instance.AttackTarget(selectedTarget, damage );
+			}
+		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 
-		selectedUnitX = selectedUnit.CurrentX;
-		selectedUnitY = selectedUnit.CurrentY;
-		Debug.Log(selectedTarget.CurrentX + "Target's X");
-		Debug.Log(selectedTarget.CurrentY + "Target's Y");
-		if (selectedUnitX < selectedTargetX)
-		{
-			selectedTarget.CurrentX = selectedTarget.CurrentX + 1;
-			Debug.Log("Right side");
 		}
-		else if (selectedUnitX > selectedTargetX)
-		{
-			selectedTarget.CurrentX = selectedTarget.CurrentX - 1;
-			Debug.Log("Left side");
-		}
-		else if (selectedUnitY < selectedTargetY)
-		{
-			selectedTarget.CurrentY = selectedTarget.CurrentY + 1;
-			Debug.Log("Front side");
-		}
-		else
-		{
-			selectedTarget.CurrentY = selectedTarget.CurrentY - 1;
-			Debug.Log("Back side");
-		}
-		selectedTarget.SetAttackCooldown(5.0f);
-		//Debug.Log(x + "mouse X");
-		//Debug.Log(y + "mouse Y");
-		BoardManager.Instance.AttackTarget(selectedTarget, damage );
-		//does somehting
 	}
 
 
