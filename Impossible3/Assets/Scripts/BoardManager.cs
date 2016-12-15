@@ -435,8 +435,8 @@ public class BoardManager : MonoBehaviour
         try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
         selectedAbility = 0;
         BoardHighlights.Instance.Hidehighlights();
-        selectedTarget = null;
-        selectedUnit = null;
+        //selectedTarget = null;
+        //selectedUnit = null;
         return didHit;
     }
 

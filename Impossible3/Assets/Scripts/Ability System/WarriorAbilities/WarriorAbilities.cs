@@ -63,18 +63,18 @@ public class WarriorAbilities : Abilities
     public void Flail(Unit selectedUnit, Unit selectedTarget)
     {
 		selectedUnit.SetAttackCooldown (6.0f);
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y + 1], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y + 2], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y + 1], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 2, y], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y - 1], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 1], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 2], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y - 1], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 2, y], damage );
-		BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y + 1], damage );
+        try { BoardManager.Instance.AttackTarget(BoardManager.Units[x, y + 1], damage); } catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x, y + 2], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y + 1], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x + 2, y], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y - 1], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 1], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 2], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y - 1], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x - 2, y], damage );} catch { }
+        try { BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y + 1], damage );} catch { }
     }
     public void Frenzy(Unit selectedUnit, Unit selectedTarget)
     {
