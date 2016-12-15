@@ -408,60 +408,65 @@ public class BoardManager : MonoBehaviour
     // An attack executing successfully but missing its target does not constitute something going wrong.
 	public bool AttackTarget(Unit selectedTarget, int damage)
     {
-        unitAccuracy = selectedUnit.accuracy;
-        bool didHit = false;
-        if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && !selectedTarget.isPlayer)
+        try
         {
-            if (unitAccuracy >= selectedTarget.dodgeChance + random.Next(100))
+            unitAccuracy = selectedUnit.accuracy;
+            bool didHit = false;
+            if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && !selectedTarget.isPlayer)
             {
-                GameObject enemy = selectedTarget.gameObject;
-                HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
-                health.takeDamageAndDie(damage);
-
-                //selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-                didHit = true;
+                if (unitAccuracy >= selectedTarget.dodgeChance + random.Next(100))
+                {
+                    GameObject enemy = selectedTarget.gameObject;
+                    HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
+                    health.takeDamageAndDie(damage);
+                    didHit = true;
+                }
+                else
+                {
+                    HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
+                    health.ConfirmHit(null);
+                    Debug.Log("Player Missed!");
+                    didHit = true;
+                }
             }
             else
             {
-                HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
-                health.ConfirmHit(null);
-                Debug.Log("Player Missed!");
-                //selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-                didHit = true;
+                return false;
             }
-        }
-        else
-        {
-            return false;
-        }
 
-        try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
-        selectedAbility = 0;
-        BoardHighlights.Instance.Hidehighlights();
-        //selectedTarget = null;
-        //selectedUnit = null;
-        return didHit;
+            try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
+            selectedAbility = 0;
+            BoardHighlights.Instance.Hidehighlights();
+            return didHit;
+        }
+        catch { return false; }
     }
 
 
 	public void BuffTarget(Unit selectedTarget, int buff)
     {
-        //selectedTarget = Units[x, y];
-        if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer == selectedUnit.isPlayer)
-        {
-            GameObject ally = selectedTarget.gameObject;
-            HealthSystem health = (HealthSystem)ally.GetComponent(typeof(HealthSystem));
-            health.takeDamageAndDie(0-buff);
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-        }
-        else
-        {
-            return;
-        }
-        BoardHighlights.Instance.Hidehighlights();
+        try{
 
-        selectedTarget = null;
-        selectedUnit = null;
+            if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer == selectedUnit.isPlayer)
+            {
+                GameObject ally = selectedTarget.gameObject;
+                HealthSystem health = (HealthSystem)ally.GetComponent(typeof(HealthSystem));
+                if (health.currentHealth <= health.startingHealth)
+                {
+                    health.takeDamageAndDie(0 - buff);
+                }
+                else
+                {
+                    health.ConfirmHit(0, "Full Health!");
+                }
+            }
+            else
+            {
+                return;
+            }
+            BoardHighlights.Instance.Hidehighlights();
+
+        }catch { }
     }
 
     //Spawns whatever unit is in the index of prefabs on BoardManager.cs
@@ -531,8 +536,8 @@ public class BoardManager : MonoBehaviour
         if (Units[x, y] == null)
         {
             GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
-            Vector3 temp = new Vector3(0, 0.5f, 0);
-            cube.transform.position += temp;
+            //Vector3 temp = new Vector3(0, 0.5f, 0);
+            //cube.transform.position += temp;
             cube.transform.rotation = Camera.main.transform.rotation;
             cube.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
             cube.transform.localScale = new Vector3(2, 2, 1);

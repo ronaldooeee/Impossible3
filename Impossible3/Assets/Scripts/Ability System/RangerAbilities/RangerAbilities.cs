@@ -67,9 +67,11 @@ public class RangerAbilities : Abilities
 			source.PlayOneShot (bowPull, 1f);
 			source.PlayOneShot (arrowFire, 1f);
 			source.PlayOneShot (arrowHit, 1f);
-		}
-        selectedUnit.SetAttackCooldown(2.0f);
-		BoardManager.Instance.AttackTarget(selectedTarget, damage);
+            selectedUnit.SetAttackCooldown(2.0f);
+            BoardManager.Instance.AttackTarget(selectedTarget, damage);
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+        }
+
     }
 
     public void BackStab(Unit selectedUnit, Unit selectedTarget)
@@ -77,6 +79,7 @@ public class RangerAbilities : Abilities
         selectedUnit.SetAttackCooldown(4.0f);
         damage = 3 * damage;
 		BoardManager.Instance.AttackTarget(selectedTarget, damage);
+        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
     }
 
     public void BlackBombArrow(Unit selectedUnit, Unit selectedTarget)
@@ -106,6 +109,7 @@ public class RangerAbilities : Abilities
         selectedUnit.SetAttackCooldown(6.0f);
         damage = damage + (damage / 2);
         BoardManager.Instance.AttackTarget(selectedTarget, damage);
+        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
     }
 		
     public void ShadowStep(Unit selectedUnit, Unit selectedTarget)
@@ -117,7 +121,10 @@ public class RangerAbilities : Abilities
             selectedUnit.spellTimer = Time.time + 10;
             selectedUnit.dodgeChance = 80;
 			selectedUnit.spellCounter += 1;
+            selectedUnit.GetComponent<HealthSystem>().ConfirmHit(0, "Stealth!");
+            BoardHighlights.Instance.Hidehighlights();
         }
+
     }
 
     //selectedUnit and selectedTarget both sending back the Ranger - Not Working
@@ -126,10 +133,11 @@ public class RangerAbilities : Abilities
         selectedUnit.SetAttackCooldown (7.0f);
 		selectedUnit.SetDamage (20);
 		if (selectedUnit.timeStampAttack <= Time.time) {
-			BoardManager.Instance.AttackTarget (selectedTarget, damage);
 			selectedTarget.timeStampAttack += 10;
 			selectedTarget.timeStampMove += 10;
-		}
+            selectedTarget.GetComponent<HealthSystem>().ConfirmHit(1, "Snared!");
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+        }
     }
 
 	public void TripleShot(Unit selectedUnit, Unit selectedTarget)
@@ -140,15 +148,17 @@ public class RangerAbilities : Abilities
 		Shuffle (enemyGOs);
 
 		if (selectedUnit.timeStampAttack <= Time.time) {
-			foreach (GameObject enemy in enemyGOs) {
-				Unit enemyUnit = (Unit)enemy.GetComponent (typeof(Unit));
-				if (spellCounter < 3) {
-					BoardManager.Instance.AttackTarget (enemyUnit, damage);
-					Debug.Log (enemyUnit);
+            Unit[] enemies = new Unit[] {null,null,null};
+            for(int i= 0; i<=2 && i < enemyGOs.Count; i++) {
+				Unit enemyUnit = enemyGOs[i].GetComponent<Unit>();
+                    enemies[i] = enemyUnit;
 					spellCounter++;
-				}
 			}
-		}
+            BoardManager.Instance.AttackTarget(enemies[0], damage);
+            BoardManager.Instance.AttackTarget(enemies[1], damage);
+            BoardManager.Instance.AttackTarget(enemies[2], damage);
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+        }
 	}
 
     public override void Ability1(Unit selectedUnit, Unit selectedTarget)
@@ -190,8 +200,6 @@ public class RangerAbilities : Abilities
     public override void Ability4(Unit selectedUnit, Unit selectedTarget)
     {
         ShadowStep(selectedUnit, selectedTarget);
-        selectedUnit.GetComponent<HealthSystem>().ConfirmHit(0, "Buff!");
-        BoardHighlights.Instance.Hidehighlights();
     }
 
     public override void Ability5(Unit selectedUnit, Unit selectedTarget)
@@ -202,7 +210,7 @@ public class RangerAbilities : Abilities
         }
         else
         {
-            OverlaySelect(selectedUnit, 1, 8, 6, 7);
+            OverlaySelect(selectedUnit, 1, 5, 0, 5);
         }
     }
 

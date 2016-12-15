@@ -48,6 +48,7 @@ public class MageAbilities : Abilities
     {
         selectedUnit.SetAttackCooldown(1.0f);
 		BoardManager.Instance.AttackTarget(selectedTarget, damage);
+        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
     }
 
     private void Fireball(Unit selectedUnit, Unit selectedTarget)
@@ -79,7 +80,6 @@ public class MageAbilities : Abilities
         {
             if (Firestorm((Unit)parameters[0], (Unit)parameters[1], (System.Random)parameters[2]))
             {
-                Debug.Log("hit");
                 count++;
             }
         }
@@ -89,6 +89,7 @@ public class MageAbilities : Abilities
     {
         int initialAccuracy = selectedTarget.accuracy;
         selectedTarget.accuracy = 0;
+        selectedTarget.GetComponent<HealthSystem>().ConfirmHit(1, "Confusion!");
         yield return new WaitForSeconds(6.0f);
         selectedTarget.accuracy = initialAccuracy;
     }
@@ -120,26 +121,14 @@ public class MageAbilities : Abilities
     {
         for (int i = 0; i < 3; i++)
         {
-            Debug.Log("buff");
             foreach (GameObject go in BoardManager.playerUnits)
             {
                 Unit player = go.GetComponent<Unit>();
                 HealthSystem playerHealthSystem = go.GetComponent<HealthSystem>();
-                //player.health *= 2;
-                //int amount = (go.GetComponent<HealthSystem>().currentHealth * 2) - go.GetComponent<HealthSystem>().currentHealth;
-                int amount = 10;
-                if (playerHealthSystem.currentHealth + amount > playerHealthSystem.startingHealth)
-                {
-                    //Pass.
-                }
-                else
-                {
-                    playerHealthSystem.takeDamageAndDie(0 - amount);
-                }
-                //go.GetComponent<HealthSystem>().takeDamageAndDie(0 - amount);
-                //BoardManager.Instance.BuffTarget(player, amount);
+                BoardManager.Instance.BuffTarget(player, 10);
                 player.dodgeChance += 1;
             }
+          
             yield return new WaitForSeconds(3.0f);
         }
     }
@@ -164,6 +153,7 @@ public class MageAbilities : Abilities
         if (BoardManager.Instance.selectedAbility == 1)
         {
             Fireball(selectedUnit, selectedTarget);
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         else
         {
@@ -177,6 +167,7 @@ public class MageAbilities : Abilities
         {
             if (Time.time > selectedUnit.timeStampAttack)
             {
+                selectedUnit.SetAttackCooldown(6.0f);
                 //Thread rain = new Thread(FireTheStorm);
                 ArrayList parameters = new ArrayList();
                 parameters.Add(selectedUnit);
@@ -196,7 +187,9 @@ public class MageAbilities : Abilities
     public override void Ability3(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 3)
         {
+            selectedUnit.SetAttackCooldown(7.0f);
             HealSpell(selectedUnit, selectedTarget);
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         else
         {
@@ -209,6 +202,7 @@ public class MageAbilities : Abilities
         {
             if (Time.time > selectedUnit.timeStampAttack)
             {
+                selectedUnit.SetAttackCooldown(4.0f);
                 //selectedUnit.SetAttackCooldown(2.0f);
                 StartCoroutine(BlindingLight(selectedUnit, selectedTarget));
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
@@ -249,6 +243,7 @@ public class MageAbilities : Abilities
             if (Time.time > selectedUnit.timeStampAttack)
             {
                 StartCoroutine(DivineShield());
+                BoardManager.Instance.selectedUnit = null;
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
             }
             /*int iterate = 0;
@@ -258,6 +253,7 @@ public class MageAbilities : Abilities
                 player.dodgeChance = initialDodgeChances[iterate];
                 iterate++;
             }*/
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         else
         {
