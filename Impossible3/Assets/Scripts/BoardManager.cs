@@ -61,7 +61,7 @@ public class BoardManager : MonoBehaviour
         SpawnMapTiles();
         ColorMapTiles();
         SpawnWalls();
-        SpawnAllObstacles(20);
+        SpawnAllObstacles(60);
 
         this.useGUILayout = true;
     }
@@ -519,9 +519,10 @@ public class BoardManager : MonoBehaviour
 
     private void SpawnAllObstacles(int count)
     {
+		List<string> Rocklist = new List<string> {"RockSprite01","RockSprite02","RockSprite03","RockSprite04","RockSprite05","RockSprite06","RockSprite07","RockSprite08"};
         for (int i = 0; i < count; i++)
         {
-            SpawnObstacle(random.Next(0, mapSize), random.Next(0, mapSize), "boulder");
+			SpawnObstacle(random.Next(0, mapSize), random.Next(0, mapSize), Rocklist[random.Next(Rocklist.Count)]);
         }
     }
 
