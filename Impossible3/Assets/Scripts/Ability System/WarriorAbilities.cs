@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Collections.Generic;
 
 public class WarriorAbilities : Abilities
 {
@@ -13,12 +15,18 @@ public class WarriorAbilities : Abilities
 	public int selectedUnitX;
 	public int selectedUnitY;
 
+	public float spellTimer;
+	public int spellCounter;
+
 	public int damage;
 	public int selfDamage;
 	public int buff;
+	public int knightOriginalHealth;
+	public HealthSystem knightHealth;
 
 	public Unit target;
 
+	private Boolean keepPlaying; 
 	private AudioSource source;
 
 	public AudioClip regAttack;
@@ -58,8 +66,19 @@ public class WarriorAbilities : Abilities
 	private void Update()
 	{
 		damage = this.GetComponentInParent<PlayerUnit>().damageAmount;
+		spellTimer = this.GetComponentInParent<PlayerUnit>().spellTimer;
+		spellCounter = this.GetComponentInParent<PlayerUnit> ().spellCounter;
 		x = BoardManager.Instance.selectionX;
 		y = BoardManager.Instance.selectionY;
+
+		if (spellTimer <= Time.time && spellCounter == 1) {
+			Debug.Log (this.GetComponentInParent<PlayerUnit> ().dodgeChance);
+			this.GetComponentInParent<PlayerUnit>().dodgeChance = 0;
+			this.GetComponentInParent<PlayerUnit>().cooldownMoveSeconds = 3;
+			keepPlaying = false;
+			Debug.Log (keepPlaying);
+			spellCounter--;
+		}
 	}
 
 	public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
@@ -72,10 +91,23 @@ public class WarriorAbilities : Abilities
 		}
 	}
 
-	public void Counter(Unit selectedUnit, Unit selectedTarget)
+	public void Sentinel(Unit selectedUnit, Unit selectedTarget)
 	{
 		//does somehting
-		source.PlayOneShot(counter);
+		selectedUnit.SetAttackCooldown(10.0f); 
+		GameObject self = selectedUnit.gameObject;
+		HealthSystem health = (HealthSystem)self.GetComponent(typeof(HealthSystem));
+		knightOriginalHealth = health.currentHealth;
+		if (selectedUnit.timeStampAttack <= Time.time) { 
+			selectedUnit.spellTimer = Time.time + 10;
+			selectedUnit.dodgeChance = 50;
+			selectedUnit.spellCounter += 1;
+			keepPlaying = true;
+			source.PlayOneShot (counter);
+			selectedUnit.SetMoveCooldown (2.0f);
+			selectedUnit.GetComponent<HealthSystem>().ConfirmHit(0, "Sentinel!");
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		}
 	}
 	public void Flail(Unit selectedUnit, Unit selectedTarget)
 	{
@@ -270,7 +302,7 @@ public class WarriorAbilities : Abilities
 	public override void Ability1(Unit selectedUnit, Unit selectedTarget) {
 		if (BoardManager.Instance.selectedAbility == 1)
 		{
-			Counter(selectedUnit, selectedTarget);
+			Sentinel(selectedUnit, selectedTarget);
 		}else
 		{
 			OverlaySelect(selectedUnit, 0, 0, 0, 0);//Unit selectedUnit, int attack, int straightrange, int diagrange, int circrange
