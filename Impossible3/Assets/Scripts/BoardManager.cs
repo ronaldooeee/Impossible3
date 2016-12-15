@@ -418,7 +418,7 @@ public class BoardManager : MonoBehaviour
                 HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
                 health.takeDamageAndDie(damage);
 
-                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+                //selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
                 didHit = true;
             }
             else
@@ -426,7 +426,7 @@ public class BoardManager : MonoBehaviour
                 HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
                 health.ConfirmHit(null);
                 Debug.Log("Player Missed!");
-                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+                //selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
                 didHit = true;
             }
         }
@@ -552,17 +552,17 @@ public class BoardManager : MonoBehaviour
         SpawnUnit(5, 8, 22);
 
         //Spawn Enemy Units (PrefabList #, x value, y value)
-        /*
+        
         SpawnUnit (7, 10, 25);
         SpawnUnit (7, 11, 26);
-        SpawnUnit (7, 4, 4);
-        SpawnUnit (7, 4, 3);
-        SpawnUnit (7, 4, 2);
-        SpawnUnit (7, 3, 2);
+        SpawnUnit (7, 11, 25);
+        SpawnUnit (7, 10, 26);
+        SpawnUnit (7, 10, 27);
+        SpawnUnit (7, 11, 27);
         SpawnUnit (7, 2, 2);
         SpawnUnit (7, 2, 3);
         SpawnUnit (7, 2, 4);
-        */
+        
 
     }
 
