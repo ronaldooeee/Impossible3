@@ -109,12 +109,13 @@ public class MageAbilities : Abilities
 
     private IEnumerator Slowness(Unit selectedUnit, Unit selectedTarget)
     {
+        float initialSpeed = selectedTarget.cooldownMoveSeconds;
         for (int i = 0; i < 3; i++)
         {
             selectedTarget.cooldownMoveSeconds += 3;
             yield return new WaitForSeconds(3.0f);
         }
-
+        selectedTarget.cooldownMoveSeconds = initialSpeed;
     }
 
     private IEnumerator DivineShield()
@@ -219,14 +220,12 @@ public class MageAbilities : Abilities
         {
             if (Time.time > selectedUnit.timeStampAttack)
             {
-            //selectedUnit.SetAttackCooldown(2.0f);
-            float initialSpeed = selectedTarget.cooldownMoveSeconds;
-
-            StartCoroutine(Decay(selectedUnit, selectedTarget));
-            StartCoroutine(Slowness(selectedUnit, selectedTarget));
+                //selectedUnit.SetAttackCooldown(2.0f);
+                StartCoroutine(Decay(selectedUnit, selectedTarget));
+                StartCoroutine(Slowness(selectedUnit, selectedTarget));
     
-            selectedTarget.cooldownMoveSeconds = initialSpeed;
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+
+                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
             }
         }
         else
