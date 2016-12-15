@@ -79,35 +79,51 @@ public class MageAbilities : Abilities
         {
             if (Firestorm((Unit)parameters[0], (Unit)parameters[1], (System.Random)parameters[2]))
             {
-                //Debug.Log("hit");
+                Debug.Log("hit");
                 count++;
             }
         }
     }
 
-    private void BlindingLight(Unit selectedUnit, Unit selectedTarget)
+    private IEnumerator BlindingLight(Unit selectedUnit, Unit selectedTarget)
     {
+        int initialAccuracy = selectedTarget.accuracy;
         selectedTarget.accuracy -= 40;
+        yield return new WaitForSeconds(6.0f);
+        selectedTarget.accuracy = initialAccuracy;
     }
 
-    private void Decay(Unit selectedUnit, Unit selectedTarget)
+    private IEnumerator Decay(Unit selectedUnit, Unit selectedTarget)
     {
-        selectedTarget.health = (int)System.Math.Floor(selectedTarget.health * 0.80);
-    }
-
-    private void Slowness(Unit selectedUnit, Unit selectedTarget)
-    {
-        selectedTarget.cooldownMoveSeconds += 3;
-    }
-
-    private void DivineShield()
-    {
-        foreach (GameObject go in BoardManager.playerUnits)
+        for (int i = 0; i < 3; i++)
         {
-            Debug.Log("buff");
-            Unit player = go.GetComponent<Unit>();
-            player.health *= 2;
-            player.dodgeChance = 1;
+            selectedTarget.health = (int)System.Math.Floor(selectedTarget.health * 0.80);
+            yield return new WaitForSeconds(3.0f);
+        }
+    }
+
+    private IEnumerator Slowness(Unit selectedUnit, Unit selectedTarget)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            selectedTarget.cooldownMoveSeconds += 3;
+            yield return new WaitForSeconds(3.0f);
+        }
+
+    }
+
+    private IEnumerator DivineShield()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            foreach (GameObject go in BoardManager.playerUnits)
+            {
+                Debug.Log("buff");
+                Unit player = go.GetComponent<Unit>();
+                player.health *= 2;
+                player.dodgeChance = 1;
+            }
+            yield return new WaitForSeconds(3.0f);
         }
     }
 
@@ -169,15 +185,7 @@ public class MageAbilities : Abilities
     public override void Ability4(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 4)
         {
-            float start = Time.time;
-            float end = Time.time + 6.0f;
-            int initialAccuracy = selectedTarget.accuracy;
-            BlindingLight(selectedUnit, selectedTarget);
-            while (Time.time < start + end)
-            {
-                //Pass.
-            }
-            selectedTarget.accuracy = initialAccuracy;
+            StartCoroutine(BlindingLight(selectedUnit, selectedTarget));
         }
         else
         {
@@ -188,24 +196,11 @@ public class MageAbilities : Abilities
     public override void Ability5(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 5)
         {
-            int three = 0;
-            float go = 0.0f;
             float initialSpeed = selectedTarget.cooldownMoveSeconds;
-            while (three < 3)
-            {
-                if (Time.time > go)
-                {
-                    Decay(selectedUnit, selectedTarget);
-                    Slowness(selectedUnit, selectedTarget);
-                    go = Time.time + 3.0f;
-                    three++;
-                }
 
-            }
-            while (go > Time.time)
-            {
-                //Pass.
-            }
+            StartCoroutine(Decay(selectedUnit, selectedTarget));
+            StartCoroutine(Slowness(selectedUnit, selectedTarget));
+    
             selectedTarget.cooldownMoveSeconds = initialSpeed;
         }
         else
@@ -214,16 +209,12 @@ public class MageAbilities : Abilities
         }
     }
 
-    public override IEnumerator Ability6(Unit selectedUnit, Unit selectedTarget) {
+    public override void Ability6(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 6)
         {
             int[] initialDodgeChances = DivineShieldPrep();
+            StartCoroutine(DivineShield());
 
-            for (int i = 0; i < 3; i++)
-            {
-                DivineShield();
-                yield return new WaitForSeconds(3.0f);
-            }
             int iterate = 0;
             foreach (GameObject playerOnBoard in BoardManager.playerUnits)
             {
