@@ -111,7 +111,10 @@ public class HealthSystem : MonoBehaviour
         if(buff != null)
         {
             hitText.GetComponent<TextMesh>().text = buff;
-            hitText.GetComponent<TextMesh>().color = Color.green;
+            if(damage == 0)
+            {
+                hitText.GetComponent<TextMesh>().color = Color.green;
+            }
         }
         else if(damage == null)
         {

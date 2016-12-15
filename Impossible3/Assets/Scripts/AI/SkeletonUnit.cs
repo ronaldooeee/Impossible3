@@ -79,7 +79,7 @@ public class SkeletonUnit : Unit
             foreach (int[] move in allowedEnemyMoves)
             {
                 //Check if this will move enemy closer to a player
-                /*if (Math.Abs(enemyUnit.CurrentX - closestPlayer.CurrentX) > Math.Abs(move[0] - closestPlayer.CurrentX) || Math.Abs(enemyUnit.CurrentY - closestPlayer.CurrentY) > Math.Abs(move[1] - closestPlayer.CurrentY))
+                if (Math.Abs(enemyUnit.CurrentX - closestPlayer.CurrentX) > Math.Abs(move[0] - closestPlayer.CurrentX) || Math.Abs(enemyUnit.CurrentY - closestPlayer.CurrentY) > Math.Abs(move[1] - closestPlayer.CurrentY))
                 {
                     if (BoardManager.Units[move[0], move[1]] == null)
                     {
@@ -91,7 +91,7 @@ public class SkeletonUnit : Unit
                         //enemyUnit.timeStampAttack += 2;
                         return;
                     }
-                }*/
+                }
             }
         }
     }

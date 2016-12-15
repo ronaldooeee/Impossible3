@@ -5,6 +5,8 @@ using System;
 
 public class BoardManager : MonoBehaviour
 {
+    public Transform WarriorAbilityUI, MageAbilityUI, ArcherAbilityUI;
+
     public static BoardManager Instance { set; get; }
     public bool[,] allowedMoves { set; get; }
     public bool[,] allowedAttacks { set; get; }
@@ -33,6 +35,7 @@ public class BoardManager : MonoBehaviour
     public static List<GameObject> playerUnits;
     public static List<GameObject> enemyUnits;
     private int quota = 2; // Amount of enemy units to keep on board at a time.
+	private int currentScoreThreshold = 7;
     private System.Random random = new System.Random();  // For generating random numbers.
 
     private Material previousMat;
@@ -47,11 +50,15 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
-        score = 40;
+        score = 0;
         playerUnits = new List<GameObject>();
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
         Instance = this;
+
+        MageAbilityUI.gameObject.SetActive(false);
+        WarriorAbilityUI.gameObject.SetActive(false);
+        ArcherAbilityUI.gameObject.SetActive(false);
 
         allowedMoves = new bool[mapSize, mapSize];
         allowedAttacks = new bool[mapSize, mapSize];
@@ -61,7 +68,7 @@ public class BoardManager : MonoBehaviour
         SpawnMapTiles();
         ColorMapTiles();
         SpawnWalls();
-        SpawnAllObstacles(20);
+        SpawnAllObstacles(60);
 
         this.useGUILayout = true;
     }
@@ -70,8 +77,12 @@ public class BoardManager : MonoBehaviour
     private void Update()
     {
         //Spawn Enemies when count on board is less than quota
-        while (enemyUnits.Count < quota)
-        {
+        /*while (enemyUnits.Count < quota)
+		{
+			if (score % 7 == 0 && score == currentScoreThreshold) {
+				currentScoreThreshold += 7;
+				quota++;
+			}
             int Spawnbuffer = 2;
             int Spawndistance = 5;
             Coordinate[] bound = findBound();
@@ -94,7 +105,7 @@ public class BoardManager : MonoBehaviour
             , new int[] { paddedBounds[0][1], paddedBounds[0][3], bound[0].y, paddedBounds[1][3] } };
 
             
-            int move = random.Next(4);
+            int move = random.Next(4);*/
 
             /*
             Debug.Log(moveRanges[move][0]);
@@ -104,8 +115,8 @@ public class BoardManager : MonoBehaviour
             Debug.Log(0-move);
             */
 
-            SpawnUnit(random.Next(6, 10), random.Next(moveRanges[move][0], moveRanges[move][1])  , random.Next(moveRanges[move][2], moveRanges[move][3]));
-        }
+            //SpawnUnit(random.Next(6, 10), random.Next(moveRanges[move][0], moveRanges[move][1])  , random.Next(moveRanges[move][2], moveRanges[move][3]));
+        //}
 
         //Let player know of new abilities
         tellScore(score);
@@ -121,6 +132,9 @@ public class BoardManager : MonoBehaviour
         //Measure when right mouse button is clicked for Movement
         if (Input.GetMouseButtonDown(1))
         {
+            MageAbilityUI.gameObject.SetActive(false);
+            WarriorAbilityUI.gameObject.SetActive(false);
+            ArcherAbilityUI.gameObject.SetActive(false);
             //Make sure x and y value is on the board
             if (selectionX >= 0 && selectionY >= 0)
             {
@@ -167,7 +181,29 @@ public class BoardManager : MonoBehaviour
                     SelectUnitForAttack(selectionX, selectionY);
                     selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges();
                     selectedAbility = 0;
-                }else if (Units[selectionX, selectionY] == null)
+                    if (selectedUnit.GetComponentInParent<MageAbilities>())
+                    {
+                        MageAbilityUI.gameObject.SetActive(true);
+                        WarriorAbilityUI.gameObject.SetActive(false);
+                        ArcherAbilityUI.gameObject.SetActive(false);
+                        
+                    }
+                    if(selectedUnit.GetComponentInParent<WarriorAbilities>())
+                    {
+                        MageAbilityUI.gameObject.SetActive(false);
+                        WarriorAbilityUI.gameObject.SetActive(true);
+                        ArcherAbilityUI.gameObject.SetActive(false);
+
+                    }
+                    if (selectedUnit.GetComponentInParent<RangerAbilities>())
+                    {
+                        MageAbilityUI.gameObject.SetActive(false);
+                        WarriorAbilityUI.gameObject.SetActive(false);
+                        ArcherAbilityUI.gameObject.SetActive(true);
+
+                    }
+                }
+                else if (Units[selectionX, selectionY] == null)
                 {
                     if(allowedAttacks[selectionX, selectionY] || (BoardHighlights.castOnSelfAndParty && allowedAbilities[selectionX, selectionY]))
                     {
@@ -408,60 +444,65 @@ public class BoardManager : MonoBehaviour
     // An attack executing successfully but missing its target does not constitute something going wrong.
 	public bool AttackTarget(Unit selectedTarget, int damage)
     {
-        unitAccuracy = selectedUnit.accuracy;
-        bool didHit = false;
-        if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && !selectedTarget.isPlayer)
+        try
         {
-            if (unitAccuracy >= selectedTarget.dodgeChance + random.Next(100))
+            unitAccuracy = selectedUnit.accuracy;
+            bool didHit = false;
+            if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && !selectedTarget.isPlayer)
             {
-                GameObject enemy = selectedTarget.gameObject;
-                HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
-                health.takeDamageAndDie(damage);
-
-                //selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-                didHit = true;
+                if (unitAccuracy >= selectedTarget.dodgeChance + random.Next(100))
+                {
+                    GameObject enemy = selectedTarget.gameObject;
+                    HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
+                    health.takeDamageAndDie(damage);
+                    didHit = true;
+                }
+                else
+                {
+                    HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
+                    health.ConfirmHit(null);
+                    Debug.Log("Player Missed!");
+                    didHit = true;
+                }
             }
             else
             {
-                HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
-                health.ConfirmHit(null);
-                Debug.Log("Player Missed!");
-                //selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-                didHit = true;
+                return false;
             }
-        }
-        else
-        {
-            return false;
-        }
 
-        try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
-        selectedAbility = 0;
-        BoardHighlights.Instance.Hidehighlights();
-        //selectedTarget = null;
-        //selectedUnit = null;
-        return didHit;
+            try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
+            selectedAbility = 0;
+            BoardHighlights.Instance.Hidehighlights();
+            return didHit;
+        }
+        catch { return false; }
     }
 
 
 	public void BuffTarget(Unit selectedTarget, int buff)
     {
-        //selectedTarget = Units[x, y];
-        if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer == selectedUnit.isPlayer)
-        {
-            GameObject ally = selectedTarget.gameObject;
-            HealthSystem health = (HealthSystem)ally.GetComponent(typeof(HealthSystem));
-            health.takeDamageAndDie(0-buff);
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-        }
-        else
-        {
-            return;
-        }
-        BoardHighlights.Instance.Hidehighlights();
+        try{
 
-        selectedTarget = null;
-        selectedUnit = null;
+            if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && selectedTarget.isPlayer == selectedUnit.isPlayer)
+            {
+                GameObject ally = selectedTarget.gameObject;
+                HealthSystem health = (HealthSystem)ally.GetComponent(typeof(HealthSystem));
+                if (health.currentHealth <= health.startingHealth)
+                {
+                    health.takeDamageAndDie(0 - buff);
+                }
+                else
+                {
+                    health.ConfirmHit(0, "Full Health!");
+                }
+            }
+            else
+            {
+                return;
+            }
+            BoardHighlights.Instance.Hidehighlights();
+
+        }catch { }
     }
 
     //Spawns whatever unit is in the index of prefabs on BoardManager.cs
@@ -519,9 +560,10 @@ public class BoardManager : MonoBehaviour
 
     private void SpawnAllObstacles(int count)
     {
+		List<string> Rocklist = new List<string> {"RockSprite01","RockSprite02","RockSprite03","RockSprite04","RockSprite05","RockSprite06","RockSprite07","RockSprite08"};
         for (int i = 0; i < count; i++)
         {
-            SpawnObstacle(random.Next(0, mapSize), random.Next(0, mapSize), "boulder");
+			SpawnObstacle(random.Next(0, mapSize), random.Next(0, mapSize), Rocklist[random.Next(Rocklist.Count)]);
         }
     }
 
@@ -530,8 +572,8 @@ public class BoardManager : MonoBehaviour
         if (Units[x, y] == null)
         {
             GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
-            Vector3 temp = new Vector3(0, 0.5f, 0);
-            cube.transform.position += temp;
+            //Vector3 temp = new Vector3(0, 0.5f, 0);
+            //cube.transform.position += temp;
             cube.transform.rotation = Camera.main.transform.rotation;
             cube.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
             cube.transform.localScale = new Vector3(2, 2, 1);
@@ -553,15 +595,16 @@ public class BoardManager : MonoBehaviour
 
         //Spawn Enemy Units (PrefabList #, x value, y value)
         
-        SpawnUnit (7, 10, 25);
-        SpawnUnit (7, 11, 26);
-        SpawnUnit (7, 11, 25);
-        SpawnUnit (7, 10, 26);
-        SpawnUnit (7, 10, 27);
-        SpawnUnit (7, 11, 27);
-        SpawnUnit (7, 2, 2);
-        SpawnUnit (7, 2, 3);
-        SpawnUnit (7, 2, 4);
+        
+        SpawnUnit (7, 10, 22);
+        SpawnUnit (7, 10, 23);
+        SpawnUnit (7, 10, 24);
+        SpawnUnit (7, 11, 22);
+        SpawnUnit (7, 11, 23);
+        SpawnUnit (7, 11, 24);
+        SpawnUnit (7, 12, 22);
+        SpawnUnit (7, 12, 23);
+        SpawnUnit (7, 12, 24);
         
 
     }
