@@ -110,7 +110,7 @@ public class PlayerUI : MonoBehaviour
 
 
         }
-    }
+}
 
 
 }

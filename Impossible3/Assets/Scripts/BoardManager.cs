@@ -5,6 +5,8 @@ using System;
 
 public class BoardManager : MonoBehaviour
 {
+    public Transform WarriorAbilityUI, MageAbilityUI, ArcherAbilityUI;
+
     public static BoardManager Instance { set; get; }
     public bool[,] allowedMoves { set; get; }
     public bool[,] allowedAttacks { set; get; }
@@ -52,6 +54,10 @@ public class BoardManager : MonoBehaviour
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
         Instance = this;
+
+        MageAbilityUI.gameObject.SetActive(false);
+        WarriorAbilityUI.gameObject.SetActive(false);
+        ArcherAbilityUI.gameObject.SetActive(false);
 
         allowedMoves = new bool[mapSize, mapSize];
         allowedAttacks = new bool[mapSize, mapSize];
@@ -121,6 +127,9 @@ public class BoardManager : MonoBehaviour
         //Measure when right mouse button is clicked for Movement
         if (Input.GetMouseButtonDown(1))
         {
+            MageAbilityUI.gameObject.SetActive(false);
+            WarriorAbilityUI.gameObject.SetActive(false);
+            ArcherAbilityUI.gameObject.SetActive(false);
             //Make sure x and y value is on the board
             if (selectionX >= 0 && selectionY >= 0)
             {
@@ -167,7 +176,29 @@ public class BoardManager : MonoBehaviour
                     SelectUnitForAttack(selectionX, selectionY);
                     selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges();
                     selectedAbility = 0;
-                }else if (Units[selectionX, selectionY] == null)
+                    if (selectedUnit.GetComponentInParent<MageAbilities>())
+                    {
+                        MageAbilityUI.gameObject.SetActive(true);
+                        WarriorAbilityUI.gameObject.SetActive(false);
+                        ArcherAbilityUI.gameObject.SetActive(false);
+                        
+                    }
+                    if(selectedUnit.GetComponentInParent<WarriorAbilities>())
+                    {
+                        MageAbilityUI.gameObject.SetActive(false);
+                        WarriorAbilityUI.gameObject.SetActive(true);
+                        ArcherAbilityUI.gameObject.SetActive(false);
+
+                    }
+                    if (selectedUnit.GetComponentInParent<RangerAbilities>())
+                    {
+                        MageAbilityUI.gameObject.SetActive(false);
+                        WarriorAbilityUI.gameObject.SetActive(false);
+                        ArcherAbilityUI.gameObject.SetActive(true);
+
+                    }
+                }
+                else if (Units[selectionX, selectionY] == null)
                 {
                     if(allowedAttacks[selectionX, selectionY] || (BoardHighlights.castOnSelfAndParty && allowedAbilities[selectionX, selectionY]))
                     {
