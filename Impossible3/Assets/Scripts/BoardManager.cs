@@ -35,6 +35,7 @@ public class BoardManager : MonoBehaviour
     public static List<GameObject> playerUnits;
     public static List<GameObject> enemyUnits;
     private int quota = 2; // Amount of enemy units to keep on board at a time.
+	private int currentScoreThreshold = 7;
     private System.Random random = new System.Random();  // For generating random numbers.
 
     private Material previousMat;
@@ -49,7 +50,7 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
-        score = 40;
+        score = 0;
         playerUnits = new List<GameObject>();
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
@@ -77,7 +78,11 @@ public class BoardManager : MonoBehaviour
     {
         //Spawn Enemies when count on board is less than quota
         /*while (enemyUnits.Count < quota)
-        {
+		{
+			if (score % 7 == 0 && score == currentScoreThreshold) {
+				currentScoreThreshold += 7;
+				quota++;
+			}
             int Spawnbuffer = 2;
             int Spawndistance = 5;
             Coordinate[] bound = findBound();
@@ -100,7 +105,7 @@ public class BoardManager : MonoBehaviour
             , new int[] { paddedBounds[0][1], paddedBounds[0][3], bound[0].y, paddedBounds[1][3] } };
 
             
-            int move = random.Next(4);
+            int move = random.Next(4);*/
 
             /*
             Debug.Log(moveRanges[move][0]);
