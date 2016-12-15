@@ -65,7 +65,6 @@ public class MageAbilities : Abilities
 
     private bool Firestorm(Unit selectedUnit, Unit selectedTarget, System.Random random)
     {
-        selectedUnit.SetAttackCooldown(5.0f);
         damage = (int)System.Math.Floor(damage * 1.25);
         return BoardManager.Instance.AttackTarget(selectedTarget, damage, random.Next(0, 100));
     }
@@ -75,6 +74,7 @@ public class MageAbilities : Abilities
         ArrayList parameters = (ArrayList)o;
         int count = 0;
         int total = ((System.Random)parameters[2]).Next(1, 4);
+        ((Unit)parameters[0]).SetAttackCooldown(5.0f);
         while (count < total)
         {
             if (Firestorm((Unit)parameters[0], (Unit)parameters[1], (System.Random)parameters[2]))
@@ -85,29 +85,51 @@ public class MageAbilities : Abilities
         }
     }
 
-    private void BlindingLight(Unit selectedUnit, Unit selectedTarget)
+    private IEnumerator BlindingLight(Unit selectedUnit, Unit selectedTarget)
     {
-        selectedTarget.accuracy -= 40;
+        int initialAccuracy = selectedTarget.accuracy;
+        selectedTarget.accuracy = 0;
+        yield return new WaitForSeconds(6.0f);
+        selectedTarget.accuracy = initialAccuracy;
     }
 
-    private void Decay(Unit selectedUnit, Unit selectedTarget)
+    private IEnumerator Decay(Unit selectedUnit, Unit selectedTarget)
     {
-        selectedTarget.health = (int)System.Math.Floor(selectedTarget.health * 0.80);
-    }
-
-    private void Slowness(Unit selectedUnit, Unit selectedTarget)
-    {
-        selectedTarget.cooldownMoveSeconds += 3;
-    }
-
-    private void DivineShield()
-    {
-        foreach (GameObject go in BoardManager.playerUnits)
+        for (int i = 0; i < 3; i++)
         {
-            Debug.Log("buff");
-            Unit player = go.GetComponent<Unit>();
-            player.health *= 2;
-            player.dodgeChance = 1;
+            //selectedTarget.health = (int)System.Math.Floor(selectedTarget.health * 0.80);
+            GameObject enemy = selectedTarget.gameObject;
+            HealthSystem healthOfEnemy = enemy.GetComponent<HealthSystem>();
+            int amount = (int)System.Math.Floor(healthOfEnemy.currentHealth - (healthOfEnemy.currentHealth * 0.80));
+            healthOfEnemy.takeDamageAndDie(amount);
+            yield return new WaitForSeconds(3.0f);
+        }
+    }
+
+    private IEnumerator Slowness(Unit selectedUnit, Unit selectedTarget)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            selectedTarget.cooldownMoveSeconds += 3;
+            yield return new WaitForSeconds(3.0f);
+        }
+
+    }
+
+    private IEnumerator DivineShield()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            foreach (GameObject go in BoardManager.playerUnits)
+            {
+                Debug.Log("buff");
+                Unit player = go.GetComponent<Unit>();
+                //player.health *= 2;
+                int amount = (go.GetComponent<HealthSystem>().currentHealth * 2) - go.GetComponent<HealthSystem>().currentHealth;
+                BoardManager.Instance.BuffTarget(player, amount);
+                player.dodgeChance += 1;
+            }
+            yield return new WaitForSeconds(3.0f);
         }
     }
 
@@ -118,12 +140,14 @@ public class MageAbilities : Abilities
         foreach (GameObject go in BoardManager.playerUnits)
         {
             Unit player = go.GetComponent<Unit>();
+
             player.health += 10;
             dodgeChances[iterate] = player.dodgeChance;
             iterate++;
         }
         return dodgeChances;
     }
+
     public override void Ability1(Unit selectedUnit, Unit selectedTarget)
     {
         if (BoardManager.Instance.selectedAbility == 1)
@@ -169,15 +193,9 @@ public class MageAbilities : Abilities
     public override void Ability4(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 4)
         {
-            float start = Time.time;
-            float end = Time.time + 6.0f;
-            int initialAccuracy = selectedTarget.accuracy;
-            BlindingLight(selectedUnit, selectedTarget);
-            while (Time.time < start + end)
-            {
-                //Pass.
-            }
-            selectedTarget.accuracy = initialAccuracy;
+            //selectedUnit.SetAttackCooldown(2.0f);
+            StartCoroutine(BlindingLight(selectedUnit, selectedTarget));
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         else
         {
@@ -188,25 +206,14 @@ public class MageAbilities : Abilities
     public override void Ability5(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 5)
         {
-            int three = 0;
-            float go = 0.0f;
+            //selectedUnit.SetAttackCooldown(2.0f);
             float initialSpeed = selectedTarget.cooldownMoveSeconds;
-            while (three < 3)
-            {
-                if (Time.time > go)
-                {
-                    Decay(selectedUnit, selectedTarget);
-                    Slowness(selectedUnit, selectedTarget);
-                    go = Time.time + 3.0f;
-                    three++;
-                }
 
-            }
-            while (go > Time.time)
-            {
-                //Pass.
-            }
+            StartCoroutine(Decay(selectedUnit, selectedTarget));
+            StartCoroutine(Slowness(selectedUnit, selectedTarget));
+    
             selectedTarget.cooldownMoveSeconds = initialSpeed;
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         else
         {
@@ -217,31 +224,18 @@ public class MageAbilities : Abilities
     public override void Ability6(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 6)
         {
-            int three = 0;
-            float go = 0.0f;
-            int[] initialDodgeChances = DivineShieldPrep();
-            while (three < 3)
-            {
-                Debug.Log(Time.time);
-                if (Time.time > go)
-                {
-                    DivineShield();
-                    go = Time.time + 3.0f;
-                    three++;
-                }
+            //selectedUnit.SetAttackCooldown(4.0f);
+            //int[] initialDodgeChances = DivineShieldPrep();
+            StartCoroutine(DivineShield());
 
-            }
-            while (go > Time.time)
-            {
-                //Pass.
-            }
-            int iterate = 0;
+            /*int iterate = 0;
             foreach (GameObject playerOnBoard in BoardManager.playerUnits)
             {
                 Unit player = playerOnBoard.GetComponent<Unit>();
                 player.dodgeChance = initialDodgeChances[iterate];
                 iterate++;
-            } //Unfortunately this assumes that all the players are still alive. Thankfully, throughout the course of the game, we never spawn more players. We'll always have enough dodgeChances to go around, but they may be misattributed.
+            }*/
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         else
         {
