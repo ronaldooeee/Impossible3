@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 2cad7bb8e8b3caf46b91ea687726d534
-timeCreated: 1481501982
+timeCreated: 1481763865
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -39,7 +39,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -57,12 +57,12 @@ TextureImporter:
       name: grave_0
       rect:
         serializedVersion: 2
-        x: 12
-        y: 14
+        x: 0
+        y: 0
         width: 52
-        height: 76
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

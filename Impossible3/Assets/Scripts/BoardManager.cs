@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class BoardManager : MonoBehaviour
 {
@@ -408,7 +409,7 @@ public class BoardManager : MonoBehaviour
         bool didHit = false;
         if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && !selectedTarget.isPlayer)
         {
-            if (unitAccuracy >= selectedTarget.dodgeChance + Random.Range(0, 100))
+            if (unitAccuracy >= selectedTarget.dodgeChance + random.Next(100))
             {
                 GameObject enemy = selectedTarget.gameObject;
                 HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
@@ -585,25 +586,44 @@ public class BoardManager : MonoBehaviour
 
     private void ColorMapTiles()
     {
-        Texture2D tile1 = Resources.Load("tile1") as Texture2D;
-        Texture2D tile2 = Resources.Load("tile2") as Texture2D;
-        Texture2D tile3 = Resources.Load("tile3") as Texture2D;
-        foreach (GameObject tile in mapTiles)
+        Texture2D[] tiles = new Texture2D[]{
+            Resources.Load("tile1") as Texture2D
+            ,Resources.Load("tile2") as Texture2D
+            ,Resources.Load("tile3") as Texture2D
+            ,Resources.Load("tile4") as Texture2D
+            ,Resources.Load("tile5") as Texture2D
+            ,Resources.Load("tile6") as Texture2D
+        };
+        for(int i = 0; i<mapTiles.Count; i++)
         {
-            tile.transform.Rotate(new Vector3(0, 0, (Random.Range(0, 3) * 90)));
-            int rand = Random.Range(0, 10);
-            if (rand < 9 && rand > 2)
+            GameObject tile = mapTiles[i];
+            Texture2D tileTex = tiles[random.Next(2)];
+            if(random.Next(100) < 20)
             {
-                tile.GetComponent<Renderer>().material.mainTexture = tile2;
-            }
-            else if (rand <= 2)
+                tileTex = tiles[random.Next(3, 6)];
+            }else
             {
-                tile.GetComponent<Renderer>().material.mainTexture = tile1;
+                Texture lastTile1 = i > 0 ? mapTiles[i - 1].GetComponent<Renderer>().material.mainTexture : null;
+                Texture lastTile2 = i > mapSize ? mapTiles[i - mapSize].GetComponent<Renderer>().material.mainTexture : null;
+
+                if (random.Next(100) < 70 && lastTile1 != null && lastTile2 != null && Convert.ToInt32(lastTile1.ToString().Substring(4, 1)) == Convert.ToInt32(lastTile2.ToString().Substring(4, 1)))
+                {
+                    tileTex = tiles[Convert.ToInt32(lastTile1.ToString().Substring(4, 1)) - 1];
+                }
+                else if (lastTile1 != null && random.Next(100) < 50)
+                {
+                    tileTex = tiles[Convert.ToInt32(lastTile1.ToString().Substring(4,1)) - 1];
+                }
+                else if(lastTile2 != null && random.Next(100) < 50)
+                {
+                    tileTex = tiles[Convert.ToInt32(lastTile2.ToString().Substring(4,1)) - 1];
+                }                    
             }
-            else
-            {
-                tile.GetComponent<Renderer>().material.mainTexture = tile3;
-            }
+
+
+            //Debug.Log((float)(tileX / mapSize));
+            tile.GetComponent<Renderer>().material.mainTexture = tileTex;
+            tile.transform.Rotate(new Vector3(0, 0, (random.Next(3) * 90)));
             tile.GetComponent<Renderer>().material.color = Color.white;
 
         }
