@@ -72,11 +72,9 @@ public class WarriorAbilities : Abilities
 		y = BoardManager.Instance.selectionY;
 
 		if (spellTimer <= Time.time && spellCounter == 1) {
-			Debug.Log (this.GetComponentInParent<PlayerUnit> ().dodgeChance);
 			this.GetComponentInParent<PlayerUnit>().dodgeChance = 0;
 			this.GetComponentInParent<PlayerUnit>().cooldownMoveSeconds = 3;
 			keepPlaying = false;
-			Debug.Log (keepPlaying);
 			spellCounter--;
 		}
 	}
@@ -209,7 +207,6 @@ public class WarriorAbilities : Abilities
 		if (selectedUnit.timeStampAttack <= Time.time){
 			if (selectedTarget.CurrentX > selectedUnit.CurrentX && BoardManager.Units[selectedUnit.CurrentX + 6, y] == null) {
 				Debug.Log ("Move right side");
-				Debug.Log (selectedUnit.CurrentX + " " + selectedUnit.CurrentY);
 				BoardManager.Units [selectedUnit.CurrentX + 6, y] = selectedUnit; 
 				selectedUnit.transform.position = BoardManager.Instance.GetTileCenter (selectedUnit.CurrentX + 6, y);
 				selectedUnit.SetPosition (selectedUnit.CurrentX + 6, y);
@@ -218,7 +215,6 @@ public class WarriorAbilities : Abilities
 					BoardManager.Instance.AttackTarget(BoardManager.Units[selectedUnitX + i, y], damage);
 				}
 				source.PlayOneShot (warpath);
-				Debug.Log (selectedUnit.CurrentX + " " + selectedUnit.CurrentY);
 				Debug.Log ("Right side");
 
 			} else if (selectedTarget.CurrentX < selectedUnit.CurrentX && BoardManager.Units[selectedUnit.CurrentX - 6, y] == null) {

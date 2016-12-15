@@ -80,7 +80,7 @@ public class BoardManager : MonoBehaviour
     private void Update()
     {
         //Spawn Enemies when count on board is less than quota
-        /*while (enemyUnits.Count < quota)
+        while (enemyUnits.Count < quota)
 		{
 			if (score % 7 == 0 && score == currentScoreThreshold) {
 				currentScoreThreshold += 7;
@@ -108,27 +108,13 @@ public class BoardManager : MonoBehaviour
             , new int[] { paddedBounds[0][1], paddedBounds[0][3], bound[0].y, paddedBounds[1][3] } };
 
             
-            int move = random.Next(4);*/
+            int move = random.Next(4);
 
-            /*
-            Debug.Log(moveRanges[move][0]);
-            Debug.Log(moveRanges[move][1]);
-            Debug.Log(moveRanges[move][2]);
-            Debug.Log(moveRanges[move][3]);
-            Debug.Log(0-move);
-            */
-
-            //SpawnUnit(random.Next(6, 10), random.Next(moveRanges[move][0], moveRanges[move][1])  , random.Next(moveRanges[move][2], moveRanges[move][3]));
-        //}
+            SpawnUnit(random.Next(6, 10), random.Next(moveRanges[move][0], moveRanges[move][1])  , random.Next(moveRanges[move][2], moveRanges[move][3]));
+        }
 
         //Let player know of new abilities
         tellScore(score);
-
-        if (playerUnits.Count < 1)
-        {
-            //UnityEditor.EditorUtility.DisplayDialog("Failure!", "You have lost the game...", "Okay");
-            //UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Play");
-        }
         UpdateSelection();
         DrawBoard();
 
@@ -525,7 +511,6 @@ public class BoardManager : MonoBehaviour
             go.transform.localScale = new Vector3(2, 2, 1);
             Units[x, y] = go.GetComponent<Unit>();
             Units[x, y].SetPosition(x, y);
-            //Debug.Log(x + " " + y);
             if (unit == 0 || unit == 4 || unit == 5)
             {
                 playerUnits.Add(go);
@@ -671,7 +656,6 @@ public class BoardManager : MonoBehaviour
             }
 
 
-            //Debug.Log((float)(tileX / mapSize));
             tile.GetComponent<Renderer>().material.mainTexture = tileTex;
             tile.transform.Rotate(new Vector3(0, 0, (random.Next(3) * 90)));
             tile.GetComponent<Renderer>().material.color = Color.white;

@@ -114,7 +114,6 @@ public class MageAbilities : Abilities
     {
         for (int i = 0; i < 3; i++)
         {
-            //selectedTarget.health = (int)System.Math.Floor(selectedTarget.health * 0.80);
             GameObject enemy = selectedTarget.gameObject;
             HealthSystem healthOfEnemy = enemy.GetComponent<HealthSystem>();
             int amount = (int)System.Math.Floor(healthOfEnemy.currentHealth - (healthOfEnemy.currentHealth * 0.80));
@@ -187,12 +186,10 @@ public class MageAbilities : Abilities
             if (Time.time > selectedUnit.timeStampAttack)
             {
                 selectedUnit.SetAttackCooldown(6.0f);
-                //Thread rain = new Thread(FireTheStorm);
                 ArrayList parameters = new ArrayList();
                 parameters.Add(selectedUnit);
                 parameters.Add(selectedTarget);
                 parameters.Add(this.random);
-                //rain.Start((object)parameters);
                 FireTheStorm(parameters);
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 				source.PlayOneShot (regAttack);
@@ -225,7 +222,6 @@ public class MageAbilities : Abilities
             if (Time.time > selectedUnit.timeStampAttack)
             {
                 selectedUnit.SetAttackCooldown(4.0f);
-                //selectedUnit.SetAttackCooldown(2.0f);
                 StartCoroutine(BlindingLight(selectedUnit, selectedTarget));
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
             }
@@ -241,7 +237,6 @@ public class MageAbilities : Abilities
         {
             if (Time.time > selectedUnit.timeStampAttack)
             {
-                //selectedUnit.SetAttackCooldown(2.0f);
                 StartCoroutine(Decay(selectedUnit, selectedTarget));
                 StartCoroutine(Slowness(selectedUnit, selectedTarget));
     
@@ -258,8 +253,6 @@ public class MageAbilities : Abilities
     public override void Ability6(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 6)
         {
-            //selectedUnit.SetAttackCooldown(4.0f);
-            //int[] initialDodgeChances = DivineShieldPrep();
             if (Time.time > selectedUnit.timeStampAttack)
             {
 				source.PlayOneShot (divineShield);
@@ -267,13 +260,6 @@ public class MageAbilities : Abilities
                 BoardManager.Instance.selectedUnit = null;
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
             }
-            /*int iterate = 0;
-            foreach (GameObject playerOnBoard in BoardManager.playerUnits)
-            {
-                Unit player = playerOnBoard.GetComponent<Unit>();
-                player.dodgeChance = initialDodgeChances[iterate];
-                iterate++;
-            }*/
         }
         else
         {

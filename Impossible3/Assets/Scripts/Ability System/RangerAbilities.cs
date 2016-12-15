@@ -24,8 +24,6 @@ public class RangerAbilities : Abilities
 	public AudioClip snare;
 	public AudioClip tripleShot;
 
-    //public GameObject ranger = this.GetComponentInParent<PlayerUnit>().gameObject;
-
     private void Start()
     {
         PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
@@ -62,7 +60,6 @@ public class RangerAbilities : Abilities
 		spellCounter = this.GetComponentInParent<PlayerUnit> ().spellCounter;
         x = BoardManager.Instance.selectionX;
         y = BoardManager.Instance.selectionY;
-		//Debug.Log (this.GetComponentInParent<PlayerUnit>().dodgeChance);
 		if(spellTimer <= Time.time && spellCounter == 1) {
 			this.GetComponentInParent<PlayerUnit>().dodgeChance = 10;
 			keepPlaying = false;
@@ -100,9 +97,7 @@ public class RangerAbilities : Abilities
         if (selectedUnit.timeStampAttack <= Time.time)
         {
             BoardManager.Instance.AttackTarget(selectedTarget, damage);
-            //Debug.Log ("First Hit");
 			BoardManager.Instance.AttackTarget(BoardManager.Units[x, y + 1], damage);
-            //Debug.Log ("Second Hit");
 			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y + 1], damage);
 			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y], damage);
 			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y - 1], damage);
@@ -250,7 +245,6 @@ public class RangerAbilities : Abilities
 
 	public void Shuffle(List<GameObject> list)
 	{
-		//UnityEngine.Random rng = new UnityEngine.Random();
 		int n = list.Count;
 		while (n > 1)
 		{

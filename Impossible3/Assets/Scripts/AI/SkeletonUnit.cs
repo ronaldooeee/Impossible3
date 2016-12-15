@@ -25,13 +25,11 @@ public class SkeletonUnit : Unit
 
     private void Update()
     {
-		return;
         int damage = this.GetComponent<PlayerUnit>().damageAmount;
 		int accuracy = this.GetComponent<PlayerUnit> ().accuracy;
 		int targetDodgeChance;
         Unit closestPlayer = null;
         int playerDistance = 100;
-		//Debug.Log (enemyUnit.timeStampMove - Time.time);
 
         //find closest player
         for (int i = 0; i < playerUnits.Count; i++)
@@ -50,8 +48,6 @@ public class SkeletonUnit : Unit
         if (enemyUnit.timeStampAttack <= Time.time && timeStampDelay <= Time.time)
         {
             bool[,] allowedEnemyAttacks = enemyUnit.PossibleAttack();
-            //BoardHighlights.Instance.Hidehighlights();
-            //BoardHighlights.Instance.HighlightAllowedAttacks(allowedEnemyAttacks);
 
             //Determine if player is in Attack distance
             if (allowedEnemyAttacks[closestPlayer.CurrentX, closestPlayer.CurrentY])
@@ -78,8 +74,6 @@ public class SkeletonUnit : Unit
         {
             List<int[]> allowedEnemyMoves = getTrueMoves();
             Shuffle(allowedEnemyMoves);
-            //BoardHighlights.Instance.Hidehighlights();
-            //BoardHighlights.Instance.HighlightAllowedMoves(enemyUnit.PossibleMove());
             foreach (int[] move in allowedEnemyMoves)
             {
                 //Check if this will move enemy closer to a player
@@ -92,7 +86,6 @@ public class SkeletonUnit : Unit
                         enemyUnit.SetPosition(move[0], move[1]);
                         BoardManager.Units[move[0], move[1]] = enemyUnit;
                         enemyUnit.timeStampMove = Time.time + enemyUnit.cooldownMoveSeconds;
-                        //enemyUnit.timeStampAttack += 2;
                         return;
                     }
                 }
@@ -125,7 +118,6 @@ public class SkeletonUnit : Unit
 
     public void Shuffle(List<int[]> list)
     {
-        //UnityEngine.Random rng = new UnityEngine.Random();
         int n = list.Count;
         while (n > 1)
         {
