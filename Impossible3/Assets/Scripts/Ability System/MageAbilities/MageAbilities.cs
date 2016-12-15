@@ -120,14 +120,23 @@ public class MageAbilities : Abilities
     {
         for (int i = 0; i < 3; i++)
         {
+            Debug.Log("buff");
             foreach (GameObject go in BoardManager.playerUnits)
             {
-                Debug.Log("buff");
                 Unit player = go.GetComponent<Unit>();
+                HealthSystem playerHealthSystem = go.GetComponent<HealthSystem>();
                 //player.health *= 2;
                 //int amount = (go.GetComponent<HealthSystem>().currentHealth * 2) - go.GetComponent<HealthSystem>().currentHealth;
                 int amount = 10;
-                go.GetComponent<HealthSystem>().takeDamageAndDie(0 - amount);
+                if (playerHealthSystem.currentHealth + amount > playerHealthSystem.startingHealth)
+                {
+                    //Pass.
+                }
+                else
+                {
+                    playerHealthSystem.takeDamageAndDie(0 - amount);
+                }
+                //go.GetComponent<HealthSystem>().takeDamageAndDie(0 - amount);
                 //BoardManager.Instance.BuffTarget(player, amount);
                 player.dodgeChance += 1;
             }
@@ -166,14 +175,17 @@ public class MageAbilities : Abilities
     {
         if (BoardManager.Instance.selectedAbility == 2)
         {
-            //Thread rain = new Thread(FireTheStorm);
-            ArrayList parameters = new ArrayList();
-            parameters.Add(selectedUnit);
-            parameters.Add(selectedTarget);
-            parameters.Add(this.random);
-            //rain.Start((object)parameters);
-            FireTheStorm(parameters);
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+            if (Time.time > selectedUnit.timeStampAttack)
+            {
+                //Thread rain = new Thread(FireTheStorm);
+                ArrayList parameters = new ArrayList();
+                parameters.Add(selectedUnit);
+                parameters.Add(selectedTarget);
+                parameters.Add(this.random);
+                //rain.Start((object)parameters);
+                FireTheStorm(parameters);
+                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+            }
         }
         else
         {
@@ -195,9 +207,12 @@ public class MageAbilities : Abilities
     public override void Ability4(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 4)
         {
-            //selectedUnit.SetAttackCooldown(2.0f);
-            StartCoroutine(BlindingLight(selectedUnit, selectedTarget));
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+            if (Time.time > selectedUnit.timeStampAttack)
+            {
+                //selectedUnit.SetAttackCooldown(2.0f);
+                StartCoroutine(BlindingLight(selectedUnit, selectedTarget));
+                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+            }
         }
         else
         {
@@ -208,6 +223,8 @@ public class MageAbilities : Abilities
     public override void Ability5(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 5)
         {
+            if (Time.time > selectedUnit.timeStampAttack)
+            {
             //selectedUnit.SetAttackCooldown(2.0f);
             float initialSpeed = selectedTarget.cooldownMoveSeconds;
 
@@ -216,6 +233,7 @@ public class MageAbilities : Abilities
     
             selectedTarget.cooldownMoveSeconds = initialSpeed;
             selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+            }
         }
         else
         {
@@ -228,8 +246,11 @@ public class MageAbilities : Abilities
         {
             //selectedUnit.SetAttackCooldown(4.0f);
             //int[] initialDodgeChances = DivineShieldPrep();
-            StartCoroutine(DivineShield());
-
+            if (Time.time > selectedUnit.timeStampAttack)
+            {
+                StartCoroutine(DivineShield());
+                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+            }
             /*int iterate = 0;
             foreach (GameObject playerOnBoard in BoardManager.playerUnits)
             {
@@ -237,7 +258,6 @@ public class MageAbilities : Abilities
                 player.dodgeChance = initialDodgeChances[iterate];
                 iterate++;
             }*/
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         else
         {
