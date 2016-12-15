@@ -139,19 +139,12 @@ public class WarriorAbilities : Abilities
 	}
 	public void Rally(Unit selectedUnit, Unit selectedTarget)
 	{
+
 		selectedUnit.SetAttackCooldown (7.0f);
 		if (selectedUnit.timeStampAttack <= Time.time){
 			BoardManager.Instance.BuffTarget (selectedTarget, 0);
-			if (Time.time - selectedTarget.timeStampAttack < 3) {
-				selectedTarget.timeStampAttack -= 3;
-			} else {
-				selectedTarget.timeStampAttack = Time.time;
-			}
-			if (Time.time - selectedTarget.timeStampMove < 3) {
-				selectedTarget.timeStampMove -= 3;
-			} else {
-				selectedTarget.timeStampMove = Time.time; 
-			}
+			selectedTarget.timeStampAttack = selectedTarget.timeStampAttack - 3 < Time.time ? Time.time : selectedTarget.timeStampAttack - 3;
+			selectedTarget.timeStampMove = selectedTarget.timeStampMove - 3 < Time.time ? Time.time : selectedTarget.timeStampMove - 3;
 			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 		}
 	}
@@ -249,7 +242,7 @@ public class WarriorAbilities : Abilities
 			} else {
 				BoardManager.Instance.AttackTarget(selectedTarget, damage );
 			}
-		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 
 		}
 	}
