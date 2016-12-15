@@ -97,7 +97,11 @@ public class MageAbilities : Abilities
     {
         for (int i = 0; i < 3; i++)
         {
-            selectedTarget.health = (int)System.Math.Floor(selectedTarget.health * 0.80);
+            //selectedTarget.health = (int)System.Math.Floor(selectedTarget.health * 0.80);
+            GameObject enemy = selectedTarget.gameObject;
+            HealthSystem healthOfEnemy = enemy.GetComponent<HealthSystem>();
+            int amount = (int)System.Math.Floor(healthOfEnemy.currentHealth - (healthOfEnemy.currentHealth * 0.80));
+            healthOfEnemy.takeDamageAndDie(amount);
             yield return new WaitForSeconds(3.0f);
         }
     }
@@ -120,8 +124,10 @@ public class MageAbilities : Abilities
             {
                 Debug.Log("buff");
                 Unit player = go.GetComponent<Unit>();
-                player.health *= 2;
-                player.dodgeChance = 1;
+                //player.health *= 2;
+                int amount = (go.GetComponent<HealthSystem>().currentHealth * 2) - go.GetComponent<HealthSystem>().currentHealth;
+                BoardManager.Instance.BuffTarget(player, amount);
+                player.dodgeChance += 1;
             }
             yield return new WaitForSeconds(3.0f);
         }
