@@ -19,6 +19,16 @@ public class WarriorAbilities : Abilities
 
 	public Unit target;
 
+	private AudioSource source;
+
+	public AudioClip regAttack;
+	public AudioClip counter;
+	public AudioClip flail;
+	public AudioClip frenzy;
+	public AudioClip rally;
+	public AudioClip warpath;
+	public AudioClip shieldBash;
+
 	private void Start()
 	{
 		PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
@@ -41,6 +51,8 @@ public class WarriorAbilities : Abilities
 		stats.accuracy = 95;
 
 		stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange , stats.accuracy};
+
+		source = GetComponent<AudioSource> ();
 	}
 
 	private void Update()
@@ -56,12 +68,14 @@ public class WarriorAbilities : Abilities
 		if (selectedUnit.timeStampAttack <= Time.time) { 
 			BoardManager.Instance.AttackTarget (selectedTarget, damage);
 			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			source.PlayOneShot (regAttack);
 		}
 	}
 
 	public void Counter(Unit selectedUnit, Unit selectedTarget)
 	{
 		//does somehting
+		source.PlayOneShot(counter);
 	}
 	public void Flail(Unit selectedUnit, Unit selectedTarget)
 	{
@@ -101,6 +115,7 @@ public class WarriorAbilities : Abilities
 			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY + 2], damage );
 			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY - 2], damage );
 			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			source.PlayOneShot (flail);
 			/*{
 				selectedUnit.SetAttackCooldown (6.0f);
 				try { BoardManager.Instance.AttackTarget(BoardManager.Units[x, y + 1], damage); } catch { }
@@ -134,6 +149,7 @@ public class WarriorAbilities : Abilities
 				BoardManager.Instance.AttackTarget (selectedTarget, damage * 2);
 			}
 			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			source.PlayOneShot (frenzy);
 		}
 
 	}
@@ -146,6 +162,7 @@ public class WarriorAbilities : Abilities
 			selectedTarget.timeStampAttack = selectedTarget.timeStampAttack - 3 < Time.time ? Time.time : selectedTarget.timeStampAttack - 3;
 			selectedTarget.timeStampMove = selectedTarget.timeStampMove - 3 < Time.time ? Time.time : selectedTarget.timeStampMove - 3;
 			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			source.PlayOneShot (rally);
 		}
 	}
 	public void Warpath(Unit selectedUnit, Unit selectedTarget)
@@ -159,6 +176,7 @@ public class WarriorAbilities : Abilities
 			selectedUnit.damageAmount = 100;
 		}
 		if (selectedUnit.timeStampAttack <= Time.time){
+			source.PlayOneShot (warpath);
 			if (selectedTarget.CurrentX > selectedUnit.CurrentX && BoardManager.Units[selectedUnit.CurrentX + 6, y] == null) {
 				Debug.Log ("Move right side");
 				Debug.Log (selectedUnit.CurrentX + " " + selectedUnit.CurrentY);
@@ -212,6 +230,7 @@ public class WarriorAbilities : Abilities
 	{
 		selectedUnit.SetAttackCooldown(6.0f);
 		if (selectedUnit.timeStampAttack <= Time.time){
+			source.PlayOneShot (shieldBash);
 			if (selectedUnit.CurrentX < selectedTarget.CurrentX && BoardManager.Units [x + 1, y] == null) {
 				selectedTarget.transform.position = BoardManager.Instance.GetTileCenter (x + 1, y);
 				selectedTarget.SetPosition (x + 1, y);
