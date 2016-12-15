@@ -68,15 +68,42 @@ public class BoardManager : MonoBehaviour
     // Update world to show changes
     private void Update()
     {
+        //Spawn Enemies when count on board is less than quota
         while (enemyUnits.Count < quota)
         {
-            int Spawndistance = 3;
+            int Spawnbuffer = 2;
+            int Spawndistance = 5;
             Coordinate[] bound = findBound();
-            bound[0].x = bound[0].x - Spawndistance >= 0 ? bound[0].x - Spawndistance : bound[0].x;
-            bound[0].y = bound[0].y - Spawndistance >= 0 ? bound[0].y - Spawndistance : bound[0].y;
-            bound[1].x = bound[1].x + Spawndistance < mapSize ? bound[1].x + Spawndistance : bound[1].x;
-            bound[1].y = bound[1].y + Spawndistance < mapSize ? bound[1].y + Spawndistance : bound[1].y;
-            SpawnUnit(random.Next(6, 10), random.Next((bound[0].x), bound[1].x),  random.Next(bound[0].y, bound[1].y));
+            int[][] paddedBounds = new int[][] { new int[] {0,0,0,0}, new int[] {0,0,0,0} };
+
+            paddedBounds[0][0] = bound[0].x - Spawnbuffer >= 0 ? bound[0].x - Spawndistance : 0;                //xMin - Spawnbuffer
+            paddedBounds[0][1] = bound[1].x + Spawnbuffer < mapSize ? bound[1].x + Spawndistance : mapSize -1;  //xMax + Spawnbuffer
+            paddedBounds[1][0] = bound[0].y - Spawnbuffer >= 0 ? bound[0].y - Spawndistance : 0;                //yMin - Spawnbuffer
+            paddedBounds[1][1] = bound[1].y + Spawnbuffer < mapSize ? bound[1].y + Spawndistance : mapSize -1;  //yMax + Spawnbuffer
+
+            paddedBounds[0][2] = bound[0].x - Spawndistance >= 0 ? bound[0].x - Spawndistance : 0;                 //xMin - Spawndistance
+            paddedBounds[0][3] = bound[1].x + Spawndistance < mapSize ? bound[1].x + Spawndistance : mapSize - 1;  //xMax + Spawndistance
+            paddedBounds[1][2] = bound[0].y - Spawndistance >= 0 ? bound[0].y - Spawndistance : 0;                 //yMin - Spawndistance
+            paddedBounds[1][3] = bound[1].y + Spawndistance < mapSize ? bound[1].y + Spawndistance : mapSize - 1;  //yMax + Spawndistance
+
+            int[][] moveRanges = new int[][] {
+              new int[] { bound[0].x, paddedBounds[0][3], paddedBounds[1][2], paddedBounds[1][0] }
+            , new int[] { paddedBounds[0][2], bound[1].x, paddedBounds[0][1], paddedBounds[0][3] }
+            , new int[] { paddedBounds[0][2], paddedBounds[0][0], paddedBounds[1][2], bound[1].y }
+            , new int[] { paddedBounds[0][1], paddedBounds[0][3], bound[0].y, paddedBounds[1][3] } };
+
+            
+            int move = random.Next(4);
+
+            /*
+            Debug.Log(moveRanges[move][0]);
+            Debug.Log(moveRanges[move][1]);
+            Debug.Log(moveRanges[move][2]);
+            Debug.Log(moveRanges[move][3]);
+            Debug.Log(0-move);
+            */
+
+            SpawnUnit(random.Next(6, 10), random.Next(moveRanges[move][0], moveRanges[move][1])  , random.Next(moveRanges[move][2], moveRanges[move][3]));
         }
 
         //Let player know of new abilities
@@ -141,6 +168,10 @@ public class BoardManager : MonoBehaviour
                     selectedAbility = 0;
                 }else if (Units[selectionX, selectionY] == null)
                 {
+                    if(allowedAttacks[selectionX, selectionY] || (BoardHighlights.castOnSelfAndParty && allowedAbilities[selectionX, selectionY]))
+                    {
+                        return;
+                    }
                     try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }                    
                     selectedAbility = 0;
                     BoardHighlights.Instance.Hidehighlights();
@@ -374,7 +405,7 @@ public class BoardManager : MonoBehaviour
 	public bool AttackTarget(Unit selectedTarget, int damage)
     {
         unitAccuracy = selectedUnit.accuracy;
-
+        bool didHit = false;
         if (selectedTarget != null && selectedUnit.timeStampAttack <= Time.time && !selectedTarget.isPlayer)
         {
             if (unitAccuracy >= selectedTarget.dodgeChance + Random.Range(0, 100))
@@ -384,7 +415,7 @@ public class BoardManager : MonoBehaviour
                 health.takeDamageAndDie(damage);
 
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-                return true;
+                didHit = true;
             }
             else
             {
@@ -392,13 +423,20 @@ public class BoardManager : MonoBehaviour
                 health.ConfirmHit(null);
                 Debug.Log("Player Missed!");
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-                return true;
+                didHit = true;
             }
         }
         else
         {
             return false;
         }
+
+        try { selectedUnit.GetComponent<PlayerUnit>().ResetAttackRanges(); } catch { }
+        selectedAbility = 0;
+        BoardHighlights.Instance.Hidehighlights();
+        selectedTarget = null;
+        selectedUnit = null;
+        return didHit;
     }
 
 
@@ -510,10 +548,10 @@ public class BoardManager : MonoBehaviour
         SpawnUnit(5, 8, 22);
 
         //Spawn Enemy Units (PrefabList #, x value, y value)
-        
+        /*
         SpawnUnit (7, 10, 25);
         SpawnUnit (7, 11, 26);
-        /*SpawnUnit (7, 4, 4);
+        SpawnUnit (7, 4, 4);
         SpawnUnit (7, 4, 3);
         SpawnUnit (7, 4, 2);
         SpawnUnit (7, 3, 2);
