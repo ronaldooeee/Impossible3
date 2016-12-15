@@ -70,7 +70,7 @@ public class BoardManager : MonoBehaviour
     private void Update()
     {
         //Spawn Enemies when count on board is less than quota
-        while (enemyUnits.Count < quota)
+        /*while (enemyUnits.Count < quota)
         {
             int Spawnbuffer = 2;
             int Spawndistance = 5;
@@ -104,8 +104,8 @@ public class BoardManager : MonoBehaviour
             Debug.Log(0-move);
             */
 
-            SpawnUnit(random.Next(6, 10), random.Next(moveRanges[move][0], moveRanges[move][1])  , random.Next(moveRanges[move][2], moveRanges[move][3]));
-        }
+            //SpawnUnit(random.Next(6, 10), random.Next(moveRanges[move][0], moveRanges[move][1])  , random.Next(moveRanges[move][2], moveRanges[move][3]));
+        //}
 
         //Let player know of new abilities
         tellScore(score);
@@ -559,17 +559,17 @@ public class BoardManager : MonoBehaviour
 
         //Spawn Enemy Units (PrefabList #, x value, y value)
         
-        /*
-        SpawnUnit (7, 10, 25);
-        SpawnUnit (7, 11, 26);
-        SpawnUnit (7, 11, 25);
-        SpawnUnit (7, 10, 26);
-        SpawnUnit (7, 10, 27);
-        SpawnUnit (7, 11, 27);
-        SpawnUnit (7, 2, 2);
-        SpawnUnit (7, 2, 3);
-        SpawnUnit (7, 2, 4);
-        */
+        
+        SpawnUnit (7, 10, 22);
+        SpawnUnit (7, 10, 23);
+        SpawnUnit (7, 10, 24);
+        SpawnUnit (7, 11, 22);
+        SpawnUnit (7, 11, 23);
+        SpawnUnit (7, 11, 24);
+        SpawnUnit (7, 12, 22);
+        SpawnUnit (7, 12, 23);
+        SpawnUnit (7, 12, 24);
+        
 
     }
 

@@ -39,7 +39,7 @@ public class KaboochaAbilities : Abilities
         y = BoardManager.Instance.selectionY;
     }
 
-    public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
+	public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
     }
 

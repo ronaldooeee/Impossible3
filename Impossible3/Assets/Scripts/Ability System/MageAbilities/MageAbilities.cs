@@ -44,7 +44,7 @@ public class MageAbilities : Abilities
         y = BoardManager.Instance.selectionY;
     }
 
-    public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
+	public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
         selectedUnit.SetAttackCooldown(1.0f);
 		BoardManager.Instance.AttackTarget(selectedTarget, damage);
