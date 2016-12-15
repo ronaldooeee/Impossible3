@@ -189,14 +189,9 @@ public class RangerAbilities : Abilities
 
     public override void Ability4(Unit selectedUnit, Unit selectedTarget)
     {
-        if (BoardManager.Instance.selectedAbility == 4)
-        {
-            ShadowStep(selectedUnit, selectedTarget);
-        }
-        else
-        {
-            OverlaySelect(selectedUnit, 0, 0, 0, 1);
-        }
+        ShadowStep(selectedUnit, selectedTarget);
+        selectedUnit.GetComponent<HealthSystem>().ConfirmHit(0, "Buff!");
+        BoardHighlights.Instance.Hidehighlights();
     }
 
     public override void Ability5(Unit selectedUnit, Unit selectedTarget)

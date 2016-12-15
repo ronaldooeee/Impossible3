@@ -30,12 +30,20 @@ public class BoardHighlights : MonoBehaviour
                 Color highlight = attackHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color;
                 highlight.a = (float)0.8;
                 attackHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color = highlight;
+
+                Color highlight2 = abilityHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color;
+                highlight2.a = (float)0.9;
+                abilityHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color = highlight2;
             }
             else
             {
                 Color highlight = attackHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color;
                 highlight.a = (float)0.5;
                 attackHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color = highlight;
+
+                Color highlight2 = abilityHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color;
+                highlight2.a = (float)0.5;
+                abilityHighlightPrefab.GetComponent<Renderer>().sharedMaterial.color = highlight2;
             }
 
             if (selectedUnit.timeStampMove <= Time.time) {
