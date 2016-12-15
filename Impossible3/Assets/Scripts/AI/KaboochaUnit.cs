@@ -115,6 +115,7 @@ public class KaboochaUnit : Unit
         //If Movemvent cooldown over, then Move
         if (closestEnemy != null && enemyUnit.timeStampMove <= Time.time )
         {
+
             List<int[]> allowedEnemyMoves = getTrueMoves();
             Shuffle(allowedEnemyMoves);
             //BoardHighlights.Instance.Hidehighlights();

@@ -559,6 +559,7 @@ public class BoardManager : MonoBehaviour
 
         //Spawn Enemy Units (PrefabList #, x value, y value)
         
+        /*
         SpawnUnit (7, 10, 25);
         SpawnUnit (7, 11, 26);
         SpawnUnit (7, 11, 25);
@@ -568,7 +569,7 @@ public class BoardManager : MonoBehaviour
         SpawnUnit (7, 2, 2);
         SpawnUnit (7, 2, 3);
         SpawnUnit (7, 2, 4);
-        
+        */
 
     }
 
