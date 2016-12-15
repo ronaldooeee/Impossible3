@@ -374,31 +374,34 @@ public class BoardManager : MonoBehaviour
     // You need to pass in a randomly generated dodge int (from 0 to 100).
 	public bool AttackTarget(Unit selectedTarget, int damage, int dodge)
     {
-        unitAccuracy = selectedUnit.accuracy;
-
-        if (selectedTarget != null && !selectedTarget.isPlayer)
+        try
         {
-            if (unitAccuracy >= selectedTarget.dodgeChance + dodge)
-            {
-                GameObject enemy = selectedTarget.gameObject;
-                HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
-                health.takeDamageAndDie(damage);
+            unitAccuracy = selectedUnit.accuracy;
 
-                return true;
+            if (selectedTarget != null && !selectedTarget.isPlayer)
+            {
+                if (unitAccuracy >= selectedTarget.dodgeChance + dodge)
+                {
+                    GameObject enemy = selectedTarget.gameObject;
+                    HealthSystem health = (HealthSystem)enemy.GetComponent(typeof(HealthSystem));
+                    health.takeDamageAndDie(damage);
+
+                    return true;
+                }
+                else
+                {
+                    HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
+                    health.ConfirmHit(null);
+                    Debug.Log("Player Missed!");
+
+                    return true;
+                }
             }
             else
             {
-                HealthSystem health = (HealthSystem)selectedTarget.gameObject.GetComponent(typeof(HealthSystem));
-                health.ConfirmHit(null);
-                Debug.Log("Player Missed!");
-
-                return true;
+                return false;
             }
-        }
-        else
-        {
-            return false;
-        }
+        }catch { return false; }
     }
 
     // Primary AttackTarget method, return true if the method executes successfully, return false if something goes wrong.
