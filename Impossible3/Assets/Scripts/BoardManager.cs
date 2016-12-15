@@ -53,7 +53,7 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
-        score = 0;
+        score = 40;
         playerUnits = new List<GameObject>();
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();

@@ -84,11 +84,13 @@ public class RangerAbilities : Abilities
 
     public void BackStab(Unit selectedUnit, Unit selectedTarget)
     {
-        selectedUnit.SetAttackCooldown(4.0f);
-        damage = 3 * damage;
-		BoardManager.Instance.AttackTarget(selectedTarget, damage);
-        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-		source[1].PlayOneShot (backStab);
+		if (selectedUnit.timeStampAttack <= Time.time) {
+			selectedUnit.SetAttackCooldown (4.0f);
+			damage = 3 * damage;
+			BoardManager.Instance.AttackTarget (selectedTarget, damage);
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			source [1].PlayOneShot (backStab, 0.8f);
+		}
     }
 
     public void BlackBombArrow(Unit selectedUnit, Unit selectedTarget)
@@ -109,18 +111,20 @@ public class RangerAbilities : Abilities
 			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y], damage);
 			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y + 1], damage);
             selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			source[1].PlayOneShot (explosion);
         }
         selectedUnit.accuracy = 90;
-		source[1].PlayOneShot (explosion);
     }
 
     public void LongShot(Unit selectedUnit, Unit selectedTarget)
     {
-        selectedUnit.SetAttackCooldown(6.0f);
-        damage = damage + (damage / 2);
-        BoardManager.Instance.AttackTarget(selectedTarget, damage);
-        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-		source[1].PlayOneShot (bowPullFireHit);
+		if (selectedUnit.timeStampAttack <= Time.time) {
+			selectedUnit.SetAttackCooldown (6.0f);
+			damage = damage + (damage / 2);
+			BoardManager.Instance.AttackTarget (selectedTarget, damage);
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			source [1].PlayOneShot (bowPullFireHit);
+		}
     }
 		
     public void ShadowStep(Unit selectedUnit, Unit selectedTarget)

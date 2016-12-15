@@ -102,7 +102,6 @@ public class WarriorAbilities : Abilities
 			selectedUnit.spellTimer = Time.time + 10;
 			selectedUnit.dodgeChance = 50;
 			selectedUnit.spellCounter += 1;
-			keepPlaying = true;
 			source.PlayOneShot (counter);
 			selectedUnit.SetMoveCooldown (2.0f);
 			selectedUnit.GetComponent<HealthSystem>().ConfirmHit(0, "Sentinel!");
@@ -208,7 +207,6 @@ public class WarriorAbilities : Abilities
 			selectedUnit.damageAmount = 100;
 		}
 		if (selectedUnit.timeStampAttack <= Time.time){
-			source.PlayOneShot (warpath);
 			if (selectedTarget.CurrentX > selectedUnit.CurrentX && BoardManager.Units[selectedUnit.CurrentX + 6, y] == null) {
 				Debug.Log ("Move right side");
 				Debug.Log (selectedUnit.CurrentX + " " + selectedUnit.CurrentY);
@@ -219,7 +217,7 @@ public class WarriorAbilities : Abilities
 				for (int i = 0; i < 6; i++) {
 					BoardManager.Instance.AttackTarget(BoardManager.Units[selectedUnitX + i, y], damage);
 				}
-
+				source.PlayOneShot (warpath);
 				Debug.Log (selectedUnit.CurrentX + " " + selectedUnit.CurrentY);
 				Debug.Log ("Right side");
 
@@ -231,6 +229,7 @@ public class WarriorAbilities : Abilities
 				for (int i = 0; i < 6; i++) {
 					BoardManager.Instance.AttackTarget(BoardManager.Units[selectedUnitX - i, y], damage);
 				}
+				source.PlayOneShot (warpath);
 				Debug.Log ("Move left side");
 
 			} else if (y > selectedUnit.CurrentY && BoardManager.Units[x, selectedUnit.CurrentY + 6] == null) {
@@ -241,6 +240,7 @@ public class WarriorAbilities : Abilities
 				for (int i = 0; i < 6; i++) {
 					BoardManager.Instance.AttackTarget(BoardManager.Units[x, selectedUnitY + i], damage);
 				}
+				source.PlayOneShot (warpath);
 
 			} else if (y < selectedUnit.CurrentY && BoardManager.Units[x, selectedUnit.CurrentY - 6] == null) {
 				BoardManager.Units [x, selectedUnit.CurrentY - 6] = selectedUnit; 
@@ -250,6 +250,7 @@ public class WarriorAbilities : Abilities
 				for (int i = 0; i < 6; i++) {
 					BoardManager.Instance.AttackTarget(BoardManager.Units[x, selectedUnitY - i], damage);
 				}
+				source.PlayOneShot (warpath);
 			} else {
 				Debug.Log ("Cannot do WarPath");
 				return;

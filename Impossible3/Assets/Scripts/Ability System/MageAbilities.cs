@@ -76,7 +76,7 @@ public class MageAbilities : Abilities
     {
 		selectedUnit.SetAttackCooldown (5.0f);
 		BoardManager.Instance.BuffTarget (selectedTarget, 50);
-		source.PlayOneShot (heal);
+		source.PlayOneShot (heal, 1.3f);
     }
 
     private bool Firestorm(Unit selectedUnit, Unit selectedTarget, System.Random random)
@@ -169,8 +169,10 @@ public class MageAbilities : Abilities
     {
         if (BoardManager.Instance.selectedAbility == 1)
         {
-            Fireball(selectedUnit, selectedTarget);
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			if (Time.time > selectedUnit.timeStampAttack) {
+				Fireball (selectedUnit, selectedTarget);
+				selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			}
         }
         else
         {
@@ -243,7 +245,7 @@ public class MageAbilities : Abilities
                 StartCoroutine(Decay(selectedUnit, selectedTarget));
                 StartCoroutine(Slowness(selectedUnit, selectedTarget));
     
-				source.PlayOneShot (slowSound, 0.2f);
+				source.PlayOneShot (slowSound, 0.5f);
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
             }
         }
@@ -260,6 +262,7 @@ public class MageAbilities : Abilities
             //int[] initialDodgeChances = DivineShieldPrep();
             if (Time.time > selectedUnit.timeStampAttack)
             {
+				source.PlayOneShot (divineShield);
                 StartCoroutine(DivineShield());
                 BoardManager.Instance.selectedUnit = null;
                 selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
@@ -271,8 +274,6 @@ public class MageAbilities : Abilities
                 player.dodgeChance = initialDodgeChances[iterate];
                 iterate++;
             }*/
-			source.PlayOneShot (divineShield);
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
         }
         else
         {

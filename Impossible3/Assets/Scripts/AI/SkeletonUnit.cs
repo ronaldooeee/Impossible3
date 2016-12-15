@@ -25,6 +25,7 @@ public class SkeletonUnit : Unit
 
     private void Update()
     {
+		return;
         int damage = this.GetComponent<PlayerUnit>().damageAmount;
 		int accuracy = this.GetComponent<PlayerUnit> ().accuracy;
 		int targetDodgeChance;
