@@ -80,23 +80,22 @@ public class WarriorAbilities : Abilities
     {
         selectedUnit.SetAttackCooldown(2.0f);
         HealthSystem health = (HealthSystem)selectedUnit.GetComponent(typeof(HealthSystem));
-        selfDamage = damage / 7;
-        if (health.currentHealth <= selfDamage)
-        {
-            health.currentHealth = 1;
-        }
-        else
-        {
-            health.currentHealth = health.currentHealth - selfDamage;
-        }
-		BoardManager.Instance.AttackTarget(selectedTarget, damage * 2 );
+		if (selectedTarget != selectedTarget.isPlayer) {
+			selfDamage = damage / 10;
+			if (health.currentHealth <= selfDamage) {
+				health.currentHealth = 1;
+			} else {
+				health.currentHealth = health.currentHealth - selfDamage;
+			}
+			BoardManager.Instance.AttackTarget (selectedTarget, damage * 2);
+		}
 
     }
     public void Rally(Unit selectedUnit, Unit selectedTarget)
     {
-        selectedTarget.SetAttackCooldown(2.0f);
-        selectedTarget.SetMoveCooldown(3.0f);
-		BoardManager.Instance.BuffTarget(selectedTarget, 20);
+		BoardManager.Instance.BuffTarget (selectedTarget, 0);
+		selectedTarget.timeStampAttack -= 3;
+		selectedTarget.timeStampMove -= 3;
     }
     public void Warpath(Unit selectedUnit, Unit selectedTarget)
     {
