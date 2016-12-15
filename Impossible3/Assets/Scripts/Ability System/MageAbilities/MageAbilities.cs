@@ -79,7 +79,7 @@ public class MageAbilities : Abilities
         {
             if (Firestorm((Unit)parameters[0], (Unit)parameters[1], (System.Random)parameters[2]))
             {
-                //Debug.Log("hit");
+                Debug.Log("hit");
                 count++;
             }
         }
@@ -125,8 +125,10 @@ public class MageAbilities : Abilities
                 Debug.Log("buff");
                 Unit player = go.GetComponent<Unit>();
                 //player.health *= 2;
-                int amount = (go.GetComponent<HealthSystem>().currentHealth * 2) - go.GetComponent<HealthSystem>().currentHealth;
-                BoardManager.Instance.BuffTarget(player, amount);
+                //int amount = (go.GetComponent<HealthSystem>().currentHealth * 2) - go.GetComponent<HealthSystem>().currentHealth;
+                int amount = 10;
+                go.GetComponent<HealthSystem>().takeDamageAndDie(0 - amount);
+                //BoardManager.Instance.BuffTarget(player, amount);
                 player.dodgeChance += 1;
             }
             yield return new WaitForSeconds(3.0f);
