@@ -246,13 +246,13 @@ public class BoardManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                if (Abilities.unlockedAbilities[0])
+                if (Abilities.unlockedAbilities[0] && selectedAbility != 1)
                 {
                     selectedUnit.GetComponent<Abilities>().Ability1(selectedUnit, selectedTarget);
                     selectedAbility = 1;
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            else if (Input.GetKeyDown(KeyCode.Alpha2) && selectedAbility != 2)
             {
                 if (Abilities.unlockedAbilities[1])
                 {
@@ -260,7 +260,7 @@ public class BoardManager : MonoBehaviour
                     selectedAbility = 2;
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            else if (Input.GetKeyDown(KeyCode.Alpha3) && selectedAbility != 3)
             {
                 if (Abilities.unlockedAbilities[2])
                 {
@@ -268,7 +268,7 @@ public class BoardManager : MonoBehaviour
                     selectedAbility = 3;
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            else if (Input.GetKeyDown(KeyCode.Alpha4) && selectedAbility != 4)
             {
                 if (Abilities.unlockedAbilities[3])
                 {
@@ -276,7 +276,7 @@ public class BoardManager : MonoBehaviour
                     selectedAbility = 4;
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
+            else if (Input.GetKeyDown(KeyCode.Alpha5) && selectedAbility != 5)
             {
                 if (Abilities.unlockedAbilities[4])
                 {
@@ -284,7 +284,7 @@ public class BoardManager : MonoBehaviour
                     selectedAbility = 5;
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha6))
+            else if (Input.GetKeyDown(KeyCode.Alpha6) && selectedAbility != 6)
             {
                 if (Abilities.unlockedAbilities[5])
                 {
