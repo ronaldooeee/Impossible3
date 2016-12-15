@@ -210,6 +210,8 @@ public class PlayerUnit : Unit
             }
         }
 
+        isAcceptedAbility[currentXPos, currentYPos] = true;
+
         return isAcceptedAbility;
     }
 

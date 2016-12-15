@@ -99,7 +99,7 @@ public class HealthSystem : MonoBehaviour
         fillImage.color = Color.Lerp(noHealth, fullHealth, currentHealth / startingHealth);
     }
 
-    public void ConfirmHit(int? damage)
+    public void ConfirmHit(int? damage, string buff =null)
     {
         PlayerUnit character = this.GetComponentInParent<PlayerUnit>();
         GameObject hitText = Instantiate(this.missHit, character.transform.GetChild(0).transform.position, Camera.main.transform.rotation) as GameObject;
@@ -108,7 +108,12 @@ public class HealthSystem : MonoBehaviour
         hitText.transform.SetParent(character.transform.GetChild(0).transform);
         hitText.GetComponentInChildren<RectTransform>().anchorMin = new Vector2(0, 1);
         hitText.GetComponentInChildren<RectTransform>().anchorMax = new Vector2(0, 1);
-        if(damage == null)
+        if(buff != null)
+        {
+            hitText.GetComponent<TextMesh>().text = buff;
+            hitText.GetComponent<TextMesh>().color = Color.green;
+        }
+        else if(damage == null)
         {
             hitText.GetComponent<TextMesh>().text = "Miss!";
         }        
