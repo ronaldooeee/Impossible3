@@ -10,6 +10,9 @@ public class SkeletonUnit : Unit
 
     public float timeStampDelay;
 
+	public AudioSource source;
+	public AudioClip attack;
+
     private void Start()
     {
         timeStampDelay = Time.time;
@@ -22,7 +25,6 @@ public class SkeletonUnit : Unit
 
     private void Update()
     {
-		return;
         int damage = this.GetComponent<PlayerUnit>().damageAmount;
 		int accuracy = this.GetComponent<PlayerUnit> ().accuracy;
 		int targetDodgeChance;
@@ -57,6 +59,7 @@ public class SkeletonUnit : Unit
 				targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range(0, 100);
                 HealthSystem health = (HealthSystem)BoardManager.Units[closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent(typeof(HealthSystem));
                 if (accuracy >= targetDodgeChance) {
+					source.PlayOneShot (attack);
 					health.takeDamageAndDie (damage);
 				} else {
 					Debug.Log ("Sword Skeleton Missed!");

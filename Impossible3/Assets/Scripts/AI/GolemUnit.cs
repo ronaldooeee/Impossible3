@@ -10,6 +10,9 @@ public class GolemUnit : Unit
 
     public float timeStampDelay;
 
+	public AudioSource source;
+	public AudioClip attack;
+
     private void Start()
     {
         timeStampDelay = Time.time;
@@ -55,6 +58,7 @@ public class GolemUnit : Unit
                 targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range (0, 100);
 				if (accuracy >= targetDodgeChance) {
 					health.takeDamageAndDie(damage);
+					source.PlayOneShot (attack);
 				} else {
 					Debug.Log ("Golem Missed!");
                     health.ConfirmHit(null);

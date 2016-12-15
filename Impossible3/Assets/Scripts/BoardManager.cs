@@ -48,6 +48,9 @@ public class BoardManager : MonoBehaviour
     public int unitAccuracy;
     public int targetDodgeChance;
 
+	public AudioSource source;
+	public AudioClip walk;
+
     private void Start()
     {
         score = 0;
@@ -382,6 +385,7 @@ public class BoardManager : MonoBehaviour
             //Set that unit's coordinates to desinations coordinates
             Units[x, y] = selectedUnit;
             selectedUnit.timeStampMove = Time.time + selectedUnit.cooldownMoveSeconds;
+			source.PlayOneShot (walk);
         }
         else if (selectedUnit.timeStampMove > Time.time)
         {

@@ -10,6 +10,9 @@ public class SkeletonArcherUnit : Unit
 
 	public float timeStampDelay;
 
+	public AudioSource source;
+	public AudioClip attack;
+
 	private void Start()
 	{
 		timeStampDelay = Time.time;
@@ -56,6 +59,7 @@ public class SkeletonArcherUnit : Unit
 					HealthSystem health = (HealthSystem)BoardManager.Units [closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent (typeof(HealthSystem));
 					health.takeDamageAndDie (damage);
 					BoardHighlights.Instance.Hidehighlights ();
+					source.PlayOneShot (attack);
 				} else {
 					Debug.Log ("Skeleton Archer Missed!");
 				}

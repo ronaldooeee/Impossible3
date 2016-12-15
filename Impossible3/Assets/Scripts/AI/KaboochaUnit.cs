@@ -12,6 +12,11 @@ public class KaboochaUnit : Unit
 
     public float timeStampDelay;
 
+	public AudioSource source;
+	public AudioClip attack;
+	public AudioClip spawn;
+	public AudioClip buff;
+
     private void Start()
     {
         timeStampDelay = Time.time;
@@ -21,6 +26,8 @@ public class KaboochaUnit : Unit
 
         enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
         enemyUnit.timeStampMove = Time.time + enemyUnit.cooldownMoveSeconds;
+
+		source.PlayOneShot (spawn);
     }
 
     private void Update()
@@ -87,6 +94,7 @@ public class KaboochaUnit : Unit
                         BoardManager.Units[closestEnemy.CurrentX, closestEnemy.CurrentY].GetComponent<Unit>().timeStampMove = Time.time;
                     }
                     enemyUnit.timeStampAttack = Time.time + enemyUnit.cooldownAttackSeconds;
+					source.PlayOneShot (buff);
                     return;
             }
             
@@ -100,6 +108,7 @@ public class KaboochaUnit : Unit
                 targetDodgeChance = closestPlayer.dodgeChance + UnityEngine.Random.Range(0, 100);
 				if (accuracy >= targetDodgeChance) {
 					health.takeDamageAndDie (damage);
+					source.PlayOneShot (attack);
 				} else {
 					Debug.Log ("Kaboocha Missed!");
                     health.ConfirmHit(null);
