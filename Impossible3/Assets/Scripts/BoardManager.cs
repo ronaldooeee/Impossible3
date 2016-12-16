@@ -54,7 +54,7 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
-        score = 12;
+        score = 0;
         playerUnits = new List<GameObject>();
         enemyUnits = new List<GameObject>();
         mapTiles = new List<GameObject>();
@@ -126,6 +126,7 @@ public class BoardManager : MonoBehaviour
             MageAbilityUI.gameObject.SetActive(false);
             WarriorAbilityUI.gameObject.SetActive(false);
             ArcherAbilityUI.gameObject.SetActive(false);
+            Highlight.gameObject.SetActive(false);
             //Make sure x and y value is on the board
             if (selectionX >= 0 && selectionY >= 0)
             {
