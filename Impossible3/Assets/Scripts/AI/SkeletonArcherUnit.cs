@@ -58,7 +58,6 @@ public class SkeletonArcherUnit : Unit
 				if (accuracy >= targetDodgeChance) {
 					HealthSystem health = (HealthSystem)BoardManager.Units [closestPlayer.CurrentX, closestPlayer.CurrentY].GetComponent (typeof(HealthSystem));
 					health.takeDamageAndDie (damage);
-					BoardHighlights.Instance.Hidehighlights ();
 					source.PlayOneShot (attack);
 				} else {
 					Debug.Log ("Skeleton Archer Missed!");
