@@ -341,11 +341,20 @@ public class BoardManager : MonoBehaviour
     private void UpdateSelection()
     {
         if (!Camera.main)
+        {
             return;
-        // Measures where mouse is hitting from Camera Perspective, puts it in the out parameter to use later, only extends 50 units,
+        }
+
+        // Measures where mouse is hitting from Camera Perspective, puts it in the out parameter to use later, only extends 100 units,
         // and will only hit things on the "BoardPlane" Layer
+
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100.0f, LayerMask.GetMask("BoardPlane")))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100.0f) && hit.collider.GetComponentInParent<PlayerUnit>())
+        { 
+                selectionX = Convert.ToInt32(hit.collider.transform.localPosition.x - 0.5);
+                selectionY = Convert.ToInt32(hit.collider.transform.localPosition.z - 0.5);         
+        }
+        else if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100.0f, LayerMask.GetMask("BoardPlane")))
         {
             selectionX = (int)hit.point.x;
             selectionY = (int)hit.point.z;
@@ -527,6 +536,7 @@ public class BoardManager : MonoBehaviour
             if (animationArray[index] != null) { go.GetComponent<Animator>().runtimeAnimatorController = animationArray[index]; }
             go.transform.rotation = Camera.main.transform.rotation;
             go.transform.localScale = new Vector3(2, 2, 1);
+            go.AddComponent<BoxCollider>();
             Units[x, y] = go.GetComponent<Unit>();
             Units[x, y].SetPosition(x, y);
             if (unit == 0 || unit == 4 || unit == 5)

@@ -65,7 +65,7 @@ public class PlayerUI : MonoBehaviour
         foreach (GameObject unit in units)
         {
             GameObject UI = null;
-            if(unit == null) { return; }
+            if(unit == null) { continue; }
             else if (unit.name == "Warrior(Clone)") { UI = UIs[0]; }
             else if (unit.name == "Mage(Clone)") { UI = UIs[1]; }
             else if (unit.name == "Ranger(Clone)") { UI = UIs[2]; }
@@ -74,7 +74,7 @@ public class PlayerUI : MonoBehaviour
                 UI.GetComponentsInChildren<Image>()[1].GetComponent<Image>().transform.localScale = Vector3.zero;
                 UI.GetComponentsInChildren<Image>()[2].GetComponent<Image>().transform.localScale = Vector3.zero;
                 UI.GetComponentsInChildren<Image>()[3].GetComponent<Image>().transform.localScale = Vector3.zero;
-                return;
+                continue;
             }
 
             Image[] bars = UI.GetComponentsInChildren<Image>();
