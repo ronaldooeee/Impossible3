@@ -20,12 +20,11 @@ public class MageAbilities : Abilities
 	public AudioClip blindSound;
 	public AudioClip slowSound;
 	public AudioClip divineShield;
-
+    PlayerUnit stats;
 
     private void Start()
     {
-        PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
-
+        stats = this.GetComponentInParent<PlayerUnit>();
         stats.health = 70;
         stats.damageAmount = 50;
 
@@ -43,7 +42,7 @@ public class MageAbilities : Abilities
         stats.dodgeChance = 5;
         stats.accuracy = 90;
 
-        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange, stats.accuracy };
+        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange, stats.accuracy, (int)stats.cooldownAttackSeconds };
 
 		source = GetComponent<AudioSource>();
     }
@@ -58,7 +57,7 @@ public class MageAbilities : Abilities
 
 	public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
-		selectedUnit.SetAttackCooldown (1.0f);
+		selectedUnit.SetAttackCooldown (stats.defaultAttackRanges[4]);
 		BoardManager.Instance.AttackTarget (selectedTarget, damage);
 		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 		source.PlayOneShot (regAttack);
@@ -75,7 +74,7 @@ public class MageAbilities : Abilities
     public void HealSpell(Unit selectedUnit, Unit selectedTarget)
     {
 		selectedUnit.SetAttackCooldown (5.0f);
-		BoardManager.Instance.BuffTarget (selectedTarget, 50);
+		BoardManager.Instance.BuffTarget (selectedTarget, 30);
 		source.PlayOneShot (heal, 1.3f);
     }
 
@@ -168,10 +167,8 @@ public class MageAbilities : Abilities
     {
         if (BoardManager.Instance.selectedAbility == 1)
         {
-			if (Time.time > selectedUnit.timeStampAttack) {
-				Fireball (selectedUnit, selectedTarget);
-				selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-			}
+			Fireball (selectedUnit, selectedTarget);
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;			
         }
         else
         {
@@ -183,17 +180,14 @@ public class MageAbilities : Abilities
     {
         if (BoardManager.Instance.selectedAbility == 2)
         {
-            if (Time.time > selectedUnit.timeStampAttack)
-            {
-                selectedUnit.SetAttackCooldown(6.0f);
-                ArrayList parameters = new ArrayList();
-                parameters.Add(selectedUnit);
-                parameters.Add(selectedTarget);
-                parameters.Add(this.random);
-                FireTheStorm(parameters);
-                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-				source.PlayOneShot (regAttack);
-            }
+            selectedUnit.SetAttackCooldown(6.0f);
+            ArrayList parameters = new ArrayList();
+            parameters.Add(selectedUnit);
+            parameters.Add(selectedTarget);
+            parameters.Add(this.random);
+            FireTheStorm(parameters);
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+			source.PlayOneShot (regAttack);            
         }
         else
         {
@@ -204,11 +198,9 @@ public class MageAbilities : Abilities
     public override void Ability3(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 3)
         {
-			if (selectedUnit.timeStampAttack <= Time.time) {
-				selectedUnit.SetAttackCooldown (7.0f);
-				HealSpell (selectedUnit, selectedTarget);
-				selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-			}
+			selectedUnit.SetAttackCooldown (7.0f);
+			HealSpell (selectedUnit, selectedTarget);
+			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;			
         }
         else
         {
@@ -219,12 +211,9 @@ public class MageAbilities : Abilities
     public override void Ability4(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 4)
         {
-            if (Time.time > selectedUnit.timeStampAttack)
-            {
-                selectedUnit.SetAttackCooldown(4.0f);
-                StartCoroutine(BlindingLight(selectedUnit, selectedTarget));
-                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-            }
+            selectedUnit.SetAttackCooldown(4.0f);
+            StartCoroutine(BlindingLight(selectedUnit, selectedTarget));
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;            
         }
         else
         {
@@ -235,14 +224,10 @@ public class MageAbilities : Abilities
     public override void Ability5(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 5)
         {
-            if (Time.time > selectedUnit.timeStampAttack)
-            {
-                StartCoroutine(Decay(selectedUnit, selectedTarget));
-                StartCoroutine(Slowness(selectedUnit, selectedTarget));
-    
-				source.PlayOneShot (slowSound, 0.5f);
-                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-            }
+            StartCoroutine(Decay(selectedUnit, selectedTarget));
+            StartCoroutine(Slowness(selectedUnit, selectedTarget));    
+			source.PlayOneShot (slowSound, 0.5f);
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;            
         }
         else
         {
@@ -253,13 +238,10 @@ public class MageAbilities : Abilities
     public override void Ability6(Unit selectedUnit, Unit selectedTarget) {
         if (BoardManager.Instance.selectedAbility == 6)
         {
-            if (Time.time > selectedUnit.timeStampAttack)
-            {
-				source.PlayOneShot (divineShield);
-                StartCoroutine(DivineShield());
-                BoardManager.Instance.selectedUnit = null;
-                selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-            }
+			source.PlayOneShot (divineShield);
+            StartCoroutine(DivineShield());
+            BoardManager.Instance.selectedUnit = null;
+            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;            
         }
         else
         {

@@ -37,9 +37,12 @@ public class WarriorAbilities : Abilities
 	public AudioClip warpath;
 	public AudioClip shieldBash;
 
-	private void Start()
+    PlayerUnit stats;
+
+
+    private void Start()
 	{
-		PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
+		stats = this.GetComponentInParent<PlayerUnit>();
 
 		stats.health = 120;
 		stats.damageAmount = 70;
@@ -58,7 +61,7 @@ public class WarriorAbilities : Abilities
 		stats.dodgeChance = 0;
 		stats.accuracy = 95;
 
-		stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange , stats.accuracy};
+		stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange , stats.accuracy, (int)stats.cooldownAttackSeconds };
 
 		source = GetComponent<AudioSource> ();
 	}
@@ -81,12 +84,10 @@ public class WarriorAbilities : Abilities
 
 	public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
 	{
-		selectedUnit.SetAttackCooldown(1.0f);
-		if (selectedUnit.timeStampAttack <= Time.time) { 
-			BoardManager.Instance.AttackTarget (selectedTarget, damage);
-			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-			source.PlayOneShot (regAttack);
-		}
+		selectedUnit.SetAttackCooldown(stats.defaultAttackRanges[4]);
+		BoardManager.Instance.AttackTarget (selectedTarget, damage);
+		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		source.PlayOneShot (regAttack);		
 	}
 
 	public void Sentinel(Unit selectedUnit, Unit selectedTarget)
@@ -96,90 +97,68 @@ public class WarriorAbilities : Abilities
 		GameObject self = selectedUnit.gameObject;
 		HealthSystem health = (HealthSystem)self.GetComponent(typeof(HealthSystem));
 		knightOriginalHealth = health.currentHealth;
-		if (selectedUnit.timeStampAttack <= Time.time) { 
-			selectedUnit.spellTimer = Time.time + 10;
-			selectedUnit.dodgeChance = 50;
-			selectedUnit.spellCounter += 1;
-			source.PlayOneShot (counter);
-			selectedUnit.SetMoveCooldown (2.0f);
-			selectedUnit.GetComponent<HealthSystem>().ConfirmHit(0, "Sentinel!");
-			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-		}
+		selectedUnit.spellTimer = Time.time + 10;
+		selectedUnit.dodgeChance = 50;
+		selectedUnit.spellCounter += 1;
+		source.PlayOneShot (counter);
+		selectedUnit.SetMoveCooldown (2.0f);
+		selectedUnit.GetComponent<HealthSystem>().ConfirmHit(0, "Sentinel!");
+		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;		
 	}
 	public void Flail(Unit selectedUnit, Unit selectedTarget)
 	{
 		selectedUnit.SetAttackCooldown (10.0f);
-		if (selectedUnit.timeStampAttack <= Time.time)
-		{
-			BoardManager.Instance.AttackTarget(selectedTarget, damage);
-			//straight up
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY + 1], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY + 2], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY + 3], damage );
-			//straight right
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 2, selectedUnit.CurrentY], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 3, selectedUnit.CurrentY], damage );
-			//straight back
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY - 1], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY - 2], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY - 3], damage );
-			//diagonals
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY - 1], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY + 1], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY - 1], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY + 1], damage );
-			//straight left
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 2, selectedUnit.CurrentY], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 3, selectedUnit.CurrentY], damage );
-			//l shape for X
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 2, selectedUnit.CurrentY + 1], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 2, selectedUnit.CurrentY - 1], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 2, selectedUnit.CurrentY + 1], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 2, selectedUnit.CurrentY - 1], damage );
-			//L shape for Y
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY + 2], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY - 2], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY + 2], damage );
-			BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY - 2], damage );
-			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-			source.PlayOneShot (flail);
-			/*{
-				selectedUnit.SetAttackCooldown (6.0f);
-				try { BoardManager.Instance.AttackTarget(BoardManager.Units[x, y + 1], damage); } catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x, y + 2], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y + 1], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x + 2, y], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x + 1, y - 1], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 1], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x, y - 2], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y - 1], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x - 2, y], damage );} catch { }
-				try { BoardManager.Instance.AttackTarget (BoardManager.Units[x - 1, y + 1], damage );} catch { }
-			}*/
-		}
+		BoardManager.Instance.AttackTarget(selectedTarget, damage);
+		//straight up
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY + 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY + 2], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY + 3], damage );
+		//straight right
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 2, selectedUnit.CurrentY], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 3, selectedUnit.CurrentY], damage );
+		//straight back
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY - 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY - 2], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX, selectedUnit.CurrentY - 3], damage );
+		//diagonals
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY - 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY + 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY - 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY + 1], damage );
+		//straight left
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 2, selectedUnit.CurrentY], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 3, selectedUnit.CurrentY], damage );
+		//l shape for X
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 2, selectedUnit.CurrentY + 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 2, selectedUnit.CurrentY - 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 2, selectedUnit.CurrentY + 1], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 2, selectedUnit.CurrentY - 1], damage );
+		//L shape for Y
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY + 2], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX - 1, selectedUnit.CurrentY - 2], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY + 2], damage );
+		BoardManager.Instance.AttackTarget (BoardManager.Units[selectedUnit.CurrentX + 1, selectedUnit.CurrentY - 2], damage );
+		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		source.PlayOneShot (flail);
+		
 	}
 	public void Frenzy(Unit selectedUnit, Unit selectedTarget)
 	{
 		selectedUnit.SetAttackCooldown(4.0f);
-
-		if (selectedUnit.timeStampAttack <= Time.time) {
-			HealthSystem health = (HealthSystem)selectedUnit.GetComponent (typeof(HealthSystem));
-			if (selectedTarget != selectedTarget.isPlayer) {
-				selfDamage = damage / 10;
-				if (health.currentHealth <= selfDamage) {
-					health.currentHealth = 1;
-				} else {
-					health.currentHealth = health.currentHealth - selfDamage;
-				}
-				BoardManager.Instance.AttackTarget (selectedTarget, damage * 2);
+		HealthSystem health = (HealthSystem)selectedUnit.GetComponent (typeof(HealthSystem));
+		if (selectedTarget != selectedTarget.isPlayer) {
+			selfDamage = damage / 10;
+			if (health.currentHealth <= selfDamage) {
+				health.currentHealth = 1;
+			} else {
+				health.currentHealth = health.currentHealth - selfDamage;
 			}
-			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-			source.PlayOneShot (frenzy);
+			BoardManager.Instance.AttackTarget (selectedTarget, damage * 2);
 		}
+		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		source.PlayOneShot (frenzy);
 
 	}
 	public void Rally(Unit selectedUnit, Unit selectedTarget)

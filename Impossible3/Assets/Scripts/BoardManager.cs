@@ -88,6 +88,9 @@ public class BoardManager : MonoBehaviour
 				currentScoreThreshold += 7;
 				quota++;
 			}
+
+            //find area for enemy spawns
+            // must be at least Spawnbuffer from any player and no more than Spawndistance from any player
             int Spawnbuffer = 2;
             int Spawndistance = 5;
             Coordinate[] bound = findBound();
@@ -112,7 +115,7 @@ public class BoardManager : MonoBehaviour
             
             int move = random.Next(4);
 
-            SpawnUnit(random.Next(6, 10), random.Next(moveRanges[move][0], moveRanges[move][1])  , random.Next(moveRanges[move][2], moveRanges[move][3]));
+            SpawnUnit(random.Next(6, 11), random.Next(moveRanges[move][0], moveRanges[move][1])  , random.Next(moveRanges[move][2], moveRanges[move][3]));
         }
 
         //Let player know of new abilities
@@ -209,7 +212,7 @@ public class BoardManager : MonoBehaviour
                 }
                 else if (selectedUnit != null)
                 {
-                    if (allowedAttacks[selectionX, selectionY] ||( BoardHighlights.castOnSelfAndParty && allowedAbilities[selectionX,selectionY]))
+                    if (selectedUnit.timeStampAttack < Time.time && (allowedAttacks[selectionX, selectionY] ||( BoardHighlights.castOnSelfAndParty && allowedAbilities[selectionX,selectionY])))
                     {
 						SelectTarget (selectionX, selectionY);
                         if (selectedAbility == 0)
@@ -536,7 +539,10 @@ public class BoardManager : MonoBehaviour
             if (animationArray[index] != null) { go.GetComponent<Animator>().runtimeAnimatorController = animationArray[index]; }
             go.transform.rotation = Camera.main.transform.rotation;
             go.transform.localScale = new Vector3(2, 2, 1);
-            go.AddComponent<BoxCollider>();
+            if (!go.GetComponent<BoxCollider>())
+            {
+                go.AddComponent<BoxCollider>();
+            }
             Units[x, y] = go.GetComponent<Unit>();
             Units[x, y].SetPosition(x, y);
             if (unit == 0 || unit == 4 || unit == 5)
@@ -589,8 +595,8 @@ public class BoardManager : MonoBehaviour
         if (Units[x, y] == null)
         {
             GameObject cube = Instantiate(unitPrefabs[1], GetTileCenter(x, y, 0), Quaternion.identity) as GameObject;
-            //Vector3 temp = new Vector3(0, 0.5f, 0);
-            //cube.transform.position += temp;
+            Vector3 temp = new Vector3(0.25f, 0, -0.25f);
+            cube.transform.position += temp;
             cube.transform.rotation = Camera.main.transform.rotation;
             cube.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
             cube.transform.localScale = new Vector3(2, 2, 1);

@@ -24,9 +24,11 @@ public class RangerAbilities : Abilities
 	public AudioClip snare;
 	public AudioClip tripleShot;
 
+    PlayerUnit stats;
+
     private void Start()
     {
-        PlayerUnit stats = this.GetComponentInParent<PlayerUnit>();
+        stats = this.GetComponentInParent<PlayerUnit>();
 
         stats.health = 80;
         stats.damageAmount = 40;
@@ -48,7 +50,7 @@ public class RangerAbilities : Abilities
         stats.spellTimer = 0;
 		stats.spellCounter = 0;
 
-        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange, stats.accuracy };
+        stats.defaultAttackRanges = new int[] { stats.straightAttackRange, stats.diagAttackRange, stats.circAttackRange, stats.accuracy, (int)stats.cooldownAttackSeconds };
 
 		source = GetComponents<AudioSource> ();
     }
@@ -70,73 +72,61 @@ public class RangerAbilities : Abilities
 
 	public override void RegAttack(Unit selectedUnit, Unit selectedTarget)
     {
-		if (selectedUnit.timeStampAttack <= Time.time) {
-			source[1].PlayOneShot (bowPullFireHit);
-            selectedUnit.SetAttackCooldown(2.0f);
-            BoardManager.Instance.AttackTarget(selectedTarget, damage);
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-        }
+        selectedUnit.SetAttackCooldown(stats.defaultAttackRanges[4]);
+		source[1].PlayOneShot (bowPullFireHit);
+        selectedUnit.SetAttackCooldown(2.0f);
+        BoardManager.Instance.AttackTarget(selectedTarget, damage);
+        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 
     }
 
     public void BackStab(Unit selectedUnit, Unit selectedTarget)
     {
-		if (selectedUnit.timeStampAttack <= Time.time) {
-			selectedUnit.SetAttackCooldown (4.0f);
-			damage = 3 * damage;
-			BoardManager.Instance.AttackTarget (selectedTarget, damage);
-			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-			source [1].PlayOneShot (backStab, 0.8f);
-		}
+		selectedUnit.SetAttackCooldown (4.0f);
+		damage = 3 * damage;
+		BoardManager.Instance.AttackTarget (selectedTarget, damage);
+		selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		source [1].PlayOneShot (backStab, 0.8f);		
     }
 
     public void BlackBombArrow(Unit selectedUnit, Unit selectedTarget)
     {
         selectedUnit.SetAttackCooldown(8.0f);
         selectedUnit.accuracy = 130;
-        if (selectedUnit.timeStampAttack <= Time.time)
-        {
-            BoardManager.Instance.AttackTarget(selectedTarget, damage);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x, y + 1], damage);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y + 1], damage);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y], damage);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y - 1], damage);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x, y - 1], damage);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y - 1], damage);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y], damage);
-			BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y + 1], damage);
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-			source[1].PlayOneShot (explosion);
-        }
+        BoardManager.Instance.AttackTarget(selectedTarget, damage);
+		BoardManager.Instance.AttackTarget(BoardManager.Units[x, y + 1], damage);
+		BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y + 1], damage);
+		BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y], damage);
+		BoardManager.Instance.AttackTarget(BoardManager.Units[x + 1, y - 1], damage);
+		BoardManager.Instance.AttackTarget(BoardManager.Units[x, y - 1], damage);
+		BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y - 1], damage);
+		BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y], damage);
+		BoardManager.Instance.AttackTarget(BoardManager.Units[x - 1, y + 1], damage);
+        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		source[1].PlayOneShot (explosion);
         selectedUnit.accuracy = 90;
     }
 
     public void LongShot(Unit selectedUnit, Unit selectedTarget)
     {
-		if (selectedUnit.timeStampAttack <= Time.time) {
 			selectedUnit.SetAttackCooldown (6.0f);
 			damage = damage + (damage / 2);
 			BoardManager.Instance.AttackTarget (selectedTarget, damage);
 			selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
 			source [1].PlayOneShot (bowPullFireHit);
-		}
     }
 		
     public void ShadowStep(Unit selectedUnit, Unit selectedTarget)
     {
         selectedUnit.SetAttackCooldown(6.0f);
-        if (selectedUnit.timeStampAttack <= Time.time)
-        {
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-            selectedUnit.spellTimer = Time.time + 10;
-            selectedUnit.dodgeChance = 80;
-			selectedUnit.spellCounter += 1;
-			keepPlaying = true;
-			StartCoroutine (DodgeNoise ());
-            selectedUnit.GetComponent<HealthSystem>().ConfirmHit(0, "Stealth!");
-            BoardHighlights.Instance.Hidehighlights();
-        }
-
+        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+        selectedUnit.spellTimer = Time.time + 10;
+        selectedUnit.dodgeChance = 80;
+		selectedUnit.spellCounter += 1;
+		keepPlaying = true;
+		StartCoroutine (DodgeNoise ());
+        selectedUnit.GetComponent<HealthSystem>().ConfirmHit(0, "Stealth!");
+        BoardHighlights.Instance.Hidehighlights();
     }
 
 	private IEnumerator DodgeNoise() {
@@ -151,13 +141,11 @@ public class RangerAbilities : Abilities
     {
         selectedUnit.SetAttackCooldown (7.0f);
 		selectedUnit.SetDamage (20);
-		if (selectedUnit.timeStampAttack <= Time.time) {
-			selectedTarget.timeStampAttack += 10;
-			selectedTarget.timeStampMove += 10;
-            selectedTarget.GetComponent<HealthSystem>().ConfirmHit(1, "Snared!");
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-			source[1].PlayOneShot (snare);
-        }
+		selectedTarget.timeStampAttack += 10;
+		selectedTarget.timeStampMove += 10;
+        selectedTarget.GetComponent<HealthSystem>().ConfirmHit(1, "Snared!");
+        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		source[1].PlayOneShot (snare);
     }
 
 	public void TripleShot(Unit selectedUnit, Unit selectedTarget)
@@ -166,20 +154,18 @@ public class RangerAbilities : Abilities
 		selectedUnit.SetDamage (25);
 		List<GameObject> enemyGOs = BoardManager.enemyUnits;
 		Shuffle (enemyGOs);
-
-		if (selectedUnit.timeStampAttack <= Time.time) {
-            Unit[] enemies = new Unit[] {null,null,null};
-            for(int i= 0; i<=2 && i < enemyGOs.Count; i++) {
-				Unit enemyUnit = enemyGOs[i].GetComponent<Unit>();
-                    enemies[i] = enemyUnit;
-					spellCounter++;
-			}
-            BoardManager.Instance.AttackTarget(enemies[0], damage);
-            BoardManager.Instance.AttackTarget(enemies[1], damage);
-            BoardManager.Instance.AttackTarget(enemies[2], damage);
-            selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
-			source[1].PlayOneShot (tripleShot);
-        }
+        Unit[] enemies = new Unit[] {null,null,null};
+        for(int i= 0; i<=2 && i < enemyGOs.Count; i++) {
+			Unit enemyUnit = enemyGOs[i].GetComponent<Unit>();
+                enemies[i] = enemyUnit;
+				spellCounter++;
+		}
+        BoardManager.Instance.AttackTarget(enemies[0], damage);
+        BoardManager.Instance.AttackTarget(enemies[1], damage);
+        BoardManager.Instance.AttackTarget(enemies[2], damage);
+        selectedUnit.timeStampAttack = Time.time + selectedUnit.cooldownAttackSeconds;
+		source[1].PlayOneShot (tripleShot);
+        
 	}
 
     public override void Ability1(Unit selectedUnit, Unit selectedTarget)
